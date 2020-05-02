@@ -1,0 +1,368 @@
+<!-- TO DO 
+    
+    el refrescado de pagina tiene un efecto de mierda. Y si puede ser, que no tengas que hacerlo a mano la mitad de las veces
+    La ventana emergente de "ficha", se debe cerrar solamente con el boton x y no el trampantojo ese de mierda que has hecho
+    si abres una ventana, que se cierre la anterior
+    el subnormal que no sabía cerrar ventanas xd
+    editar
+    dependecias de eliminacion
+    
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Victor Martin Diaz"/>
+        <script src="codigo.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/5fd608cf6f.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.4.0/json2html.min.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet"/>
+    
+        <title>Página Principal</title>
+        
+        <script>
+            $(document).ready(function() {
+                
+                $("#login").hide();
+                
+                $(".indexLogo").click(function() {
+                    $("#login").slideToggle();
+                    $('#entidades').slideUp();
+                    $('#autores').slideUp();
+                    $('#productos').slideUp();
+                });
+                $(".dropdown-item").click(function(event){
+                event.preventDefault();
+                });
+               
+                try{
+            if(usuarioRegistrado.tipo=="lector" || usuarioRegistrado.tipo=="escritor"){
+                    
+                    $(".dropdown-item").click(function() {
+                    $('#autores').slideUp();
+                    $('#entidades').slideUp();
+                    $('#productos').slideUp();
+
+                     $("#ficha").animate({
+                        opacity: '1',
+                        height: '550px',
+                        width: '550px', 
+                     });
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
+                });
+                
+                
+                
+                
+                
+                $("#ficha").click(function() {
+                    $("#ficha").hide({
+                        opacity: '0',
+                        height: '0px',
+                        width: '0px', 
+                     });
+                    $('.banda').animate({
+                        opacity: '0.7'
+                    });
+                    
+                        location.reload(true);
+                    
+                });
+                
+                $(".dropdown-item").click( function(event) {
+                    document.getElementById("logout").style.visibility = "visible";
+                });
+                
+                var bodyElement = document.getElementById("botonera");
+                bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
+                
+                
+                if(usuarioRegistrado.tipo == "escritor"){
+                    bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
+                    $("a[rel='pop-up']").click(function () {
+                        var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
+                        nueva = window.open(this.href, 'Popup', caracteristicas);
+                        return false;
+                    });
+                }
+                $("#logout").click(function(){
+                    window.sessionStorage.removeItem("usuarioRegistrado");
+                    login.action = "./main.html";
+                });
+            }
+            }catch(error){console.log(error)};
+            });
+            
+            
+        </script>
+       
+    </head>
+    
+    <body id="body" class="indexFondo" onload="cargar();">
+    
+        <header>
+            <nav class="navbar navbar-expand-md  mainNav">
+                <span class="col-lg-2 col-md-3 col-sm-12 text-center"> 
+                    <a class="navbar-brand" href="#">
+                        <img class="img-responsive indexLogo ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
+                     </a>
+                </span>
+                <button class="navbar-toggler col" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end col" id="navbarSupportedContent">
+                    <ul class="navbar-nav dropdown-menu-left indexNav">                  
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleAutores()'><i class="fas fa-user"></i> Autores</a>
+                            <div class="dropdown-menu" id="autores">
+                             <!--   <a class="dropdown-item" href=""  id="Linus Torvalds"><img class="dropdownImg" src="./Autores/img/LinusTorvalds.jpg"/><span class="name">Linus Torvalds</span></a>
+                                <a class="dropdown-item" href="./Autores/RichardStallman.html" id="Richard Stallman"><img class="dropdownImg" src="./Autores/img/stallman.jpg" /><span class="name">Richard Stallman</span></a>
+                                <a class="dropdown-item" href="./Autores/TedNelson.html" id="Ted Nelson"><img class="dropdownImg" src="./Autores/img/nelson.jpg" /><span class="name">Ted Nelson</span></a>
+                                <a class="dropdown-item" href="./Autores/TimBernersLee.html" id="Tim Berners-Lee"><img class="dropdownImg" src="./Autores/img/lee.jpeg" /><span class="name">Tim Berners-Lee</span></a>
+                                <a class="dropdown-item" href="./Autores/VannevarBush.html" id="Vannevar Bush"><img class="dropdownImg" src="./Autores/img/bush.jpg" /><span class="name">Vannevar Bush</span></a> -->
+                            </div>
+                        </li>
+                                    
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleEntidades()'><i class="fas fa-chart-line"></i> Entidades</a>
+                            <div class="dropdown-menu" id="entidades">
+                              <!--  <a class="dropdown-item" href="./Entidades/cern.html" id="CERN"><img class="dropdownImg" src="./Entidades/img/cern.png" /><span class="name">CERN</span></a>
+                                <a class="dropdown-item" href="./Entidades/fsf.html" id="FSF"><img class="dropdownImg" src="./Entidades/img/fsfb.png" /><span class="name">Fundación Software Libre</span></a>
+                                <a class="dropdown-item" href="./Entidades/ibm.html" id="IBM"><img class="dropdownImg" src="./Entidades/img/ibm.png" /><span class="name">IBM</span></a>
+                                    <a class="dropdown-item" href="./Entidades/w3c.html" id="W3C"><img class="dropdownImg" src="./Entidades/img/W3C.jpg" /><span class="name">W3C</span></a> -->
+                            </div>
+                        </li>
+                        
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
+                            <div class="dropdown-menu" id="productos">
+                               <!-- <a class="dropdown-item" href="./productos/gnu.html" id="GNU"><img class="dropdownImg" src="./productos/img/gnu.jpg" /><span class="name">Proyecto GNU</span></a>
+                                <a class="dropdown-item" href="./productos/linux.html" id=" Linux"><img class="dropdownImg" src="./productos/img/linux1.jpg" /><span class="name">Linux</span></a>
+                                <a class="dropdown-item" href="./productos/www.html" id="WWW"><img class="dropdownImg" src="./productos/img/www3.jpg" /><span class="name">World Wide Web</span></a> -->
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <div id=botonera>
+            <form id="login" onsubmit="return validacion();">
+                <label for="nombre" class="texto">Nombre</label>
+                <input type="text" id="nombre">
+                <label for="contraseña" class="texto">Contraseña</label>
+                <input type="password" id="contraseña">
+                <input type="submit" value="login" id="boton">
+            </form>
+        </div>  
+                
+        <div id="ficha" style="background-color:dimgray; color: aliceblue; height:100px;width:100px;margin:auto; opacity: 0; text-align: center;"></div>
+        
+        <div class="banda d-none d-md-block">
+            <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
+        </div>
+        
+        <footer class="indexFooter">
+            <p class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la Universidad Politécnica de Madrid.</p>
+            <p class="d-lg none"> Universidad Politécnica de Madrid.</p>
+            <time datetime="2020-02-14 20:00">14/02/2020</time>
+        </footer>
+    
+
+        <script>
+            var mostrar ="q";
+            usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
+        </script> 
+        
+        <script>
+            
+        </script> 
+            
+        <script>
+            function slideToggleAutores(){
+                $('#autores').slideToggle();
+                $('#entidades').slideUp();
+                $('#productos').slideUp();
+            };
+
+            function slideToggleEntidades(){
+                $('#entidades').slideToggle();
+                $('#autores').slideUp();
+                $('#productos').slideUp();
+            };
+
+            function slideToggleProductos(){
+                $('#productos').slideToggle();
+                $('#autores').slideUp();
+                $('#entidades').slideUp();
+            };
+        </script>
+            
+        <script>
+            $('#autores').hide();
+            $('#entidades').hide();
+            $('#productos').hide();
+        </script>     
+            
+            <script>
+            
+          
+                var existe;
+                for(let i=0; i<=localStorage.length-1; i++) {
+                    
+            if(localStorage.getItem(i)!=null) {
+                existe = false;
+                //console.log(i, localStorage.getItem(i));
+                var miNombre = window.localStorage.getItem(i);
+                
+                var recibir = window.localStorage.getItem(miNombre);
+                //console.log(miNombre);
+                //console.log(recibir);
+                
+                var dibujar = JSON.parse(recibir);
+                if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
+                //console.log(dibujar);
+                
+                //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
+                $(".dropdown-item").each(function(){ 
+                    //console.log(miNombre);
+                    //console.log(document.getElementById(miNombre));
+                    //console.log(dibujar.nombre);
+                    //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.id);
+                    if(this.id==miNombre){
+                        existe = true;
+                    }
+                });
+                
+            }
+                    
+        
+                console.log(existe);
+                if(!existe) {
+                        //console.log("hola");
+                        var jsonObj = $.parseJSON(recibir);
+                var autorElement = document.getElementById("autores");
+                var entidadElement = document.getElementById("entidades");
+                var productosElement = document.getElementById("productos");
+                var imagenNueva = dibujar.foto;
+                var nombreNuevo = dibujar.nombre;
+                
+                switch(dibujar.tipo) {
+                    case "persona": {
+                        autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                        break;
+                    }
+                    case "entidad": {
+                        entidadElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                        break;
+                    }
+                    case "producto": {
+                        productosElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                        break;
+                    }
+                }
+                }
+                    existe = true;
+           }         
+                    
+                
+                
+                var mostrado = false;
+                $(".dropdown-item").click(function() {
+                    mostrar = this.id;
+                    console.log(mostrar);
+                    
+                    for(let i=0; i<=localStorage.length-1; i++) {
+                        
+                        
+                        //console.log(localStorage.getItem(i));
+                        
+                    if(localStorage.getItem(i)==mostrar &&! mostrado){
+                        mostrado = true;
+                        var miNombre0 = window.localStorage.getItem(i);
+                        console.log(miNombre0);
+                var recibir0 = window.localStorage.getItem(miNombre0);
+                        console.log(recibir0);
+                        var dibujar0 = JSON.parse(recibir0);
+                        console.log(dibujar0);
+            //            console.log(i.nombre);
+                     let template0 = [{'<>':'img','src':'${foto}','class':'laImg'}, {'<>':'h1','html':'${nombre}'}, {'<>':'p','html':'Fecha de nacimiento: ${fechaNacimiento}'}, {'<>':'p','html':'Fecha de defunción: ${fechaDefuncion}'}, {'<>':'a', 'href':'${wiki}','html':'wikipedia'}];
+
+                
+                    let data0 = [dibujar0];
+                document.getElementById("ficha").innerHTML += ( json2html.transform(data0,template0) );
+
+                
+                var bodyElement = document.getElementById("ficha");
+                bodyElement.innerHTML += '<br/>';
+                if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
+                if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
+                bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
+                    
+                    } // Cierro el if
+                    
+                }//cierro el for
+                    
+                    
+                             $('#eliminar').click(function(){
+
+                        for(let i=0; i<=localStorage.length-1; i++) {
+                    if(localStorage.getItem(i)!=null){
+                        //console.log(localStorage.getItem(i));
+                            //console.log(dibujar);
+                            if(localStorage.getItem(i)==dibujar0.nombre){
+                                console.log(dibujar0.nombre);
+                                
+                                let prueba = document.getElementById(dibujar0.nombre);
+                                console.log(prueba);
+                                $(prueba).hide();
+                                localStorage.removeItem(i);
+                                localStorage.removeItem(dibujar0.nombre);
+                            }
+                    }
+        
+                existe = false;
+
+                     }
+                        sleep(500);
+                        location.reload(true);
+                });
+                    
+                    
+                    
+                });
+                
+                
+    
+        </script>
+        
+        <script>
+            $(function() {
+
+                var html = '<div>';
+                $.each(jsonObj, function(tipo, fechaNacimiento, fechaDefuncion, nombre, wiki) {
+                    "#ficha" += '<h1>' + tipo + '</h1>';
+                    "#ficha" += '<p>' + fechaNacimiento + '</p>';
+                    "#ficha" += '<p>' + fechaDefuncion + '</p>';
+                    "#ficha" += '<a hrerf=" ' + wiki + '"/>';
+              });
+              "#ficha" += '</div>';
+              $('div').html("#ficha");
+            });
+        </script>
+        
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>      
+
+    </body>
+</html>
