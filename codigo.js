@@ -47,3 +47,22 @@ function sacaFicha(){
     $('.banda').animate({
         opacity: '0'
     });}
+
+function slideToggleAutores(){
+    $('#autores').slideToggle();
+    $('#entidades').slideUp();
+    $('#productos').slideUp();
+};
+
+function slideToggleEntidades(){
+    $('#entidades').slideToggle();
+    $('#autores').slideUp();
+    $('#productos').slideUp();
+};
+
+function slideToggleProductos(){
+    $('#productos').slideToggle();
+    $('#autores').slideUp();
+    $('#entidades').slideUp();
+};
+

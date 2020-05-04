@@ -1,9 +1,7 @@
-<!-- TO DO
+<!-- TODO
     
     el refrescado de pagina tiene un efecto de mierda. Y si puede ser, que no tengas que hacerlo a mano la mitad de las veces
     La ventana emergente de "ficha", se debe cerrar solamente con el boton x y no el trampantojo ese de mierda que has hecho
-    si abres una ventana, que se cierre la anterior
-    el subnormal que no sabía cerrar ventanas xd
     editar
     dependecias de eliminacion
     
@@ -39,47 +37,44 @@
                 });
                
                 try{
-            if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
+                    if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
 
 
-                $("#ficha").click(function() {
-                    $("#ficha").hide({
-                        opacity: '0',
-                        height: '0px',
-                        width: '0px',
-                     });
-                    $('.banda').animate({
-                        opacity: '0.7'
-                    });
-                    
-                    location.reload();
-                    document.getElementById("logout").style.visibility = "visible";
-                });
+                        $("#ficha").click(function() {
+                            $("#ficha").hide({
+                                opacity: '0',
+                                height: '0px',
+                                width: '0px',
+                             });
+                            $('.banda').animate({
+                                opacity: '0.7'
+                            });
+
+                            location.reload();
+                            document.getElementById("logout").style.visibility = "visible";
+                        });
 
 
-                var bodyElement = document.getElementById("botonera");
-                bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
-                
-                
-                if(usuarioRegistrado.tipo === "escritor"){
-                    bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
-                    $("a[rel='pop-up']").click(function () {
-                        var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
-                        nueva = window.open(this.href, 'Popup', caracteristicas);
-                        return false;
-                    });
-                }
-                $("#logout").click(function(){
-                    window.sessionStorage.removeItem("usuarioRegistrado");
-                    login.action = "./main.html";
-                });
-            }
-            }catch(error){console.log(error)};
+                        var bodyElement = document.getElementById("botonera");
+                        bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
+
+
+                        if(usuarioRegistrado.tipo === "escritor"){
+                            bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
+                            $("a[rel='pop-up']").click(function () {
+                                var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
+                                nueva = window.open(this.href, 'Popup', caracteristicas);
+                                return false;
+                            });
+                        }
+                        $("#logout").click(function(){
+                            window.sessionStorage.removeItem("usuarioRegistrado");
+                            login.action = "./main.html";
+                        });
+                    }
+                }catch(error){console.log(error)};
             });
-            
-            
         </script>
-       
     </head>
     
     <body id="body" class="indexFondo" onload="cargar();">
@@ -137,35 +132,11 @@
             <p class="d-lg none"> Universidad Politécnica de Madrid.</p>
             <time datetime="2020-02-14 20:00">14/02/2020</time>
         </footer>
-    
+
 
         <script>
             var mostrar ="q";
             usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
-        </script> 
-        
-        <script>
-            
-        </script> 
-            
-        <script>
-            function slideToggleAutores(){
-                $('#autores').slideToggle();
-                $('#entidades').slideUp();
-                $('#productos').slideUp();
-            };
-
-            function slideToggleEntidades(){
-                $('#entidades').slideToggle();
-                $('#autores').slideUp();
-                $('#productos').slideUp();
-            };
-
-            function slideToggleProductos(){
-                $('#productos').slideToggle();
-                $('#autores').slideUp();
-                $('#entidades').slideUp();
-            };
         </script>
             
         <script>
@@ -174,170 +145,161 @@
             $('#productos').hide();
         </script>     
             
-            <script>
+        <script>
+            let existe;
 
+            for(let i=0; i<=localStorage.length-1; i++) {
+                if(localStorage.getItem(i)!=null) {
+                    existe = false;
+                    //console.log(i, localStorage.getItem(i));
+                    let miNombre = window.localStorage.getItem(i);
 
-                var existe;
-                for(let i=0; i<=localStorage.length-1; i++) {
-                    
-            if(localStorage.getItem(i)!=null) {
-                existe = false;
-                //console.log(i, localStorage.getItem(i));
-                var miNombre = window.localStorage.getItem(i);
-
-                var recibir = window.localStorage.getItem(miNombre);
-                //console.log(miNombre);
-                //console.log(recibir);
-
-                var dibujar = JSON.parse(recibir);
-                if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
-                //console.log(dibujar);
-                
-                //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
-                $(".dropdown-item").each(function(){ 
+                    var recibir = window.localStorage.getItem(miNombre);
                     //console.log(miNombre);
-                    //console.log(document.getElementById(miNombre));
-                    //console.log(dibujar.nombre);
-                    //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.id);
-                    if(this.id==miNombre){
-                        existe = true;
-                    }
-                });
-                
-            }
-                    
-        
+                    //console.log(recibir);
+
+                    var dibujar = JSON.parse(recibir);
+                    if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
+                    //console.log(dibujar);
+
+                    //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
+                    $(".dropdown-item").each(function(){
+                        //console.log(miNombre);
+                        //console.log(document.getElementById(miNombre));
+                        //console.log(dibujar.nombre);
+                        //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.id);
+                        if(this.id==miNombre){
+                            existe = true;
+                        }
+                    });
+
+                }
+
                 console.log(existe);
                 if(!existe) {
-                        //console.log("hola");
-                        var jsonObj = $.parseJSON(recibir);
-                var autorElement = document.getElementById("autores");
-                var entidadElement = document.getElementById("entidades");
-                var productosElement = document.getElementById("productos");
-                var imagenNueva = dibujar.foto;
-                var nombreNuevo = dibujar.nombre;
-                
-                switch(dibujar.tipo) {
-                    case "persona": {
-                        autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                        break;
-                    }
-                    case "entidad": {
-                        entidadElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                        break;
-                    }
-                    case "producto": {
-                        productosElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                        break;
+                    //console.log("hola");
+                    var jsonObj = $.parseJSON(recibir);
+                    var autorElement = document.getElementById("autores");
+                    var entidadElement = document.getElementById("entidades");
+                    var productosElement = document.getElementById("productos");
+                    var imagenNueva = dibujar.foto;
+                    var nombreNuevo = dibujar.nombre;
+
+                    switch(dibujar.tipo) {
+                        case "persona": {
+                            autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
+                        case "entidad": {
+                            entidadElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
+                        case "producto": {
+                            productosElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
                     }
                 }
-                }
-                    existe = true;
-           }         
-                    
-                
-                
-                var mostrado = false;
-                $(".dropdown-item").click(function(event) {
+                existe = true;
+            }
 
-                    event.preventDefault();
-                    $('#autores').slideUp();
-                    $('#entidades').slideUp();
-                    $('#productos').slideUp();
 
-                    $("#ficha").animate({
-                        opacity: '1',
-                        height: '550px',
-                        width: '550px',
-                    });
-                    $('.banda').animate({
-                        opacity: '0'
-                    });
 
-                    mostrar = this.id;
-                    console.log(mostrar);
+            var mostrado = false;
+            $(".dropdown-item").click(function(event) {
 
-                    if(miNombre0!==mostrar) {
-                        mostrado = false;
-                        $("#ficha").animate({
-                            opacity: '0',
-                            height: '0px',
-                            width: '0px',
-                        });
-                        $("#ficha").hide();
+                event.preventDefault();
+                $('#autores').slideUp();
+                $('#entidades').slideUp();
+                $('#productos').slideUp();
 
-                        document.getElementById("ficha").innerHTML = "";
-                    }
-                    $("#ficha").show();
-                        $("#ficha").animate({
-                            opacity: '1',
-                            height: '550px',
-                            width: '550px',
-                        });
+                $("#ficha").animate({
+                    opacity: '1',
+                    height: '550px',
+                    width: '550px',
+                });
+                $('.banda').animate({
+                    opacity: '0'
+                });
 
-                    
-                    for(let i=0; i<=localStorage.length-1; i++) {
-                        
-                        
-                        //console.log(localStorage.getItem(i));
-                        
+                mostrar = this.id;
+                console.log(mostrar);
+
+
+                mostrado = false;
+                $("#ficha").animate({
+                    opacity: '0',
+                    height: '0px',
+                    width: '0px',
+                });
+                $("#ficha").hide();
+
+                document.getElementById("ficha").innerHTML = "";
+                $("#ficha").show();
+                $("#ficha").animate({
+                    opacity: '1',
+                    height: '550px',
+                    width: '550px',
+                });
+
+
+                for(let i=0; i<=localStorage.length-1; i++) {
+
+                    //console.log(localStorage.getItem(i));
+
                     if(localStorage.getItem(i)===mostrar &&! mostrado){
                         mostrado = true;
                         var miNombre0 = window.localStorage.getItem(i);
                         console.log(miNombre0);
-                var recibir0 = window.localStorage.getItem(miNombre0);
+                        var recibir0 = window.localStorage.getItem(miNombre0);
                         console.log(recibir0);
                         var dibujar0 = JSON.parse(recibir0);
                         console.log(dibujar0);
-            //            console.log(i.nombre);
-                     let template0 = [{'<>':'img','src':'${foto}','class':'laImg'}, {'<>':'h1','html':'${nombre}'}, {'<>':'p','html':'Fecha de nacimiento: ${fechaNacimiento}'}, {'<>':'p','html':'Fecha de defunción: ${fechaDefuncion}'}, {'<>':'a', 'href':'${wiki}','html':'wikipedia'}];
+                        //  console.log(i.nombre);
+                        let template0 = [{'<>':'img','src':'${foto}','class':'laImg'}, {'<>':'h1','html':'${nombre}'}, {'<>':'p','html':'Fecha de nacimiento: ${fechaNacimiento}'}, {'<>':'p','html':'Fecha de defunción: ${fechaDefuncion}'}, {'<>':'a', 'href':'${wiki}','html':'wikipedia'}];
 
-                
-                    let data0 = [dibujar0];
-                document.getElementById("ficha").innerHTML += ( json2html.transform(data0,template0) );
 
-                
-                let bodyElement = document.getElementById("ficha");
-                bodyElement.innerHTML += '<br/>';
-                if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
-                if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
-                bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
+                        let data0 = [dibujar0];
+                        document.getElementById("ficha").innerHTML += ( json2html.transform(data0,template0) );
+
+
+                        let bodyElement = document.getElementById("ficha");
+                        bodyElement.innerHTML += '<br/>';
+                        if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
+                        if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
+                        bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
 
                     } // Cierro el if
-                    
-                }//cierro el for
-                    
-                    
-                             $('#eliminar').click(function(){
 
-                        for(let i=0; i<=localStorage.length-1; i++) {
-                    if(localStorage.getItem(i)!=null){
-                        //console.log(localStorage.getItem(i));
+                }//cierro el for
+
+
+                $('#eliminar').click(function(){
+
+                    for(let i=0; i<=localStorage.length-1; i++) {
+                        if(localStorage.getItem(i)!=null){
+                            //console.log(localStorage.getItem(i));
                             //console.log(dibujar);
                             if(localStorage.getItem(i)==dibujar0.nombre){
                                 console.log(dibujar0.nombre);
-                                
+
                                 let prueba = document.getElementById(dibujar0.nombre);
                                 console.log(prueba);
                                 $(prueba).hide();
                                 localStorage.removeItem(i);
                                 localStorage.removeItem(dibujar0.nombre);
                             }
-                    }
-        
-                existe = false;
+                        }
+
+                        existe = false;
 
                      }
-                        sleep(500);
-                        location.reload();
+
+                    location.reload();
                 });
 
 
-
-                });
-                
-                
-    
+            });
         </script>
         
         <script>
@@ -349,7 +311,7 @@
                     bodyElement += '<p>' + fechaNacimiento + '</p>';
                     bodyElement += '<p>' + fechaDefuncion + '</p>';
                     bodyElement += '<a href=" ' + wiki + '"/>';
-              });
+                });
                 bodyElement += '</div>';
 
             });
@@ -358,7 +320,6 @@
         
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>      
-
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     </body>
 </html>
