@@ -37,14 +37,12 @@
                     $('#autores').slideUp();
                     $('#productos').slideUp();
                 });
-                $(".dropdown-item").click(function(event){
-                    event.preventDefault();
-                });
                
                 try{
             if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
                     
-                    $(".dropdown-item").click(function() {
+                    $(".dropdown-item").click(function(event) {
+                        event.preventDefault();
                         $('#autores').slideUp();
                         $('#entidades').slideUp();
                         $('#productos').slideUp();
@@ -52,32 +50,28 @@
                         $("#ficha").animate({
                             opacity: '1',
                             height: '550px',
-                            width: '550px', 
+                            width: '550px',
                         });
                         $('.banda').animate({
                             opacity: '0'
                         });
                     });
-                
 
 
                 $("#ficha").click(function() {
                     $("#ficha").hide({
                         opacity: '0',
                         height: '0px',
-                        width: '0px', 
+                        width: '0px',
                      });
                     $('.banda').animate({
                         opacity: '0.7'
                     });
                     
-                        location.reload();
-                    
-                });
-
-                $(".dropdown-item").click( function(event) {
+                    location.reload();
                     document.getElementById("logout").style.visibility = "visible";
                 });
+
 
                 var bodyElement = document.getElementById("botonera");
                 bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
