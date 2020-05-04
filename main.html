@@ -1,4 +1,4 @@
-<!-- TO DO 
+<!-- TO DO
     
     el refrescado de pagina tiene un efecto de mierda. Y si puede ser, que no tengas que hacerlo a mano la mitad de las veces
     La ventana emergente de "ficha", se debe cerrar solamente con el boton x y no el trampantojo ese de mierda que has hecho
@@ -10,6 +10,7 @@
 -->
 
 <!DOCTYPE html>
+
 <html lang="es">
     <head>
         <meta charset="UTF-8">
@@ -37,28 +38,26 @@
                     $('#productos').slideUp();
                 });
                 $(".dropdown-item").click(function(event){
-                event.preventDefault();
+                    event.preventDefault();
                 });
                
                 try{
-            if(usuarioRegistrado.tipo=="lector" || usuarioRegistrado.tipo=="escritor"){
+            if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
                     
                     $(".dropdown-item").click(function() {
-                    $('#autores').slideUp();
-                    $('#entidades').slideUp();
-                    $('#productos').slideUp();
+                        $('#autores').slideUp();
+                        $('#entidades').slideUp();
+                        $('#productos').slideUp();
 
-                     $("#ficha").animate({
-                        opacity: '1',
-                        height: '550px',
-                        width: '550px', 
-                     });
-                    $('.banda').animate({
-                        opacity: '0'
+                        $("#ficha").animate({
+                            opacity: '1',
+                            height: '550px',
+                            width: '550px', 
+                        });
+                        $('.banda').animate({
+                            opacity: '0'
+                        });
                     });
-                });
-                
-                
                 
                 
                 
@@ -72,19 +71,19 @@
                         opacity: '0.7'
                     });
                     
-                        location.reload(true);
+                        location.reload();
                     
                 });
                 
                 $(".dropdown-item").click( function(event) {
                     document.getElementById("logout").style.visibility = "visible";
                 });
-                
+
                 var bodyElement = document.getElementById("botonera");
                 bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
                 
                 
-                if(usuarioRegistrado.tipo == "escritor"){
+                if(usuarioRegistrado.tipo === "escritor"){
                     bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
                     $("a[rel='pop-up']").click(function () {
                         var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
@@ -213,8 +212,8 @@
         </script>     
             
             <script>
-            
-          
+
+
                 var existe;
                 for(let i=0; i<=localStorage.length-1; i++) {
                     
@@ -222,11 +221,11 @@
                 existe = false;
                 //console.log(i, localStorage.getItem(i));
                 var miNombre = window.localStorage.getItem(i);
-                
+
                 var recibir = window.localStorage.getItem(miNombre);
                 //console.log(miNombre);
                 //console.log(recibir);
-                
+
                 var dibujar = JSON.parse(recibir);
                 if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
                 //console.log(dibujar);

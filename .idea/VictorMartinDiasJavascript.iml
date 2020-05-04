@@ -2,11 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/temp" />
-      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../VictorMartinDiasJavascript/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../VictorMartinDiasJavascript/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/../VictorMartinDiasJavascript/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="5fd608cf6f" level="application" />
+    <orderEntry type="library" name="json2html" level="application" />
+    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
 </module>
