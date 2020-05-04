@@ -59,8 +59,8 @@
                         });
                     });
                 
-                
-                
+
+
                 $("#ficha").click(function() {
                     $("#ficha").hide({
                         opacity: '0',
@@ -74,7 +74,7 @@
                         location.reload();
                     
                 });
-                
+
                 $(".dropdown-item").click( function(event) {
                     document.getElementById("logout").style.visibility = "visible";
                 });
@@ -300,7 +300,7 @@
                 document.getElementById("ficha").innerHTML += ( json2html.transform(data0,template0) );
 
                 
-                var bodyElement = document.getElementById("ficha");
+                let bodyElement = document.getElementById("ficha");
                 bodyElement.innerHTML += '<br/>';
                 if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
                 if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
@@ -332,7 +332,7 @@
 
                      }
                         sleep(500);
-                        location.reload(true);
+                        location.reload();
                 });
                     
                     
@@ -345,16 +345,16 @@
         
         <script>
             $(function() {
-
-                var html = '<div>';
+                let bodyElement = document.getElementById("ficha");
+                let html = '<div>';
                 $.each(jsonObj, function(tipo, fechaNacimiento, fechaDefuncion, nombre, wiki) {
-                    "#ficha" += '<h1>' + tipo + '</h1>';
-                    "#ficha" += '<p>' + fechaNacimiento + '</p>';
-                    "#ficha" += '<p>' + fechaDefuncion + '</p>';
-                    "#ficha" += '<a hrerf=" ' + wiki + '"/>';
+                    bodyElement += '<h1>' + tipo + '</h1>';
+                    bodyElement += '<p>' + fechaNacimiento + '</p>';
+                    bodyElement += '<p>' + fechaDefuncion + '</p>';
+                    bodyElement += '<a href=" ' + wiki + '"/>';
               });
-              "#ficha" += '</div>';
-              $('div').html("#ficha");
+                bodyElement += '</div>';
+
             });
         </script>
         
