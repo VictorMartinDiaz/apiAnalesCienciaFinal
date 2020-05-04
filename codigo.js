@@ -38,4 +38,12 @@ function getUsuario(datos, nombre, contraseña){
     return null;
 }
 
-
+function sacaFicha(){
+    $("#ficha").animate({
+    opacity: '1',
+    height: '550px',
+    width: '550px',
+    });
+    $('.banda').animate({
+        opacity: '0'
+    });}

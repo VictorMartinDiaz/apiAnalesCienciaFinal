@@ -40,22 +40,6 @@
                
                 try{
             if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
-                    
-                    $(".dropdown-item").click(function(event) {
-                        event.preventDefault();
-                        $('#autores').slideUp();
-                        $('#entidades').slideUp();
-                        $('#productos').slideUp();
-
-                        $("#ficha").animate({
-                            opacity: '1',
-                            height: '550px',
-                            width: '550px',
-                        });
-                        $('.banda').animate({
-                            opacity: '0'
-                        });
-                    });
 
 
                 $("#ficha").click(function() {
@@ -115,32 +99,17 @@
                     <ul class="navbar-nav dropdown-menu-left indexNav">                  
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleAutores()'><i class="fas fa-user"></i> Autores</a>
-                            <div class="dropdown-menu" id="autores">
-                             <!--   <a class="dropdown-item" href=""  id="Linus Torvalds"><img class="dropdownImg" src="./Autores/img/LinusTorvalds.jpg"/><span class="name">Linus Torvalds</span></a>
-                                <a class="dropdown-item" href="./Autores/RichardStallman.html" id="Richard Stallman"><img class="dropdownImg" src="./Autores/img/stallman.jpg" /><span class="name">Richard Stallman</span></a>
-                                <a class="dropdown-item" href="./Autores/TedNelson.html" id="Ted Nelson"><img class="dropdownImg" src="./Autores/img/nelson.jpg" /><span class="name">Ted Nelson</span></a>
-                                <a class="dropdown-item" href="./Autores/TimBernersLee.html" id="Tim Berners-Lee"><img class="dropdownImg" src="./Autores/img/lee.jpeg" /><span class="name">Tim Berners-Lee</span></a>
-                                <a class="dropdown-item" href="./Autores/VannevarBush.html" id="Vannevar Bush"><img class="dropdownImg" src="./Autores/img/bush.jpg" /><span class="name">Vannevar Bush</span></a> -->
-                            </div>
+                            <div class="dropdown-menu" id="autores"></div>
                         </li>
                                     
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleEntidades()'><i class="fas fa-chart-line"></i> Entidades</a>
-                            <div class="dropdown-menu" id="entidades">
-                              <!--  <a class="dropdown-item" href="./Entidades/cern.html" id="CERN"><img class="dropdownImg" src="./Entidades/img/cern.png" /><span class="name">CERN</span></a>
-                                <a class="dropdown-item" href="./Entidades/fsf.html" id="FSF"><img class="dropdownImg" src="./Entidades/img/fsfb.png" /><span class="name">Fundación Software Libre</span></a>
-                                <a class="dropdown-item" href="./Entidades/ibm.html" id="IBM"><img class="dropdownImg" src="./Entidades/img/ibm.png" /><span class="name">IBM</span></a>
-                                    <a class="dropdown-item" href="./Entidades/w3c.html" id="W3C"><img class="dropdownImg" src="./Entidades/img/W3C.jpg" /><span class="name">W3C</span></a> -->
-                            </div>
+                            <div class="dropdown-menu" id="entidades"></div>
                         </li>
                         
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
-                            <div class="dropdown-menu" id="productos">
-                               <!-- <a class="dropdown-item" href="./productos/gnu.html" id="GNU"><img class="dropdownImg" src="./productos/img/gnu.jpg" /><span class="name">Proyecto GNU</span></a>
-                                <a class="dropdown-item" href="./productos/linux.html" id=" Linux"><img class="dropdownImg" src="./productos/img/linux1.jpg" /><span class="name">Linux</span></a>
-                                <a class="dropdown-item" href="./productos/www.html" id="WWW"><img class="dropdownImg" src="./productos/img/www3.jpg" /><span class="name">World Wide Web</span></a> -->
-                            </div>
+                            <div class="dropdown-menu" id="productos"></div>
                         </li>
                     </ul>
                 </div>
@@ -269,16 +238,50 @@
                 
                 
                 var mostrado = false;
-                $(".dropdown-item").click(function() {
+                $(".dropdown-item").click(function(event) {
+
+                    event.preventDefault();
+                    $('#autores').slideUp();
+                    $('#entidades').slideUp();
+                    $('#productos').slideUp();
+
+                    $("#ficha").animate({
+                        opacity: '1',
+                        height: '550px',
+                        width: '550px',
+                    });
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
+
                     mostrar = this.id;
                     console.log(mostrar);
+
+                    if(miNombre0!==mostrar) {
+                        mostrado = false;
+                        $("#ficha").animate({
+                            opacity: '0',
+                            height: '0px',
+                            width: '0px',
+                        });
+                        $("#ficha").hide();
+
+                        document.getElementById("ficha").innerHTML = "";
+                    }
+                    $("#ficha").show();
+                        $("#ficha").animate({
+                            opacity: '1',
+                            height: '550px',
+                            width: '550px',
+                        });
+
                     
                     for(let i=0; i<=localStorage.length-1; i++) {
                         
                         
                         //console.log(localStorage.getItem(i));
                         
-                    if(localStorage.getItem(i)==mostrar &&! mostrado){
+                    if(localStorage.getItem(i)===mostrar &&! mostrado){
                         mostrado = true;
                         var miNombre0 = window.localStorage.getItem(i);
                         console.log(miNombre0);
@@ -299,7 +302,7 @@
                 if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
                 if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
                 bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
-                    
+
                     } // Cierro el if
                     
                 }//cierro el for
@@ -328,9 +331,9 @@
                         sleep(500);
                         location.reload();
                 });
-                    
-                    
-                    
+
+
+
                 });
                 
                 
