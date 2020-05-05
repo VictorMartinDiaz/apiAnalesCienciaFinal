@@ -206,7 +206,7 @@
 
 
             var mostrado = false;
-            $(".dropdown-item").click(function(event) {
+            $(".dropdown-item").click( async function(event) {
 
                 event.preventDefault();
                 $('#autores').slideUp();
@@ -226,13 +226,32 @@
                 console.log(mostrar);
 
 
-                mostrado = false;
-                $("#ficha").animate({
+                if(mostrado){
+                    let paso = 0;
+                    mostrado = false;
+                if(paso==0){$("#ficha").animate({
                     opacity: '0',
                     height: '0px',
                     width: '0px',
                 });
+                paso++;
+                }
+                if(paso==1){
+                    await new Promise(r => setTimeout(r, 800));
                 $("#ficha").hide();
+                    document.getElementById("ficha").innerHTML = "";
+                    paso++;
+
+                }
+                if(paso==2){
+                    $("#ficha").show();
+                    $("#ficha").animate({
+                        opacity: '1',
+                        height: '550px',
+                        width: '550px',
+                    });}
+
+            }
 
                 document.getElementById("ficha").innerHTML = "";
                 $("#ficha").show();
@@ -241,7 +260,7 @@
                     height: '550px',
                     width: '550px',
                 });
-
+                //asyncFicha(0, mostrado, this.id);
 
                 for(let i=0; i<=localStorage.length-1; i++) {
 
