@@ -65,7 +65,11 @@
                                 var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
                                 nueva = window.open(this.href, 'Popup', caracteristicas);
                                 return false;
+
                             });
+                            let blurred = false;
+                            window.onblur = function() { blurred = true; };
+                            window.onfocus = function() { blurred && (location.reload()); };
                         }
                         $("#logout").click(function(){
                             window.sessionStorage.removeItem("usuarioRegistrado");
@@ -147,7 +151,7 @@
         </script>     
             
         <script>
-            let existe;
+            let existe = true;
 
             for(let i=0; i<=localStorage.length-1; i++) {
                 if(localStorage.getItem(i)!=null) {
