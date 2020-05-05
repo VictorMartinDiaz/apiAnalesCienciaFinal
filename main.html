@@ -41,7 +41,7 @@
 
 
                         $("#ficha").click(function() {
-                            $("#ficha").hide({
+                            $("#ficha").animate({
                                 opacity: '0',
                                 height: '0px',
                                 width: '0px',
@@ -115,8 +115,8 @@
             <form id="login" onsubmit="return validacion();">
                 <label for="nombre" class="texto">Nombre</label>
                 <input type="text" id="nombre">
-                <label for="contraseña" class="texto">Contraseña</label>
-                <input type="password" id="contraseña">
+                <label for="password" class="texto">password</label>
+                <input type="password" id="password">
                 <input type="submit" value="login" id="boton">
             </form>
         </div>  
@@ -135,8 +135,9 @@
 
 
         <script>
-            var mostrar ="q";
+            var mostrar ="";
             usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
+            if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
         </script>
             
         <script>
@@ -213,85 +214,98 @@
                 $('#entidades').slideUp();
                 $('#productos').slideUp();
 
-                $("#ficha").animate({
-                    opacity: '1',
-                    height: '550px',
-                    width: '550px',
-                });
-                $('.banda').animate({
-                    opacity: '0'
-                });
+                if(usuarioRegistrado.tipo=="escritor" || usuarioRegistrado.tipo==="lector") {
+                    $("#ficha").animate({
+                        opacity: '1',
+                        height: '550px',
+                        width: '550px',
+                    });
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
 
-                mostrar = this.id;
-                console.log(mostrar);
+                    mostrar = this.id;
+                    console.log(mostrar);
 
 
-                if(mostrado){
-                    let paso = 0;
-                    mostrado = false;
-                if(paso==0){$("#ficha").animate({
-                    opacity: '0',
-                    height: '0px',
-                    width: '0px',
-                });
-                paso++;
-                }
-                if(paso==1){
-                    await new Promise(r => setTimeout(r, 800));
-                $("#ficha").hide();
+                    if (mostrado) {
+                        let paso = 0;
+                        mostrado = false;
+                        if (paso == 0) {
+                            $("#ficha").animate({
+                                opacity: '0',
+                                height: '0px',
+                                width: '0px',
+                            });
+                            paso++;
+                        }
+                        if (paso == 1) {
+                            await new Promise(r => setTimeout(r, 800));
+                            $("#ficha").hide();
+                            document.getElementById("ficha").innerHTML = "";
+                            paso++;
+
+                        }
+                        if (paso == 2) {
+                            $("#ficha").show();
+                            $("#ficha").animate({
+                                opacity: '1',
+                                height: '550px',
+                                width: '550px',
+                            });
+                        }
+
+                    }
+
                     document.getElementById("ficha").innerHTML = "";
-                    paso++;
-
-                }
-                if(paso==2){
                     $("#ficha").show();
                     $("#ficha").animate({
                         opacity: '1',
                         height: '550px',
                         width: '550px',
-                    });}
+                    });
+                    //asyncFicha(0, mostrado, this.id);
 
-            }
+                    for (let i = 0; i <= localStorage.length - 1; i++) {
 
-                document.getElementById("ficha").innerHTML = "";
-                $("#ficha").show();
-                $("#ficha").animate({
-                    opacity: '1',
-                    height: '550px',
-                    width: '550px',
-                });
-                //asyncFicha(0, mostrado, this.id);
+                        //console.log(localStorage.getItem(i));
 
-                for(let i=0; i<=localStorage.length-1; i++) {
-
-                    //console.log(localStorage.getItem(i));
-
-                    if(localStorage.getItem(i)===mostrar &&! mostrado){
-                        mostrado = true;
-                        var miNombre0 = window.localStorage.getItem(i);
-                        console.log(miNombre0);
-                        var recibir0 = window.localStorage.getItem(miNombre0);
-                        console.log(recibir0);
-                        var dibujar0 = JSON.parse(recibir0);
-                        console.log(dibujar0);
-                        //  console.log(i.nombre);
-                        let template0 = [{'<>':'img','src':'${foto}','class':'laImg'}, {'<>':'h1','html':'${nombre}'}, {'<>':'p','html':'Fecha de nacimiento: ${fechaNacimiento}'}, {'<>':'p','html':'Fecha de defunción: ${fechaDefuncion}'}, {'<>':'a', 'href':'${wiki}','html':'wikipedia'}];
+                        if (localStorage.getItem(i) === mostrar && !mostrado) {
+                            mostrado = true;
+                            var miNombre0 = window.localStorage.getItem(i);
+                            console.log(miNombre0);
+                            var recibir0 = window.localStorage.getItem(miNombre0);
+                            console.log(recibir0);
+                            var dibujar0 = JSON.parse(recibir0);
+                            console.log(dibujar0);
+                            //  console.log(i.nombre);
+                            let template0 = [{'<>': 'img', 'src': '${foto}', 'class': 'laImg'}, {
+                                '<>': 'h1',
+                                'html': '${nombre}'
+                            }, {'<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'}, {
+                                '<>': 'p',
+                                'html': 'Fecha de defunción: ${fechaDefuncion}'
+                            }, {'<>': 'a', 'href': '${wiki}', 'html': 'wikipedia'}];
 
 
-                        let data0 = [dibujar0];
-                        document.getElementById("ficha").innerHTML += ( json2html.transform(data0,template0) );
+                            let data0 = [dibujar0];
+                            document.getElementById("ficha").innerHTML += (json2html.transform(data0, template0));
 
 
-                        let bodyElement = document.getElementById("ficha");
-                        bodyElement.innerHTML += '<br/>';
-                        if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';}
-                        if(usuarioRegistrado.tipo == "escritor"){bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';}
-                        bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
+                            let bodyElement = document.getElementById("ficha");
+                            bodyElement.innerHTML += '<br/>';
+                            if (usuarioRegistrado.tipo == "escritor") {
+                                bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';
+                            }
+                            if (usuarioRegistrado.tipo == "escritor") {
+                                bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
+                            }
+                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
 
-                    } // Cierro el if
+                        } // Cierro el if
 
-                }//cierro el for
-
+                    }//cierro el for
+                }
 
                 $('#eliminar').click(function(){
 
