@@ -1,6 +1,5 @@
 <!-- TODO
     el enlace a la wiki no funca
-    cambiar tamaño foto
     editar
     dependecias de eliminacion
     
@@ -25,9 +24,9 @@
         
         <script>
             $(document).ready(function() {
-                
+
                 $("#login").hide();
-                
+
                 $(".indexLogo").click(function() {
                     $("#login").slideToggle();
                     $('#entidades').slideUp();
@@ -42,10 +41,8 @@
                             document.getElementById("logout").style.visibility = "visible";
                         });
 
-
                         var bodyElement = document.getElementById("botonera");
                         bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
-
 
                         if(usuarioRegistrado.tipo === "escritor"){
                             bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
@@ -70,7 +67,6 @@
     </head>
     
     <body id="body" class="indexFondo" onload="cargar();">
-    
         <header>
             <nav class="navbar navbar-expand-md  mainNav">
                 <span class="col-lg-2 col-md-3 col-sm-12 text-center"> 
@@ -113,7 +109,7 @@
             </form>
         </div>  
                 
-        <div id="ficha" style="background-color:dimgray; color: aliceblue; height:100px;width:100px;margin:auto; opacity: 0; text-align: center;"></div>
+        <div id="ficha"></div>
         
         <div class="banda d-none d-md-block">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
@@ -140,37 +136,28 @@
             
         <script>
             let existe = true;
+            var mostrado = false;
 
             for(let i=0; i<=localStorage.length-1; i++) {
                 if(localStorage.getItem(i)!=null) {
                     existe = false;
-                    //console.log(i, localStorage.getItem(i));
                     let miNombre = window.localStorage.getItem(i);
 
                     var recibir = window.localStorage.getItem(miNombre);
-                    //console.log(miNombre);
-                    //console.log(recibir);
 
                     var dibujar = JSON.parse(recibir);
                     if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
-                    //console.log(dibujar);
 
                     //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
                     $(".dropdown-item").each(function(){
-                        //console.log(miNombre);
-                        //console.log(document.getElementById(miNombre));
-                        //console.log(dibujar.nombre);
-                        //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.id);
                         if(this.id==miNombre){
                             existe = true;
                         }
                     });
-
                 }
 
                 console.log(existe);
                 if(!existe) {
-                    //console.log("hola");
                     var jsonObj = $.parseJSON(recibir);
                     var autorElement = document.getElementById("autores");
                     var entidadElement = document.getElementById("entidades");
@@ -195,10 +182,6 @@
                 }
                 existe = true;
             }
-
-
-
-            var mostrado = false;
             $(".dropdown-item").click( async function(event) {
 
                 event.preventDefault();
@@ -206,7 +189,7 @@
                 $('#entidades').slideUp();
                 $('#productos').slideUp();
 
-                if(usuarioRegistrado.tipo=="escritor" || usuarioRegistrado.tipo==="lector") {
+                if(usuarioRegistrado.tipo==="escritor" || usuarioRegistrado.tipo==="lector") {
                     $("#ficha").animate({
                         opacity: '1',
                         height: '550px',
@@ -218,7 +201,6 @@
 
                     mostrar = this.id;
                     console.log(mostrar);
-
 
                     if (mostrado) {
                         let paso = 0;
@@ -246,7 +228,6 @@
                                 width: '550px',
                             });
                         }
-
                     }
 
                     document.getElementById("ficha").innerHTML = "";
@@ -256,11 +237,8 @@
                         height: '550px',
                         width: '550px',
                     });
-                    //asyncFicha(0, mostrado, this.id);
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
-
-                        //console.log(localStorage.getItem(i));
 
                         if (localStorage.getItem(i) === mostrar && !mostrado) {
                             mostrado = true;
@@ -279,10 +257,8 @@
                                 'html': 'Fecha de defunción: ${fechaDefuncion}'
                             }, {'<>': 'a', 'href': '${wiki}', 'html': 'wikipedia'}];
 
-
                             let data0 = [dibujar0];
                             document.getElementById("ficha").innerHTML += (json2html.transform(data0, template0));
-
 
                             let bodyElement = document.getElementById("ficha");
                             bodyElement.innerHTML += '<br/>';
@@ -293,11 +269,7 @@
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
                             }
                             bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
-
-
-
                         } // Cierro el if
-
                     }//cierro el for
                 }
 
@@ -305,8 +277,6 @@
 
                     for(let i=0; i<=localStorage.length-1; i++) {
                         if(localStorage.getItem(i)!=null){
-                            //console.log(localStorage.getItem(i));
-                            //console.log(dibujar);
                             if(localStorage.getItem(i)==dibujar0.nombre){
                                 console.log(dibujar0.nombre);
 
@@ -317,15 +287,10 @@
                                 localStorage.removeItem(dibujar0.nombre);
                             }
                         }
-
                         existe = false;
-
                      }
-
                     location.reload();
                 });
-
-
             });
         </script>
         
@@ -343,8 +308,7 @@
 
             });
         </script>
-        
-        
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

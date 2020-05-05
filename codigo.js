@@ -22,7 +22,7 @@ function validacion(){
     } else {
         window.sessionStorage.setItem("usuarioRegistrado", JSON.stringify(usuario));
         var login = document.getElementById("login");
-        if (usuario.tipo == "escritor" || usuario.tipo == "lector"){
+        if (usuario.tipo === "escritor" || usuario.tipo === "lector"){
             login.action = "./main.html";
         } 
     }
@@ -32,7 +32,7 @@ function validacion(){
 function getUsuario(datos, nombre, password){
     let usuario;
     for(usuario of datos.usuarios){
-        if (usuario.nombre == nombre && usuario.password == password){
+        if (usuario.nombre === nombre && usuario.password === password){
 
             return usuario;
         }
@@ -44,19 +44,19 @@ function slideToggleAutores(){
     $('#autores').slideToggle();
     $('#entidades').slideUp();
     $('#productos').slideUp();
-};
+}
 
 function slideToggleEntidades(){
     $('#entidades').slideToggle();
     $('#autores').slideUp();
     $('#productos').slideUp();
-};
+}
 
 function slideToggleProductos(){
     $('#productos').slideToggle();
     $('#autores').slideUp();
     $('#entidades').slideUp();
-};
+}
 
 async function cerrar() {
     $("#ficha").animate({
@@ -69,5 +69,4 @@ async function cerrar() {
     });
     await new Promise(r => setTimeout(r, 500));
     location.reload();
-    //document.getElementById("logout").style.visibility = "visible";
-};
+}
