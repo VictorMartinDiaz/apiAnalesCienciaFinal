@@ -20,7 +20,7 @@ function validacion(){
         nombre.value = "";
         contraseña.value = "";
     } else {
-        var tipo = window.sessionStorage.setItem("usuarioRegistrado", JSON.stringify(usuario));
+        var clase = window.sessionStorage.setItem("usuarioRegistrado", JSON.stringify(usuario));
         var login = document.getElementById("login");
         if (usuario.tipo == "escritor" || usuario.tipo == "lector"){
             login.action = "./main.html";

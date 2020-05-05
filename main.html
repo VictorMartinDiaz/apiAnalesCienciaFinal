@@ -69,7 +69,7 @@
                         }
                         $("#logout").click(function(){
                             window.sessionStorage.removeItem("usuarioRegistrado");
-                            login.action = "./main.html";
+                            $("#login").action = "./main.html";
                         });
                     }
                 }catch(error){console.log(error)};
