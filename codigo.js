@@ -40,17 +40,6 @@ function getUsuario(datos, nombre, password){
     return null;
 }
 
-function sacaFicha(){
-    $("#ficha").animate({
-    opacity: '1',
-    height: '550px',
-    width: '550px',
-    });
-    $('.banda').animate({
-        opacity: '0'
-    });}
-
-
 function slideToggleAutores(){
     $('#autores').slideToggle();
     $('#entidades').slideUp();
@@ -69,3 +58,16 @@ function slideToggleProductos(){
     $('#entidades').slideUp();
 };
 
+async function cerrar() {
+    $("#ficha").animate({
+        opacity: '0',
+        height: '0px',
+        width: '0px',
+    });
+    $('.banda').animate({
+        opacity: '0.7'
+    });
+    await new Promise(r => setTimeout(r, 500));
+    location.reload();
+    //document.getElementById("logout").style.visibility = "visible";
+};

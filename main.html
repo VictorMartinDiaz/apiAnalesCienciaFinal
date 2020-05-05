@@ -1,7 +1,6 @@
 <!-- TODO
-    
-    el refrescado de pagina tiene un efecto de mierda. Y si puede ser, que no tengas que hacerlo a mano la mitad de las veces
-    La ventana emergente de "ficha", se debe cerrar solamente con el boton x y no el trampantojo ese de mierda que has hecho
+    el enlace a la wiki no funca
+    cambiar tamaño foto
     editar
     dependecias de eliminacion
     
@@ -39,18 +38,7 @@
                 try{
                     if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
 
-
                         $("#ficha").click(function() {
-                            $("#ficha").animate({
-                                opacity: '0',
-                                height: '0px',
-                                width: '0px',
-                             });
-                            $('.banda').animate({
-                                opacity: '0.7'
-                            });
-
-                            location.reload();
                             document.getElementById("logout").style.visibility = "visible";
                         });
 
@@ -304,7 +292,9 @@
                             if (usuarioRegistrado.tipo == "escritor") {
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
                             }
-                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar">X</button>';
+                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+
+
 
                         } // Cierro el if
 
