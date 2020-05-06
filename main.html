@@ -166,7 +166,7 @@
 
                     switch(dibujar.tipo) {
                         case "persona": {
-                            autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            autorElement.innerHTML += '<a class="dropdown-item negro" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
                             break;
                         }
                         case "entidad": {
@@ -189,14 +189,14 @@
                 $('#productos').slideUp();
 
                 if(usuarioRegistrado.tipo==="escritor" || usuarioRegistrado.tipo==="lector") {
-                    $("#ficha").animate({
+                    /*$("#ficha").animate({
                         opacity: '1',
                         height: '550px',
                         width: '550px',
                     });
                     $('.banda').animate({
                         opacity: '0'
-                    });
+                    });*/
 
 
                     mostrar = this.id;
@@ -236,9 +236,7 @@
                         width: '550px',
                     });
 
-                    await new Promise(r => setTimeout(r, 333));
-                    $('.logoCentral').addClass("escondida");
-                    $('.banda').addClass("escondida");
+
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
@@ -276,13 +274,20 @@
 
 
                             if (usuarioRegistrado.tipo === "escritor") {
+                                bodyElement.innerHTML += '<div>';
                                 bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
+                                bodyElement.innerHTML += '</div>';
                             }
 
                         } // Cierro el if
                     }//cierro el for
+                    await new Promise(r => setTimeout(r, 666));
+                    $('.logoCentral').addClass("escondida");
+                    $('.banda').addClass("escondida");
                 }
+
+
 
                 $('#eliminar').click(function(){
 
@@ -300,7 +305,7 @@
                         }
                         existe = false;
                      }
-                    location.reload();
+                    //location.reload();
                 });
             });
         </script>

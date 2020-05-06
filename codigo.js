@@ -79,5 +79,5 @@ async function cerrar() {
 
     await new Promise(r => setTimeout(r, 700));
 
-    location.reload();
+    //location.reload();
 }
