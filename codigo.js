@@ -64,9 +64,14 @@ async function cerrar() {
         height: '0px',
         width: '0px',
     });
+
+    $('.logoCentral').removeClass("escondida");
+    $('.logoCentral').addClass("logoCentral");
+    $('.banda').removeClass("escondida");
+    $('.banda').addClass("banda");
+
     $('.banda').animate({
         opacity: '0.7'
     });
-    await new Promise(r => setTimeout(r, 500));
-    location.reload();
+
 }

@@ -1,6 +1,5 @@
 <!-- TODO
-    el enlace a la wiki no funca
-    editar
+    hacer funcionar el boton "editar"
     dependecias de eliminacion
     
 -->
@@ -61,7 +60,7 @@
                             $("#login").action = "./main.html";
                         });
                     }
-                }catch(error){console.log(error)};
+                }catch(error){console.log(error)}
             });
         </script>
     </head>
@@ -146,11 +145,11 @@
                     var recibir = window.localStorage.getItem(miNombre);
 
                     var dibujar = JSON.parse(recibir);
-                    if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
+                    if(dibujar.fechaDefuncion==="") dibujar.fechaDefuncion="-";
 
                     //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
                     $(".dropdown-item").each(function(){
-                        if(this.id==miNombre){
+                        if(this.id===miNombre){
                             existe = true;
                         }
                     });
@@ -199,35 +198,34 @@
                         opacity: '0'
                     });
 
+
                     mostrar = this.id;
                     console.log(mostrar);
 
                     if (mostrado) {
-                        let paso = 0;
+
                         mostrado = false;
-                        if (paso == 0) {
+
                             $("#ficha").animate({
                                 opacity: '0',
                                 height: '0px',
                                 width: '0px',
                             });
-                            paso++;
-                        }
-                        if (paso == 1) {
-                            await new Promise(r => setTimeout(r, 800));
+
+                        $('.banda').animate({
+                            opacity: '0.7'
+                        });
+
+                            await new Promise(r => setTimeout(r, 666));
                             $("#ficha").hide();
                             document.getElementById("ficha").innerHTML = "";
-                            paso++;
 
-                        }
-                        if (paso == 2) {
                             $("#ficha").show();
                             $("#ficha").animate({
                                 opacity: '1',
                                 height: '550px',
                                 width: '550px',
                             });
-                        }
                     }
 
                     document.getElementById("ficha").innerHTML = "";
@@ -237,6 +235,12 @@
                         height: '550px',
                         width: '550px',
                     });
+
+                    await new Promise(r => setTimeout(r, 333));
+                    $('.logoCentral').addClass("escondida");
+                    $('.logoCentral').removeClass("logoCentral");
+                    $('.banda').addClass("escondida");
+                    $('.banda').removeClass("banda");
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
@@ -249,26 +253,35 @@
                             var dibujar0 = JSON.parse(recibir0);
                             console.log(dibujar0);
                             //  console.log(i.nombre);
-                            let template0 = [{'<>': 'img', 'src': '${foto}', 'class': 'laImg'}, {
-                                '<>': 'h1',
-                                'html': '${nombre}'
-                            }, {'<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'}, {
-                                '<>': 'p',
-                                'html': 'Fecha de defunción: ${fechaDefuncion}'
-                            }, {'<>': 'a', 'href': '${wiki}', 'html': 'wikipedia'}];
-
+                            let template = [
+                                {
+                                    '<>': 'img', 'src': '${foto}', 'class': 'laImg'
+                                },
+                                {
+                                '<>': 'h1', 'html': '${nombre}'
+                                },
+                                {
+                                    '<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'
+                                },
+                                {
+                                '<>': 'p', 'html': 'Fecha de defunción: ${fechaDefuncion}'
+                                },
+                                {
+                                    '<>': 'a', 'href': '${wiki}', 'html': 'wikipedia', 'class': 'linkWiki'
+                                }
+                            ];
+                            var bodyElement = document.getElementById("ficha");
+                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
                             let data0 = [dibujar0];
-                            document.getElementById("ficha").innerHTML += (json2html.transform(data0, template0));
+                            document.getElementById("ficha").innerHTML += (json2html.transform(data0, template));
 
-                            let bodyElement = document.getElementById("ficha");
-                            bodyElement.innerHTML += '<br/>';
-                            if (usuarioRegistrado.tipo == "escritor") {
-                                bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';
-                            }
-                            if (usuarioRegistrado.tipo == "escritor") {
+
+
+                            if (usuarioRegistrado.tipo === "escritor") {
+                                bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
                             }
-                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+
                         } // Cierro el if
                     }//cierro el for
                 }
@@ -277,7 +290,7 @@
 
                     for(let i=0; i<=localStorage.length-1; i++) {
                         if(localStorage.getItem(i)!=null){
-                            if(localStorage.getItem(i)==dibujar0.nombre){
+                            if(localStorage.getItem(i)===dibujar0.nombre){
                                 console.log(dibujar0.nombre);
 
                                 let prueba = document.getElementById(dibujar0.nombre);
@@ -297,14 +310,17 @@
         <script>
             $(function() {
                 let bodyElement = document.getElementById("ficha");
-                let html = '<div>';
-                $.each(jsonObj, function(tipo, fechaNacimiento, fechaDefuncion, nombre, wiki) {
+
+                $.each(jsonObj, function(tipo, nombre, fechaNacimiento, fechaDefuncion, wiki) {
+                    bodyElement += '<div>';
                     bodyElement += '<h1>' + tipo + '</h1>';
+                    bodyElement += '<p>' + nombre + '</p>';
                     bodyElement += '<p>' + fechaNacimiento + '</p>';
                     bodyElement += '<p>' + fechaDefuncion + '</p>';
-                    bodyElement += '<a href=" ' + wiki + '"/>';
+                    bodyElement += '<a href="' + wiki + '">' + '</a>';
+                    bodyElement += '</div>';
+
                 });
-                bodyElement += '</div>';
 
             });
         </script>

@@ -48,15 +48,24 @@
 }
 
 .laImg {
-    max-height: 200px;    
+    max-height: 200px;
     max-width: 350px;
     margin: 5% 10%;
 }
 
+.linkWiki {
+    display: block;
+}
+
+.escondida {
+    display: none;
+}
+
 #cerrar {
     float: right;
-    margin-top: -410px;
     margin-right: 5px;
+    margin-left: -500px;
+    margin-top: 5px;
 }
 a:link{
     color:skyblue;
@@ -64,6 +73,7 @@ a:link{
 a:visited{
     color: white;
 }
+
 .btn-info {
     margin-top: 20px;
     margin-right: 5px;
