@@ -1,199 +1,191 @@
 <html>
-  <head>
-    <title>formulario</title>
-    <link rel="stylesheet" type="text/css" href="formulario.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <head>
+        <title>formulario</title>
+        <link rel="stylesheet" type="text/css" href="formulario.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            
-            /*
-            $(".p1").hide();
-            $(".p2").hide();
-            $(".p3").hide();
-            $(".p4").hide();
-            $(".v1").hide();
-            $(".v2").hide();
-            $(".f1").hide();
-            $(".f2").hide();
-            $(".f3").hide();
-            
-            $(".addCont").find(":checkbox").each(function(){
-                $(this).click(function() {
-                    let showHide = "."+this.id.substr(0,2);
-                    $(showHide).toggle();
+        <script>
+            $(document).ready(function() {
+
+                /*
+                $(".p1").hide();
+                $(".p2").hide();
+                $(".p3").hide();
+                $(".p4").hide();
+                $(".v1").hide();
+                $(".v2").hide();
+                $(".f1").hide();
+                $(".f2").hide();
+                $(".f3").hide();
+
+                $(".addCont").find(":checkbox").each(function(){
+                    $(this).click(function() {
+                        let showHide = "."+this.id.substr(0,2);
+                        $(showHide).toggle();
+                    });
+                 });
+                */
+                let $itemVariantRowRadio = $("#persona");
+
+                $(".radioBotones").find(":radio").each(function(){
+                    $(this).click(function() {
+                        if(this.id=="persona") {($(".defuncion").show());}
+                        else {($(".defuncion").hide());}
+                    });
                 });
-             });
-            */
-            let $itemVariantRowRadio = $("#persona");
-            
-            $(".radioBotones").find(":radio").each(function(){
-                $(this).click(function() {
-                    if(this.id=="persona") {($(".defuncion").show());}
-                    else {($(".defuncion").hide());}
-                });
+
+            });
+        </script>
+    </head>
+
+    <body id="contenido">
+        <form id="form" action="page.php">
+            <label>Tipo</label>
+            <fieldset class="radioBotones">
+                <input type="radio" id="persona" name="tipo" value="persona" checked>
+                <label for="persona">Persona</label><br>
+                <input type="radio" id="entidad" name="tipo" value="entidad">
+                <label for="entidad">Entidad</label><br>
+                <input type="radio" id="producto" name="tipo" value="producto">
+                <label for="producto">Producto</label>
+            </fieldset>
+           <!--
+            <label>Contenido adicional</label>
+            <fieldset class="addCont">
+                <span class="caja">
+                    <input type="checkbox" id="p1cb" name="checkbox" value="p1cb">
+                    <label for="p1cb"> Párrafo 1</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="p2cb" name="checkbox" value="p2cb">
+                    <label for="p2cb"> Párrafo 2</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="p3cb" name="checkbox" value="p3cb">
+                    <label for="p3cb"> Párrafo 3</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="p4cb" name="checkbox" value="p4cb">
+                    <label for="p4cb"> Párrafo 4</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="v1cb" name="checkbox" value="v1cb">
+                    <label for="v1cb"> Vídeo 1</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="v2cb" name="checkbox" value="v2cb">
+                    <label for="v2cb"> Vídeo 2</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="f1cb" name="checkbox" value="f1cb">
+                    <label for="f1cb"> Foto 1</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="f2cb" name="checkbox" value="f2cb">
+                    <label for="f2cb"> Foto 2</label>
+                </span>
+                <span class="caja">
+                    <input type="checkbox" id="f3cb" name="checkbox" value="f3cb">
+                    <label for="f3cb"> Foto 3</label>
+                </span>
+            </fieldset>
+            -->
+            <label>Campos</label>
+            <fieldset class="campos">
+                <label for="fechaNacimiento">Fecha de nacimiento</label>
+                <input type="date" name="fechaNacimiento" id="fechaNacimiento">
+
+                <label for="fechaDefuncion" class="defuncion">Fecha de defunción (Si procede)</label>
+                <input type="date" class="defuncion" name="fechaDefuncion" id="fechaDefuncion">
+
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre">
+
+                <label for="wiki">Wiki:</label>
+                <input type="url" name="wiki" id="wiki" placeholder="página de la wikipedia">
+
+                <label for="foto" class="foto">Foto:</label>
+                <input type="text" class="foto" name="foto" id="foto" placeholder="página donde se aloja la imagen">
+            </fieldset>
+                <!--
+                <label for="p1" class="p1">Párrafo 1</label>
+                <input type="textarea" class="p1" name="p1" id="p1">
+                <label for="p2" class="p2">Párrafo 2</label>
+                <input type="textarea" class="p2" name="p2" id="p2">
+                <label for="p3" class="p3">Párrafo 3</label>
+                <input type="textarea" class="p3" name="p3" id="p3">
+                <label for="p4" class="p4">Párrafo 4</label>
+                <input type="textarea" class="p4" name="p4" id="p4">
+                <label for="v1" class="v1">Vídeo 1</label>
+                <input type="text" class="v1" name="vid1" id="vid1" placeholder="pegar el texto de «placeholder»">
+                <label for="v2" class="v2">Vídeo 2</label>
+                <input type="text" class="v2" name="vid2" id="vid2" placeholder="pegar el texto de «placeholder»">
+                <label for="f1" class="f1">Foto 1</label>
+                <input type="url" class="f1" name="foto1" id="foto1" placeholder="página donde se aloja la imagen">
+                <label for="f2" class="f2">Foto 2</label>
+                <input type="url" class="f2" name="foto2" id="foto2" placeholder="página donde se aloja la imagen">
+                <label for="f3" class="f3">Foto 3</label>
+                <input type="url" class="f3" name="foto3" id="foto3" placeholder="página donde se aloja la imagen">
+                -->
+            <input type="submit" value="Send" />
+        </form>
+
+        <script>
+            var id;
+            if(localStorage.length>0){
+                for(let i=0; i<=localStorage.length-1; i++) {
+                    if(localStorage.getItem(i)==null) {
+                        id = i;
+                        break;
+                    }
+                }
+            } else {
+                id = 0;
+            }
+
+            (function ($) {
+                $.fn.serializeFormJSON = function () {
+                    var o = {};
+                    var a = this.serializeArray();
+                    $.each(a, function () {
+                        if (o[this.name]) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                    return o;
+                };
+            })(jQuery);
+
+            $('form').submit(function (e) {
+                console.log(id);
+                e.preventDefault();
+                var data = $(this).serializeFormJSON();
+                var elNombre = data.nombre;
+
+                //crea elementos tipo 0:paco, 1:juan, 2:luis, etc...
+                window.localStorage.setItem(id, elNombre);
+                var recibe = window.localStorage.getItem(id);
+                console.log(recibe);
+                id++;
+
+                var enviar = JSON.stringify(data);
+                //crea elementos tipo paco:{json}, juan:{json}, etc...
+                window.localStorage.setItem(elNombre, enviar);
+                var recibir = window.localStorage.getItem(elNombre);
+                console.log(recibir);
+                console.log(elNombre);
+
+               window.close();
             });
 
-        });
-       
-    </script>
-  </head>
-  <body id="contenido">
-    <form id="form" action="page.php">
-        
-        <label>Tipo</label>
-        <fieldset class="radioBotones">
-            <input type="radio" id="persona" name="tipo" value="persona" checked>
-            <label for="persona">Persona</label><br>
-            <input type="radio" id="entidad" name="tipo" value="entidad">
-            <label for="entidad">Entidad</label><br>
-            <input type="radio" id="producto" name="tipo" value="producto">
-            <label for="producto">Producto</label>
-        </fieldset>
-       <!-- 
-        <label>Contenido adicional</label>
-        <fieldset class="addCont">
-            <span class="caja">
-                <input type="checkbox" id="p1cb" name="checkbox" value="p1cb">
-                <label for="p1cb"> Párrafo 1</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="p2cb" name="checkbox" value="p2cb">
-                <label for="p2cb"> Párrafo 2</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="p3cb" name="checkbox" value="p3cb">
-                <label for="p3cb"> Párrafo 3</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="p4cb" name="checkbox" value="p4cb">
-                <label for="p4cb"> Párrafo 4</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="v1cb" name="checkbox" value="v1cb">
-                <label for="v1cb"> Vídeo 1</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="v2cb" name="checkbox" value="v2cb">
-                <label for="v2cb"> Vídeo 2</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="f1cb" name="checkbox" value="f1cb">
-                <label for="f1cb"> Foto 1</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="f2cb" name="checkbox" value="f2cb">
-                <label for="f2cb"> Foto 2</label>
-            </span>
-            <span class="caja">
-                <input type="checkbox" id="f3cb" name="checkbox" value="f3cb">
-                <label for="f3cb"> Foto 3</label>
-            </span>   
-        </fieldset>
-        -->
-        <label>Campos</label>
-        <fieldset class="campos">
-        <label for="fechaNacimiento">Fecha de nacimiento</label>
-        <input type="date" name="fechaNacimiento" id="fechaNacimiento">
-        
-        <label for="fechaDefuncion" class="defuncion">Fecha de defunción (Si procede)</label>
-        <input type="date" class="defuncion" name="fechaDefuncion" id="fechaDefuncion">
-        
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre">
-        <label for="wiki">Wiki:</label>
-        <input type="url" name="wiki" id="wiki" placeholder="página de la wikipedia">
-        <label for="f1" class="f1">Foto:</label>
-        <input type="text" class="f1" name="foto" id="foto" placeholder="página donde se aloja la imagen">
-        <!--
-        <label for="p1" class="p1">Párrafo 1</label> 
-        <input type="textarea" class="p1" name="p1" id="p1"> 
-        <label for="p2" class="p2">Párrafo 2</label> 
-        <input type="textarea" class="p2" name="p2" id="p2"> 
-        <label for="p3" class="p3">Párrafo 3</label> 
-        <input type="textarea" class="p3" name="p3" id="p3"> 
-        <label for="p4" class="p4">Párrafo 4</label> 
-        <input type="textarea" class="p4" name="p4" id="p4"> 
-        <label for="v1" class="v1">Vídeo 1</label> 
-        <input type="text" class="v1" name="vid1" id="vid1" placeholder="pegar todo el texto de «placeholder»"> 
-        <label for="v2" class="v2">Vídeo 2</label> 
-        <input type="text" class="v2" name="vid2" id="vid2" placeholder="pegar todo el texto de «placeholder»"> 
-        <label for="f1" class="f1">Foto 1</label>
-        <input type="url" class="f1" name="foto1" id="foto1" placeholder="página donde se aloja la imagen">
-        <label for="f2" class="f2">Foto 2</label> 
-        <input type="url" class="f2" name="foto2" id="foto2" placeholder="página donde se aloja la imagen"> 
-        <label for="f3" class="f3">Foto 3</label> 
-        <input type="url" class="f3" name="foto3" id="foto3" placeholder="página donde se aloja la imagen"> 
-        -->
-        </fieldset>
-        
-        <input type="submit" value="Send" />
-    </form>
-
-    <script>
-        if(localStorage.length>0){
-            for(let i=0; i<=localStorage.length-1; i++) {
-                if(localStorage.getItem(i)==null) {
-                    var id = i;
-                    break;
-                }
+             for(let i=0; i<=localStorage.length-1; i++) {
+                if(localStorage.getItem(i)!=null) {console.log(i, localStorage.getItem(i));}
             }
-        } else {
-            var id = 0;
-        }
-        
-        (function ($) {
-            $.fn.serializeFormJSON = function () {
-                var o = {};
-                var a = this.serializeArray();
-                $.each(a, function () {
-                    if (o[this.name]) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
-                        }
-                        o[this.name].push(this.value || '');
-                    } else {
-                        o[this.name] = this.value || '';
-                    }
-                    
-                });
-                return o;
-            };
-        })(jQuery);
-        
-        
-
-        $('form').submit(function (e) {
-            console.log(id);
-            e.preventDefault();
-            var data = $(this).serializeFormJSON();
-            
-            var elNombre = data.nombre;
-            
-            //crea elementos tipo 0:paco, 1:juan, 2:luis, etc...
-            window.localStorage.setItem(id, elNombre);
-            var recibe = window.localStorage.getItem(id);
-            console.log(recibe);
-            id++;
-            
-            
-            var enviar = JSON.stringify(data); 
-            //crea elementos tipo paco:{json}, juan:{json}, etc...
-            window.localStorage.setItem(elNombre, enviar);
-            var recibir = window.localStorage.getItem(elNombre);
-            console.log(recibir);
-            console.log(elNombre);
-            
-           window.close();
-            
-        });
-        
-         for(let i=0; i<=localStorage.length-1; i++) {
-            if(localStorage.getItem(i)!=null) {console.log(i, localStorage.getItem(i));}
-        }
-        //localStorage.clear();
-    </script>
-      
-    
-  </body>
+        </script>
+    </body>
 </html>
