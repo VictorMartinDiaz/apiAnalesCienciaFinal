@@ -72,7 +72,7 @@ async function cerrar() {
     $('.logoCentral').removeClass("escondida");
     $('.banda').removeClass("escondida");
     $('.banda').animate({
-        opacity: '0.7'
+        opacity: '0.87'
     });
 
 }
