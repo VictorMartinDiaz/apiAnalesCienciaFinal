@@ -108,11 +108,11 @@
             </form>
         </div>
 
-        <div id="ficha"></div>
-
         <div class="banda">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
         </div>
+
+        <div id="ficha"></div>
 
         <footer class="indexFooter">
             <p class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la Universidad Politécnica de Madrid.</p>
@@ -228,14 +228,22 @@
                             });
                     }
 
+
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
+                    await new Promise(r => setTimeout(r, 150));
+                    $('.logoCentral').addClass("escondida");
+                    $('.banda').addClass("escondida");
+
                     document.getElementById("ficha").innerHTML = "";
+                    await new Promise(r => setTimeout(r, 200));
                     $("#ficha").show();
                     $("#ficha").animate({
                         opacity: '1',
                         height: '550px',
                         width: '550px',
                     });
-
 
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
@@ -282,9 +290,8 @@
 
                         } // Cierro el if
                     }//cierro el for
-                    await new Promise(r => setTimeout(r, 666));
-                    $('.logoCentral').addClass("escondida");
-                    $('.banda').addClass("escondida");
+
+
                 }
 
 
@@ -306,6 +313,7 @@
                         existe = false;
                      }
                     //location.reload();
+                    cerrar();
                 });
             });
         </script>
