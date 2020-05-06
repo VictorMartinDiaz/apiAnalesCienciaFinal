@@ -57,10 +57,6 @@
     display: block;
 }
 
-.escondida {
-    display: none;
-}
-
 #cerrar {
     float: right;
     margin-right: 5px;
@@ -105,15 +101,17 @@ a:visited{
     width: 100%;
     /*IMPORTANTE*/
     height: 200px;
-    position: absolute;
-    top: 50%;
-    margin-top: -50px;
+    margin-top: 20vh;
     text-align: center;
 }
 
 .logoCentral{
     display: inline;
     height:100%;
+}
+
+.escondida {
+    display: none;
 }
 
 .indexNav > li > .dropdown-menu { 

@@ -59,19 +59,25 @@ function slideToggleProductos(){
 }
 
 async function cerrar() {
+    $('.logoCentral').removeClass("escondida");
+    $('.banda').removeClass("escondida");
+    $('.banda').animate({
+        opacity: '0.7'
+    });
+    $('.logoCentral').animate({
+        opacity: '0.7'
+    });
+
+
     $("#ficha").animate({
         opacity: '0',
         height: '0px',
         width: '0px',
     });
 
-    $('.logoCentral').removeClass("escondida");
-    $('.logoCentral').addClass("logoCentral");
-    $('.banda').removeClass("escondida");
-    $('.banda').addClass("banda");
 
-    $('.banda').animate({
-        opacity: '0.7'
-    });
 
+    await new Promise(r => setTimeout(r, 700));
+
+    location.reload();
 }

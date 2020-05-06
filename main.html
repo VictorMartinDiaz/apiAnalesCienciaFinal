@@ -32,7 +32,7 @@
                     $('#autores').slideUp();
                     $('#productos').slideUp();
                 });
-               
+
                 try{
                     if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
 
@@ -64,11 +64,11 @@
             });
         </script>
     </head>
-    
+
     <body id="body" class="indexFondo" onload="cargar();">
         <header>
             <nav class="navbar navbar-expand-md  mainNav">
-                <span class="col-lg-2 col-md-3 col-sm-12 text-center"> 
+                <span class="col-lg-2 col-md-3 col-sm-12 text-center">
                     <a class="navbar-brand" href="#">
                         <img class="img-responsive indexLogo ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
                      </a>
@@ -78,17 +78,17 @@
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-end col" id="navbarSupportedContent">
-                    <ul class="navbar-nav dropdown-menu-left indexNav">                  
+                    <ul class="navbar-nav dropdown-menu-left indexNav">
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleAutores()'><i class="fas fa-user"></i> Autores</a>
                             <div class="dropdown-menu" id="autores"></div>
                         </li>
-                                    
+
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleEntidades()'><i class="fas fa-chart-line"></i> Entidades</a>
                             <div class="dropdown-menu" id="entidades"></div>
                         </li>
-                        
+
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
                             <div class="dropdown-menu" id="productos"></div>
@@ -97,7 +97,7 @@
                 </div>
             </nav>
         </header>
-        
+
         <div id=botonera>
             <form id="login" onsubmit="return validacion();">
                 <label for="nombre" class="texto">Nombre</label>
@@ -106,14 +106,14 @@
                 <input type="password" id="password">
                 <input type="submit" value="login" id="boton">
             </form>
-        </div>  
-                
+        </div>
+
         <div id="ficha"></div>
-        
-        <div class="banda d-none d-md-block">
+
+        <div class="banda">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
         </div>
-        
+
         <footer class="indexFooter">
             <p class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la Universidad Politécnica de Madrid.</p>
             <p class="d-lg none"> Universidad Politécnica de Madrid.</p>
@@ -126,13 +126,13 @@
             usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
             if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
         </script>
-            
+
         <script>
             $('#autores').hide();
             $('#entidades').hide();
             $('#productos').hide();
-        </script>     
-            
+        </script>
+
         <script>
             let existe = true;
             var mostrado = false;
@@ -238,9 +238,7 @@
 
                     await new Promise(r => setTimeout(r, 333));
                     $('.logoCentral').addClass("escondida");
-                    $('.logoCentral').removeClass("logoCentral");
                     $('.banda').addClass("escondida");
-                    $('.banda').removeClass("banda");
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
