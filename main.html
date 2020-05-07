@@ -20,6 +20,19 @@
         <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet"/>
     
         <title>Página Principal</title>
+
+        <script>
+            let url = "http://localhost:63342/VictorMartinDiasJavascript/formulario.html";
+            let httpRequest = new XMLHttpRequest();
+
+            function request() {
+                httpRequest.open("GET",
+                    encodeURI(url), true);
+                httpRequest.responseType = "json";
+                httpRequest.onload (dameFormulario());
+            }
+        </script>
+
         
         <script>
             $(document).ready(function() {
@@ -28,16 +41,42 @@
                 $("#login").animate({
                     opacity: '0'
                 });
+                $('#nombre').attr('disabled', 'disabled');
+                $('#password').attr('disabled', 'disabled');
+
+                var playing = true;
+
+               /* function loop(){
+                    if(playing){
+                        $('.indexLogo').fadeIn(400, function(){
+                            $(this).fadeOut(700,loop);
+                        });
+                    }
+                }
+
+                loop(); // start loop
+
+
+                $('.glowed').click(async function(){
+                    playing = false;
+                    await new Promise(r => setTimeout(r, 500));
+                    $('.indexLogo').fadeIn();
+                });*/
+
 
                 $(".indexLogo").click(function() {
 
                     if(opacidad === 0) {
+                        $("#nombre").removeAttr("disabled");
+                        $("#password").removeAttr("disabled");
                         $("#login").animate({
                             opacity: '1'
                         });
                         opacidad = 1;
                     }
                     else {
+                        $('#nombre').attr('disabled', 'disabled');
+                        $('#password').attr('disabled', 'disabled');
                         {$("#login").animate({
                             opacity: '0'
                         });}
@@ -86,7 +125,7 @@
             <nav class="navbar navbar-expand-md  mainNav">
                 <span class="col-lg-2 col-md-3 col-sm-12 text-center">
                     <a class="navbar-brand" href="#">
-                        <img class="img-responsive indexLogo ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
+                        <img class="img-responsive indexLogo glowed ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
                      </a>
                 </span>
                 <button class="navbar-toggler col" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -131,9 +170,8 @@
         <div id="ficha"></div>
 
         <footer class="indexFooter">
-            <p class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la Universidad Politécnica de Madrid.</p>
-            <p class="d-lg none"> Universidad Politécnica de Madrid.</p>
-            <time datetime="2020-02-14 20:00">14/02/2020</time>
+            <span class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la </span><span class="d inline"> Universidad Politécnica de Madrid.</span>
+            <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
         </footer>
 
 
@@ -150,6 +188,7 @@
         </script>
 
         <script>
+
             let existe = true;
             var mostrado = false;
 
