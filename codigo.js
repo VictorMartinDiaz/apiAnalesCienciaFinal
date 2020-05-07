@@ -40,6 +40,8 @@ function getUsuario(datos, nombre, password){
     return null;
 }
 
+
+
 function slideToggleAutores(){
     $('#autores').slideToggle();
     $('#entidades').slideUp();

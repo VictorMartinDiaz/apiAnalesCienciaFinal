@@ -24,10 +24,26 @@
         <script>
             $(document).ready(function() {
 
-                $("#login").hide();
+                let opacidad = 0;
+                $("#login").animate({
+                    opacity: '0'
+                });
 
                 $(".indexLogo").click(function() {
-                    $("#login").slideToggle();
+
+                    if(opacidad === 0) {
+                        $("#login").animate({
+                            opacity: '1'
+                        });
+                        opacidad = 1;
+                    }
+                    else {
+                        {$("#login").animate({
+                            opacity: '0'
+                        });}
+                        opacidad=0;
+                    }
+
                     $('#entidades').slideUp();
                     $('#autores').slideUp();
                     $('#productos').slideUp();
