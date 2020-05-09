@@ -1,6 +1,5 @@
 <!-- TODO
-    el enlace a la wiki no funca
-    editar
+    hacer funcionar el boton "editar"
     dependecias de eliminacion
     
 -->
@@ -21,19 +20,74 @@
         <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet"/>
     
         <title>Página Principal</title>
+
+        <script>
+            let url = "http://localhost:63342/VictorMartinDiasJavascript/formulario.html";
+            let httpRequest = new XMLHttpRequest();
+
+            function request() {
+                httpRequest.open("GET",
+                    encodeURI(url), true);
+                httpRequest.responseType = "json";
+                httpRequest.onload (dameFormulario());
+            }
+        </script>
+
         
         <script>
             $(document).ready(function() {
 
-                $("#login").hide();
+                let opacidad = 0;
+                $("#login").animate({
+                    opacity: '0'
+                });
+                $('#nombre').attr('disabled', 'disabled');
+                $('#password').attr('disabled', 'disabled');
+
+                var playing = true;
+
+               /* function loop(){
+                    if(playing){
+                        $('.indexLogo').fadeIn(400, function(){
+                            $(this).fadeOut(700,loop);
+                        });
+                    }
+                }
+
+                loop(); // start loop
+
+
+                $('.glowed').click(async function(){
+                    playing = false;
+                    await new Promise(r => setTimeout(r, 500));
+                    $('.indexLogo').fadeIn();
+                });*/
+
 
                 $(".indexLogo").click(function() {
-                    $("#login").slideToggle();
+
+                    if(opacidad === 0) {
+                        $("#nombre").removeAttr("disabled");
+                        $("#password").removeAttr("disabled");
+                        $("#login").animate({
+                            opacity: '1'
+                        });
+                        opacidad = 1;
+                    }
+                    else {
+                        $('#nombre').attr('disabled', 'disabled');
+                        $('#password').attr('disabled', 'disabled');
+                        {$("#login").animate({
+                            opacity: '0'
+                        });}
+                        opacidad=0;
+                    }
+
                     $('#entidades').slideUp();
                     $('#autores').slideUp();
                     $('#productos').slideUp();
                 });
-               
+
                 try{
                     if(usuarioRegistrado.tipo==="lector" || usuarioRegistrado.tipo==="escritor"){
 
@@ -61,17 +115,17 @@
                             $("#login").action = "./main.html";
                         });
                     }
-                }catch(error){console.log(error)};
+                }catch(error){console.log(error)}
             });
         </script>
     </head>
-    
+
     <body id="body" class="indexFondo" onload="cargar();">
         <header>
             <nav class="navbar navbar-expand-md  mainNav">
-                <span class="col-lg-2 col-md-3 col-sm-12 text-center"> 
+                <span class="col-lg-2 col-md-3 col-sm-12 text-center">
                     <a class="navbar-brand" href="#">
-                        <img class="img-responsive indexLogo ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
+                        <img class="img-responsive indexLogo glowed ml-4" src="./img/logoPolitecnica1.png"  data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
                      </a>
                 </span>
                 <button class="navbar-toggler col" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -79,17 +133,17 @@
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-end col" id="navbarSupportedContent">
-                    <ul class="navbar-nav dropdown-menu-left indexNav">                  
+                    <ul class="navbar-nav dropdown-menu-left indexNav">
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleAutores()'><i class="fas fa-user"></i> Autores</a>
                             <div class="dropdown-menu" id="autores"></div>
                         </li>
-                                    
+
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleEntidades()'><i class="fas fa-chart-line"></i> Entidades</a>
                             <div class="dropdown-menu" id="entidades"></div>
                         </li>
-                        
+
                         <li class="nav-item dropdown mr-5">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
                             <div class="dropdown-menu" id="productos"></div>
@@ -98,7 +152,7 @@
                 </div>
             </nav>
         </header>
-        
+
         <div id=botonera>
             <form id="login" onsubmit="return validacion();">
                 <label for="nombre" class="texto">Nombre</label>
@@ -107,18 +161,17 @@
                 <input type="password" id="password">
                 <input type="submit" value="login" id="boton">
             </form>
-        </div>  
-                
-        <div id="ficha"></div>
-        
-        <div class="banda d-none d-md-block">
+        </div>
+
+        <div class="banda">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
         </div>
-        
+
+        <div id="ficha"></div>
+
         <footer class="indexFooter">
-            <p class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la Universidad Politécnica de Madrid.</p>
-            <p class="d-lg none"> Universidad Politécnica de Madrid.</p>
-            <time datetime="2020-02-14 20:00">14/02/2020</time>
+            <span class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la </span><span class="d inline"> Universidad Politécnica de Madrid.</span>
+            <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
         </footer>
 
 
@@ -127,14 +180,15 @@
             usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
             if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
         </script>
-            
+
         <script>
             $('#autores').hide();
             $('#entidades').hide();
             $('#productos').hide();
-        </script>     
-            
+        </script>
+
         <script>
+
             let existe = true;
             var mostrado = false;
 
@@ -146,11 +200,11 @@
                     var recibir = window.localStorage.getItem(miNombre);
 
                     var dibujar = JSON.parse(recibir);
-                    if(dibujar.fechaDefuncion=="") dibujar.fechaDefuncion="-";
+                    if(dibujar.fechaDefuncion==="") dibujar.fechaDefuncion="-";
 
                     //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
                     $(".dropdown-item").each(function(){
-                        if(this.id==miNombre){
+                        if(this.id===miNombre){
                             existe = true;
                         }
                     });
@@ -167,7 +221,7 @@
 
                     switch(dibujar.tipo) {
                         case "persona": {
-                            autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            autorElement.innerHTML += '<a class="dropdown-item negro" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
                             break;
                         }
                         case "entidad": {
@@ -190,53 +244,53 @@
                 $('#productos').slideUp();
 
                 if(usuarioRegistrado.tipo==="escritor" || usuarioRegistrado.tipo==="lector") {
-                    $("#ficha").animate({
-                        opacity: '1',
-                        height: '550px',
-                        width: '550px',
-                    });
-                    $('.banda').animate({
-                        opacity: '0'
-                    });
 
                     mostrar = this.id;
                     console.log(mostrar);
 
                     if (mostrado) {
-                        let paso = 0;
+
                         mostrado = false;
-                        if (paso == 0) {
+
                             $("#ficha").animate({
                                 opacity: '0',
                                 height: '0px',
                                 width: '0px',
                             });
-                            paso++;
-                        }
-                        if (paso == 1) {
-                            await new Promise(r => setTimeout(r, 800));
+
+                        $('.banda').animate({
+                            opacity: '0.87'
+                        });
+
+                            await new Promise(r => setTimeout(r, 666));
                             $("#ficha").hide();
                             document.getElementById("ficha").innerHTML = "";
-                            paso++;
 
-                        }
-                        if (paso == 2) {
                             $("#ficha").show();
                             $("#ficha").animate({
                                 opacity: '1',
                                 height: '550px',
                                 width: '550px',
                             });
-                        }
                     }
 
+
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
+                    await new Promise(r => setTimeout(r, 150));
+                    $('.logoCentral').addClass("escondida");
+                    $('.banda').addClass("escondida");
+
                     document.getElementById("ficha").innerHTML = "";
+                    await new Promise(r => setTimeout(r, 200));
                     $("#ficha").show();
                     $("#ficha").animate({
                         opacity: '1',
                         height: '550px',
                         width: '550px',
                     });
+
 
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
@@ -249,35 +303,50 @@
                             var dibujar0 = JSON.parse(recibir0);
                             console.log(dibujar0);
                             //  console.log(i.nombre);
-                            let template0 = [{'<>': 'img', 'src': '${foto}', 'class': 'laImg'}, {
-                                '<>': 'h1',
-                                'html': '${nombre}'
-                            }, {'<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'}, {
-                                '<>': 'p',
-                                'html': 'Fecha de defunción: ${fechaDefuncion}'
-                            }, {'<>': 'a', 'href': '${wiki}', 'html': 'wikipedia'}];
-
-                            let data0 = [dibujar0];
-                            document.getElementById("ficha").innerHTML += (json2html.transform(data0, template0));
-
-                            let bodyElement = document.getElementById("ficha");
-                            bodyElement.innerHTML += '<br/>';
-                            if (usuarioRegistrado.tipo == "escritor") {
-                                bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</a>';
-                            }
-                            if (usuarioRegistrado.tipo == "escritor") {
-                                bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
-                            }
+                            let template = [
+                                {
+                                    '<>': 'img', 'src': '${foto}', 'class': 'laImg'
+                                },
+                                {
+                                '<>': 'h1', 'html': '${nombre}'
+                                },
+                                {
+                                    '<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'
+                                },
+                                {
+                                '<>': 'p', 'html': 'Fecha de defunción: ${fechaDefuncion}'
+                                },
+                                {
+                                    '<>': 'a', 'href': '${wiki}', 'html': 'wikipedia', 'class': 'linkWiki'
+                                }
+                            ];
+                            var bodyElement = document.getElementById("ficha");
                             bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+                            let data0 = [dibujar0];
+                            document.getElementById("ficha").innerHTML += (json2html.transform(data0, template));
+
+
+
+                            if (usuarioRegistrado.tipo === "escritor") {
+                                bodyElement.innerHTML += '<div>';
+                                bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
+                                bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
+                                bodyElement.innerHTML += '</div>';
+                            }
+
                         } // Cierro el if
                     }//cierro el for
+
+
                 }
+
+
 
                 $('#eliminar').click(function(){
 
                     for(let i=0; i<=localStorage.length-1; i++) {
                         if(localStorage.getItem(i)!=null){
-                            if(localStorage.getItem(i)==dibujar0.nombre){
+                            if(localStorage.getItem(i)===dibujar0.nombre){
                                 console.log(dibujar0.nombre);
 
                                 let prueba = document.getElementById(dibujar0.nombre);
@@ -289,7 +358,8 @@
                         }
                         existe = false;
                      }
-                    location.reload();
+                    //location.reload();
+                    cerrar();
                 });
             });
         </script>
@@ -297,14 +367,17 @@
         <script>
             $(function() {
                 let bodyElement = document.getElementById("ficha");
-                let html = '<div>';
-                $.each(jsonObj, function(tipo, fechaNacimiento, fechaDefuncion, nombre, wiki) {
+
+                $.each(jsonObj, function(tipo, nombre, fechaNacimiento, fechaDefuncion, wiki) {
+                    bodyElement += '<div>';
                     bodyElement += '<h1>' + tipo + '</h1>';
+                    bodyElement += '<p>' + nombre + '</p>';
                     bodyElement += '<p>' + fechaNacimiento + '</p>';
                     bodyElement += '<p>' + fechaDefuncion + '</p>';
-                    bodyElement += '<a href=" ' + wiki + '"/>';
+                    bodyElement += '<a href="' + wiki + '">' + '</a>';
+                    bodyElement += '</div>';
+
                 });
-                bodyElement += '</div>';
 
             });
         </script>
