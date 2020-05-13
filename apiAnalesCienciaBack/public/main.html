@@ -1,0 +1,473 @@
+<!-- TODO
+    hacer funcionar el boton "editar"
+    dependecias de eliminacion
+-->
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Victor Martin Diaz"/>
+        <script src="codigo.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/5fd608cf6f.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.4.0/json2html.min.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet"/>
+    
+        <title>Página Principal</title>
+        
+        <script>
+            $(document).ready(function() {
+
+                let opacidad = 0;
+                $("#login").animate({
+                    opacity: '0'
+                });
+                $('#username').attr('disabled', 'disabled');
+                $('#password').attr('disabled', 'disabled');
+
+
+                /* var playing = true;
+               function loop(){
+                    if(playing){
+                        $('.indexLogo').fadeIn(400, function(){
+                            $(this).fadeOut(700,loop);
+                        });
+                    }
+                }
+
+                loop(); // start loop
+
+
+                $('.glowed').click(async function(){
+                    playing = false;
+                    await new Promise(r => setTimeout(r, 500));
+                    $('.indexLogo').fadeIn();
+                });*/
+
+
+                $(".indexLogo").click(function() {
+
+                    if(opacidad === 0) {
+                        $("#username").removeAttr("disabled");
+                        $("#password").removeAttr("disabled");
+                        $("#login").animate({
+                            opacity: '1'
+                        });
+                        opacidad = 1;
+                    }
+                    else {
+                        $('#username').attr('disabled', 'disabled');
+                        $('#password').attr('disabled', 'disabled');
+                        {$("#login").animate({
+                            opacity: '0'
+                        });}
+                        opacidad=0;
+                    }
+
+                    $('#entidades').slideUp();
+                    $('#autores').slideUp();
+                    $('#productos').slideUp();
+                });
+
+                try{
+                    if(usuarioRegistrado.tipo==="reader" || usuarioRegistrado.tipo==="reader+writer"){
+
+                        let bodyElement = "";
+
+                        $("#ficha").click(function() {
+                            document.getElementById("logout").style.visibility = "visible";
+                        });
+
+                        bodyElement = document.getElementById("botonera");
+                        bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
+
+                        if(usuarioRegistrado.tipo === "reader+writer"){
+                            bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
+                            $("a[rel='pop-up']").click(function () {
+                                var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
+                                nueva = window.open(this.href, 'Popup', caracteristicas);
+                                return false;
+
+                            });
+                            let blurred = false;
+                            window.onblur = function() { blurred = true; };
+                            window.onfocus = function() { blurred && (location.reload()); };
+                        }
+                        $("#logout").click(function(){
+                            window.sessionStorage.removeItem("usuarioRegistrado");
+                            $("#login").action = "./main.html";
+                        });
+                    }
+                }catch(error){console.log(error)}
+            });
+        </script>
+    </head>
+
+    <body id="body" class="indexFondo" onload="cargar();">
+        <header>
+            <nav class="navbar navbar-expand-md  mainNav">
+                <span class="col-lg-2 col-md-3 col-sm-12 text-center">
+                    <a class="navbar-brand" href="#">
+                        <img class="img-responsive indexLogo glowed ml-4" src="img/logoPolitecnica1.png" data-placement="bottom" title="Haz click aquí para identificarte" alt="logo de la universidad"/>
+                     </a>
+                </span>
+                <button class="navbar-toggler col" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end col" id="navbarSupportedContent">
+                    <ul class="navbar-nav dropdown-menu-left indexNav">
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleAutores()'><i class="fas fa-user"></i> Autores</a>
+                            <div class="dropdown-menu" id="autores"></div>
+                        </li>
+
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleEntidades()'><i class="fas fa-chart-line"></i> Entidades</a>
+                            <div class="dropdown-menu" id="entidades"></div>
+                        </li>
+
+                        <li class="nav-item dropdown mr-5">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
+                            <div class="dropdown-menu" id="productos"></div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div id=botonera>
+            <form id="login" method="post">
+                <label for="username" class="texto">Nombre:</label>
+                <input type="text" id="username" name="username"/>
+                <label for="password" class="texto">Password:</label>
+                <input type="password" id="password" name="password"/>
+                <input type="submit" value="Submit" id="boton">
+            </form>
+        </div>
+
+        <div class="banda">
+            <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
+        </div>
+        <div id="info"></div>
+        <div id="ficha"></div>
+
+        <footer class="indexFooter">
+            <span class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la </span><span class="d inline"> Universidad Politécnica de Madrid.</span>
+            <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
+        </footer>
+        <script>
+
+            $(function request() {
+                $('form').bind('submit', function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/access_token',
+                        data: $('form').serialize(),
+                        success: function (data, textStatus, request) {
+                            //alert('form was submitted');
+                            authHeader = request.getResponseHeader('Authorization');
+
+                            $(function retreive() {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'api/v1/products',
+                                    headers: {"Authorization": authHeader},
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $('#info').html(JSON.stringify(data));
+                                    },
+                                })
+                            })
+                        }
+                    });
+                    return false;
+                });
+            });
+
+
+            /*let url = "/access_token";
+            let httpRequest = new XMLHttpRequest();
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let userInfo = "username="+username+"&password="+password;
+            function request() {
+                httpRequest.open("POST", encodeURI(url), true);
+                console.log(httpRequest.status);
+                httpRequest.responseType = "json";
+                httpRequest.onload = () => {
+                    console.log(httpRequest.status);
+                    console.log(httpRequest);
+                    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+                        alert(httpRequest.responseText);
+
+                        let data = $('form').serialize;
+                        console.log(data);
+                    } else
+                    {
+                        alert("no hay conexion");
+                    }
+                    };
+                httpRequest.send(data);
+            }*/
+
+
+                    /*if(resultado.innerHTML === "") {
+                    for (let i in data) {
+                        let producto = data[i];
+                        if (producto.name === "WWW") {
+                            resultado.innerHTML += producto.name + " " + producto.birthDate + " tiene " + producto.deathDate + " años." + "<br/>";
+                        } console.log(producto.name);
+                    }
+                }*/
+
+
+
+            /*let authHeader = null;
+            $("#boton").click(function(){
+                $.post(
+                    "/access_token",
+                    $("#login").serialize(),
+                    null
+                ).success(function (data, textStatus, request) {
+                    // Si es correcto => mostrar productos
+                    authHeader = request.getResponseHeader('Authorization');
+                    $.ajax({
+                        type: "GET", url: '/api/v1/products', headers: {"Authorization": authHeader}, dataType: 'json',
+                        success: function (data) {
+                            $('#resultado').html(JSON.stringify(data));
+                        }
+                    })
+                }).fail(function () { alert("Incorrecto :(") });
+            });*/
+
+            //console.log( "..\\apiAnalesCienciaBack\\src\\scripts\\listProducts.php");
+
+            //var resultado = document.getElementById("info");
+
+
+        </script>
+
+        <script>
+            var mostrar ="";
+            usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
+            if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
+        </script>
+
+        <script>
+            $('#autores').hide();
+            $('#entidades').hide();
+            $('#productos').hide();
+        </script>
+
+        <script>
+
+            let existe = true;
+            var mostrado = false;
+
+
+            for(let i=0; i<=localStorage.length-1; i++) {
+
+                let miNombre = "";
+                let recibir = "";
+                let dibujar = "";
+
+                if(localStorage.getItem(i)!=null) {
+                    existe = false;
+                    miNombre = window.localStorage.getItem(i);
+
+                    recibir = window.localStorage.getItem(miNombre);
+
+                    dibujar = JSON.parse(recibir);
+                    if(dibujar.fechaDefuncion==="") dibujar.fechaDefuncion="-";
+
+                    //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
+                    $(".dropdown-item").each(function(){
+                        if(this.id===miNombre){
+                            existe = true;
+                        }
+                    });
+                }
+
+                console.log(existe);
+                if(!existe) {
+                    let jsonObj = $.parseJSON(recibir);
+                    let autorElement = document.getElementById("autores");
+                    let entidadElement = document.getElementById("entidades");
+                    let productosElement = document.getElementById("productos");
+                    let imagenNueva = dibujar.foto;
+                    let nombreNuevo = dibujar.nombre;
+
+                    switch(dibujar.tipo) {
+                        case "persona": {
+                            autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
+                        case "entidad": {
+                            entidadElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
+                        case "producto": {
+                            productosElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
+                            break;
+                        }
+                    }
+                }
+                existe = true;
+            }
+            $(".dropdown-item").click( async function(event) {
+
+                let dibujar="";
+
+                event.preventDefault();
+                $('#autores').slideUp();
+                $('#entidades').slideUp();
+                $('#productos').slideUp();
+
+                if(usuarioRegistrado.tipo==="reader+writer" || usuarioRegistrado.tipo==="reader") {
+
+                    mostrar = this.id;
+                    console.log(mostrar);
+
+                    if (mostrado) {
+
+                        mostrado = false;
+
+                            $("#ficha").animate({
+                                opacity: '0',
+                                height: '0px',
+                                width: '0px',
+                            });
+
+                        $('.banda').animate({
+                            opacity: '0.87'
+                        });
+
+                            await new Promise(r => setTimeout(r, 666));
+                            $("#ficha").hide();
+                            document.getElementById("ficha").innerHTML = "";
+
+                            $("#ficha").show();
+                            $("#ficha").animate({
+                                opacity: '1',
+                                height: '550px',
+                                width: '550px',
+                            });
+                    }
+
+
+                    $('.banda').animate({
+                        opacity: '0'
+                    });
+                    await new Promise(r => setTimeout(r, 150));
+                    $('.logoCentral').addClass("escondida");
+                    $('.banda').addClass("escondida");
+
+                    document.getElementById("ficha").innerHTML = "";
+                    await new Promise(r => setTimeout(r, 200));
+                    $("#ficha").show();
+                    $("#ficha").animate({
+                        opacity: '1',
+                        height: '550px',
+                        width: '550px',
+                    });
+
+
+                    for (let i = 0; i <= localStorage.length - 1; i++) {
+
+                        if (localStorage.getItem(i) === mostrar && !mostrado) {
+                            mostrado = true;
+                            let miNombre = window.localStorage.getItem(i);
+                            console.log(miNombre);
+                            let recibir = window.localStorage.getItem(miNombre);
+                            console.log(recibir);
+                            dibujar = JSON.parse(recibir);
+                            console.log(dibujar);
+                            //  console.log(i.nombre);
+                            let template = [
+                                {
+                                    '<>': 'img', 'src': '${foto}', 'class': 'laImg'
+                                },
+                                {
+                                '<>': 'h1', 'html': '${nombre}'
+                                },
+                                {
+                                    '<>': 'p', 'html': 'Fecha de nacimiento: ${fechaNacimiento}'
+                                },
+                                {
+                                '<>': 'p', 'html': 'Fecha de defunción: ${fechaDefuncion}'
+                                },
+                                {
+                                    '<>': 'a', 'href': '${wiki}', 'html': 'wikipedia', 'class': 'linkWiki'
+                                }
+                            ];
+                            let bodyElement = document.getElementById("ficha");
+                            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+                            let data = [dibujar];
+                            document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
+
+
+
+                            if (usuarioRegistrado.tipo === "reader+writer") {
+                                bodyElement.innerHTML += '<div>';
+                                bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
+                                bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
+                                bodyElement.innerHTML += '</div>';
+                            }
+
+                        } // Cierro el if
+                    }//cierro el for
+
+
+                }
+
+
+
+                $('#eliminar').click(function(){
+
+                    for(let i=0; i<=localStorage.length-1; i++) {
+                        if(localStorage.getItem(i)!=null){
+                            if(localStorage.getItem(i)===dibujar.nombre){
+                                console.log(dibujar.nombre);
+
+                                let prueba = document.getElementById(dibujar.nombre);
+                                console.log(prueba);
+                                $(prueba).hide();
+                                localStorage.removeItem(i);
+                                localStorage.removeItem(dibujar.nombre);
+                            }
+                        }
+                        existe = false;
+                     }
+                    //location.reload();
+                    cerrar();
+                });
+            });
+        </script>
+        
+        <script>
+            $(function() {
+                let bodyElement = document.getElementById("ficha");
+
+                $.each(jsonObj, function(tipo, nombre, fechaNacimiento, fechaDefuncion, wiki) {
+                    bodyElement += '<div>';
+                    bodyElement += '<h1>' + tipo + '</h1>';
+                    bodyElement += '<p>' + nombre + '</p>';
+                    bodyElement += '<p>' + fechaNacimiento + '</p>';
+                    bodyElement += '<p>' + fechaDefuncion + '</p>';
+                    bodyElement += '<a href="' + wiki + '">' + '</a>';
+                    bodyElement += '</div>';
+
+                });
+
+            });
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    </body>
+</html>
