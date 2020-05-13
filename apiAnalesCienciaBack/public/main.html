@@ -1,7 +1,5 @@
-<!-- TODO
-    hacer funcionar el boton "editar"
-    dependecias de eliminacion
--->
+<!-- TODO dependecias de eliminacion -->
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -28,7 +26,7 @@
                 $('#username').attr('disabled', 'disabled');
                 $('#password').attr('disabled', 'disabled');
 
-
+                // TODO hacer algo que haga intuitivo el login
                 /* var playing = true;
                function loop(){
                     if(playing){
@@ -71,7 +69,7 @@
                     $('#autores').slideUp();
                     $('#productos').slideUp();
                 });
-
+                <!-- TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer -->
                 try{
                     if(usuarioRegistrado.tipo==="reader" || usuarioRegistrado.tipo==="reader+writer"){
 
@@ -85,10 +83,11 @@
                         bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
 
                         if(usuarioRegistrado.tipo === "reader+writer"){
+                            // TODO Hacer un formulario más cuco
                             bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
                             $("a[rel='pop-up']").click(function () {
-                                var caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
-                                nueva = window.open(this.href, 'Popup', caracteristicas);
+                                let caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
+                                let nueva = window.open(this.href, 'Popup', caracteristicas);
                                 return false;
 
                             });
@@ -97,6 +96,7 @@
                             window.onfocus = function() { blurred && (location.reload()); };
                         }
                         $("#logout").click(function(){
+                            // TODO cambiar sesionStorage por la BBDD (O no, en este caso. No sé)
                             window.sessionStorage.removeItem("usuarioRegistrado");
                             $("#login").action = "./main.html";
                         });
@@ -171,6 +171,8 @@
                             //alert('form was submitted');
                             authHeader = request.getResponseHeader('Authorization');
 
+                            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
+
                             $(function retreive() {
                                 $.ajax({
                                     type: 'GET',
@@ -178,7 +180,14 @@
                                     headers: {"Authorization": authHeader},
                                     dataType: 'json',
                                     success: function (data) {
-                                        $('#info').html(JSON.stringify(data));
+                                        console.log(data);
+                                        console.log(data['products']);
+                                        console.log(data['products'][1]);
+                                        console.log(data['products'][1]['product']);
+                                        console.log(data['products'][1]['product'].name);
+                                        //$('#info').html(JSON.stringify(data));
+                                        //todo usar esto ↓ para rellenar los dropdowmn (y las fichas)
+                                        $('#info').html(JSON.stringify(data['products'][1]['product'].name));
                                     },
                                 })
                             })
@@ -188,7 +197,7 @@
                 });
             });
 
-
+            //TODO borrar esto si no le sacas utilidad xd
             /*let url = "/access_token";
             let httpRequest = new XMLHttpRequest();
             let username = document.getElementById("username").value;
@@ -214,7 +223,7 @@
                 httpRequest.send(data);
             }*/
 
-
+                    //TODO ver si esto sirve para algo
                     /*if(resultado.innerHTML === "") {
                     for (let i in data) {
                         let producto = data[i];
@@ -252,6 +261,8 @@
         </script>
 
         <script>
+            //TODO sesionStorage caca, cambiar por la BBDD
+            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
             var mostrar ="";
             usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
             if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
@@ -268,7 +279,7 @@
             let existe = true;
             var mostrado = false;
 
-
+            //TODO cambiar localStorage por la BBDD con lo que ya sabes
             for(let i=0; i<=localStorage.length-1; i++) {
 
                 let miNombre = "";
@@ -291,10 +302,11 @@
                         }
                     });
                 }
-
                 console.log(existe);
+
                 if(!existe) {
-                    let jsonObj = $.parseJSON(recibir);
+                    var jsonObj = "";
+                    jsonObj = $.parseJSON(recibir);
                     let autorElement = document.getElementById("autores");
                     let entidadElement = document.getElementById("entidades");
                     let productosElement = document.getElementById("productos");
@@ -327,6 +339,7 @@
                 $('#entidades').slideUp();
                 $('#productos').slideUp();
 
+                //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
                 if(usuarioRegistrado.tipo==="reader+writer" || usuarioRegistrado.tipo==="reader") {
 
                     mostrar = this.id;
@@ -376,6 +389,7 @@
                     });
 
 
+                    //TODO cambiar localStorage por BBDD
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
                         if (localStorage.getItem(i) === mostrar && !mostrado) {
@@ -410,20 +424,17 @@
                             document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
 
-
+                            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
                             if (usuarioRegistrado.tipo === "reader+writer") {
                                 bodyElement.innerHTML += '<div>';
+                                //TODO hacer funcionar el boton "editar"
                                 bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
                                 bodyElement.innerHTML += '</div>';
                             }
-
-                        } // Cierro el if
-                    }//cierro el for
-
-
+                        }
+                    }
                 }
-
 
 
                 $('#eliminar').click(function(){
@@ -460,9 +471,7 @@
                     bodyElement += '<p>' + fechaDefuncion + '</p>';
                     bodyElement += '<a href="' + wiki + '">' + '</a>';
                     bodyElement += '</div>';
-
                 });
-
             });
         </script>
 
