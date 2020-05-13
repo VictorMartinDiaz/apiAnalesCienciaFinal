@@ -1,0 +1,62 @@
+{
+    "name": "tdw/aciencia",
+    "type": "project",
+    "description": "UPM - TDW - Slim4 Anales de la Ciencia",
+    "license": "MIT",
+    "homepage": "http://www.etsisi.upm.es/",
+    "keywords": ["slim-4", "php", "doctrine", "phpunit", "openapi"],
+    "authors": [
+        {
+            "name": "TDW UPM",
+            "homepage": "http://www.etsisi.upm.es/",
+            "email": "miw.etsisi@upm.es",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TDW\\ACiencia\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TDW\\Test\\ACiencia\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "ext-mysqli": "*",
+        "ext-pdo": "*",
+        "doctrine/orm": "^2.7",
+        "lcobucci/jwt": "^3.3",
+        "monolog/monolog": "^2.0",
+        "php-di/php-di": "^6.1",
+        "ramsey/uuid": "^4.0",
+        "selective/basepath": "^0.2.0",
+        "selective/config": "^0.1.1",
+        "slim/http": "^1.0",
+        "slim/psr7": "^1.0",
+        "slim/slim": "^4.4",
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "require-dev": {
+        "composer/composer": "^1.10",
+        "fzaninotto/faker": "^1.9",
+        "phpunit/phpunit": "^9.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "TDW\\ACiencia\\Utility\\Install::preUpdateSchema",
+            "TDW\\ACiencia\\Utility\\Install::postInstall"
+        ],
+        "start": "php -S 127.0.0.1:8000 -t public"
+    },
+    "scripts-descriptions": {
+        "start": "Lanza el servidor interno del intérprete de PHP"
+    }
+}

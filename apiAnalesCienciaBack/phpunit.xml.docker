@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.readthedocs.io/en/9.1/configuration.html, XmlUnboundNsPrefix -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.1/phpunit.xsd"
+         colors="true"
+         bootstrap="tests/tests_bootstrap.php"
+         verbose="true"
+>
+  <php>
+    <ini name="error_reporting" value="32767" />
+    <!-- define your env variables for the test env here -->
+
+    <!-- DOCKER -->
+    <env name="DATABASE_HOST" value="aos_mysql" force="true" />
+    <!-- env name="DATABASE_PORT" value="3306" force="true" /-->
+    <env name="DATABASE_NAME" value="db_name_test" force="true" />
+    <env name="DATABASE_USER" value="root" force="true" />
+    <env name="DATABASE_PASSWD" value="root" force="true" />
+    <!-- env name="DATABASE_DRIVER" value="pdo_mysql" force="true" /-->
+    <!-- env name="DATABASE_CHARSET" value="UTF8" force="true" /-->
+
+    <env name="ADMIN_USER_NAME" value="adminTDW" force="true" />
+    <env name="ADMIN_USER_EMAIL" value="adminTDW@example.com" force="true" />
+    <env name="ADMIN_USER_PASSWD" value="*adminTDW*" force="true" />
+
+    <env name="ENTITY_DIR" value="/src/Entity/" force="true" />
+    <!-- env name="DEBUG" value="0" /-->
+
+    <env name="RUTA_API" value="/api/v1" force="true" />
+    <env name="RUTA_LOGIN" value="/access_token" force="true" />
+    <env name="JWT_SECRET" value="68V0zWFrS72GbpPreidkQFLfj4v9m3Ti+DXc8OB0gcM=" force="true" />
+    <!-- DOCKER -->
+  </php>
+
+  <logging>
+    <log type="coverage-clover" target="./logs/coverage.xml"/>
+  </logging>
+  <testsuites>
+    <testsuite name="TDW ACiencia API test suite">
+      <directory suffix="Test.php">tests</directory>
+    </testsuite>
+  </testsuites>
+
+  <filter>
+    <whitelist>
+      <directory>./src/</directory>
+      <exclude>
+        <directory>./src/scripts/</directory>
+        <directory>./src/Factory/</directory>
+        <directory>./src/Handler/</directory>
+        <directory>./src/Utility/</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+
+</phpunit>
