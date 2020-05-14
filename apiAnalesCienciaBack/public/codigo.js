@@ -44,9 +44,9 @@ function request() {
                 //alert('form was submitted');
                 authHeader = request.getResponseHeader('Authorization');
                 let usuarioActual = document.getElementById('username').value;
-                //retrieveProducts();
-                //retrievePersons();
-                //retrieveEntities();
+                retrieveProducts();
+                retrievePersons();
+                retrieveEntities();
                 retrieveUserType(authHeader, usuarioActual);
             }
         });
@@ -55,9 +55,7 @@ function request() {
 }
 
 function retrieveUserType(authHeader, usuarioActual) {
-    var usuarioRegistrado = '';
-    /*console.log("Usuario actual (dentro funcion)");
-    console.log(usuarioActual);*/
+
     $.ajax({
         type: 'GET',
         url: 'api/v1/users',
@@ -75,12 +73,8 @@ function retrieveUserType(authHeader, usuarioActual) {
                 console.log(i['user'].username);
                 console.log(i['user'].role);*/
                 if (usuarioActual === i['user'].username) {
-                    console.log("------------------------------------------------");
-                    console.log(i['user'].username);
                     const tipo = i['user'].role;
-console.log(tipo);
                     localStorage.usuarioRegistrado = tipo;
-                    console.log(localStorage.getItem('usuarioRegistrado'));
                     imIn();
                     return false;
                 }
@@ -92,9 +86,8 @@ console.log(tipo);
 function imIn() {
         try {
             const usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
-            console.log(usuarioRegistrado);
+
             if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
-                console.log("ole, ole");
                 let bodyElement = "";
 
                 $("#ficha").click(function () {
@@ -106,10 +99,11 @@ function imIn() {
 
                 if (usuarioRegistrado === "writer") {
                     // TODO Hacer un formulario más cuco
+                    // TODO Hacer funcionar el boton crear
                     bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
                     $("a[rel='pop-up']").click(function () {
                         let caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
-                        let nueva = window.open(this.href, 'Popup', caracteristicas);
+                        window.open(this.href, 'Popup', caracteristicas);
                         return false;
 
                     });
@@ -131,22 +125,72 @@ function imIn() {
         }
     }
 
-
 function retrieveProducts() {
+    let productosElement = document.getElementById("productos");
+
     $.ajax({
         type: 'GET',
         url: 'api/v1/products',
         headers: {"Authorization": authHeader},
         dataType: 'json',
         success: function (data) {
-            console.log(data);
-            console.log(data['products']);
+            data['products'].forEach(i => {
+                productosElement.innerHTML +=
+                    '<a class="dropdown-item" href="" id="' + i['product'].name + '">' +
+                    '<img class="dropdownImg" src=' + i['product'].imageUrl+ ' />' +
+                    '<span class="name id="' + i['product'].name + '">' + i['product'].name +
+                    '</span>' +
+                    '</a>'
+            });
+            /*console.log(data['products']);
             console.log(data['products'][1]);
             console.log(data['products'][1]['product']);
-            console.log(data['products'][1]['product'].name);
+            console.log(data['products'][1]['product'].name);*/
             //$('#info').html(JSON.stringify(data));
-            //todo usar esto ↓ para rellenar los dropdowmn (y las fichas)
-            $('#info').html(JSON.stringify(data['products'][1]['product'].name));
+
+
+        },
+    })
+}
+
+function retrievePersons() {
+    let personasElement = document.getElementById("autores");
+
+    $.ajax({
+        type: 'GET',
+        url: 'api/v1/persons',
+        headers: {"Authorization": authHeader},
+        dataType: 'json',
+        success: function (data) {
+            data['persons'].forEach(i => {
+                personasElement.innerHTML +=
+                    '<a class="dropdown-item" href="" id="' + i['person'].name + '">' +
+                    '<img class="dropdownImg" src=' + i['person'].imageUrl+ ' />' +
+                    '<span class="name id="' + i['person'].name + '">' + i['person'].name +
+                    '</span>' +
+                    '</a>'
+            });
+        },
+    })
+}
+
+function retrieveEntities() {
+    let entidadesElement = document.getElementById("entidades");
+
+    $.ajax({
+        type: 'GET',
+        url: 'api/v1/entities',
+        headers: {"Authorization": authHeader},
+        dataType: 'json',
+        success: function (data) {
+            data['entities'].forEach(i => {
+                entidadesElement.innerHTML +=
+                    '<a class="dropdown-item" href="" id="' + i['entity'].name + '">' +
+                    '<img class="dropdownImg" src=' + i['entity'].imageUrl+ ' />' +
+                    '<span class="name id="' + i['entity'].name + '">' + i['entity'].name +
+                    '</span>' +
+                    '</a>'
+            });
         },
     })
 }
