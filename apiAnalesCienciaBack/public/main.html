@@ -18,7 +18,12 @@
         
         <script>
             $(document).ready(function() {
-
+                let remanente = localStorage.getItem('usuarioRegistrado');
+                console.log(remanente);
+                   /* if (remanente === "reader" || remanente === "writer") {
+                        localStorage.removeItem('usuarioRegistrado');
+                    }
+                console.log(remanente);*/
                 let opacidad = 0;
                 $("#login").animate({
                     opacity: '0'
@@ -69,44 +74,11 @@
                     $('#autores').slideUp();
                     $('#productos').slideUp();
                 });
-                <!-- TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer -->
-                try{
-                    if(usuarioRegistrado.tipo==="reader" || usuarioRegistrado.tipo==="reader+writer"){
-
-                        let bodyElement = "";
-
-                        $("#ficha").click(function() {
-                            document.getElementById("logout").style.visibility = "visible";
-                        });
-
-                        bodyElement = document.getElementById("botonera");
-                        bodyElement.innerHTML = "<a href='./main.html' class='btn btn-danger' id='logout'>Logout</a>";
-
-                        if(usuarioRegistrado.tipo === "reader+writer"){
-                            // TODO Hacer un formulario más cuco
-                            bodyElement.innerHTML += '<a href="formulario.html" class="btn btn-primary" rel="pop-up" id="crear">Crear</a>';
-                            $("a[rel='pop-up']").click(function () {
-                                let caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
-                                let nueva = window.open(this.href, 'Popup', caracteristicas);
-                                return false;
-
-                            });
-                            let blurred = false;
-                            window.onblur = function() { blurred = true; };
-                            window.onfocus = function() { blurred && (location.reload()); };
-                        }
-                        $("#logout").click(function(){
-                            // TODO cambiar sesionStorage por la BBDD (O no, en este caso. No sé)
-                            window.sessionStorage.removeItem("usuarioRegistrado");
-                            $("#login").action = "./main.html";
-                        });
-                    }
-                }catch(error){console.log(error)}
             });
         </script>
     </head>
 
-    <body id="body" class="indexFondo" onload="cargar();">
+    <body id="body" class="indexFondo">
         <header>
             <nav class="navbar navbar-expand-md  mainNav">
                 <span class="col-lg-2 col-md-3 col-sm-12 text-center">
@@ -140,12 +112,12 @@
         </header>
 
         <div id=botonera>
-            <form id="login" method="post">
+            <form id="login">
                 <label for="username" class="texto">Nombre:</label>
                 <input type="text" id="username" name="username"/>
                 <label for="password" class="texto">Password:</label>
                 <input type="password" id="password" name="password"/>
-                <input type="submit" value="Submit" id="boton">
+                <input type="submit" value="Submit" id="boton" onclick="request()">
             </form>
         </div>
 
@@ -160,69 +132,6 @@
             <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
         </footer>
         <script>
-
-            $(function request() {
-                $('form').bind('submit', function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/access_token',
-                        data: $('form').serialize(),
-                        success: function (data, textStatus, request) {
-                            //alert('form was submitted');
-                            authHeader = request.getResponseHeader('Authorization');
-
-                            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
-
-                            $(function retreive() {
-                                $.ajax({
-                                    type: 'GET',
-                                    url: 'api/v1/products',
-                                    headers: {"Authorization": authHeader},
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        console.log(data);
-                                        console.log(data['products']);
-                                        console.log(data['products'][1]);
-                                        console.log(data['products'][1]['product']);
-                                        console.log(data['products'][1]['product'].name);
-                                        //$('#info').html(JSON.stringify(data));
-                                        //todo usar esto ↓ para rellenar los dropdowmn (y las fichas)
-                                        $('#info').html(JSON.stringify(data['products'][1]['product'].name));
-                                    },
-                                })
-                            })
-                        }
-                    });
-                    return false;
-                });
-            });
-
-            //TODO borrar esto si no le sacas utilidad xd
-            /*let url = "/access_token";
-            let httpRequest = new XMLHttpRequest();
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
-            let userInfo = "username="+username+"&password="+password;
-            function request() {
-                httpRequest.open("POST", encodeURI(url), true);
-                console.log(httpRequest.status);
-                httpRequest.responseType = "json";
-                httpRequest.onload = () => {
-                    console.log(httpRequest.status);
-                    console.log(httpRequest);
-                    if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-                        alert(httpRequest.responseText);
-
-                        let data = $('form').serialize;
-                        console.log(data);
-                    } else
-                    {
-                        alert("no hay conexion");
-                    }
-                    };
-                httpRequest.send(data);
-            }*/
-
                     //TODO ver si esto sirve para algo
                     /*if(resultado.innerHTML === "") {
                     for (let i in data) {
@@ -232,7 +141,6 @@
                         } console.log(producto.name);
                     }
                 }*/
-
 
 
             /*let authHeader = null;
@@ -256,16 +164,6 @@
             //console.log( "..\\apiAnalesCienciaBack\\src\\scripts\\listProducts.php");
 
             //var resultado = document.getElementById("info");
-
-
-        </script>
-
-        <script>
-            //TODO sesionStorage caca, cambiar por la BBDD
-            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
-            var mostrar ="";
-            usuarioRegistrado = JSON.parse(sessionStorage.getItem("usuarioRegistrado"));
-            if (usuarioRegistrado == null) usuarioRegistrado = "visitante";
         </script>
 
         <script>
@@ -275,7 +173,7 @@
         </script>
 
         <script>
-
+            //usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
             let existe = true;
             var mostrado = false;
 
@@ -332,16 +230,15 @@
             }
             $(".dropdown-item").click( async function(event) {
 
-                let dibujar="";
+                let dibujar = "";
+                let mostrar = "";
 
                 event.preventDefault();
                 $('#autores').slideUp();
                 $('#entidades').slideUp();
                 $('#productos').slideUp();
 
-                //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
-                if(usuarioRegistrado.tipo==="reader+writer" || usuarioRegistrado.tipo==="reader") {
-
+                if(usuarioRegistrado==="writer" || usuarioRegistrado==="reader") {
                     mostrar = this.id;
                     console.log(mostrar);
 
@@ -424,8 +321,7 @@
                             document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
 
-                            //TODO averiguar como hacer un get al scope del usuario para ver si es reader o writer
-                            if (usuarioRegistrado.tipo === "reader+writer") {
+                            if (usuarioRegistrado === "writer") {
                                 bodyElement.innerHTML += '<div>';
                                 //TODO hacer funcionar el boton "editar"
                                 bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';

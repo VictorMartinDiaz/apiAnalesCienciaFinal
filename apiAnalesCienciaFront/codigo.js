@@ -43,6 +43,7 @@ function getUsuario(datos, nombre, password){
 }
 
 
+/*
 
 function slideToggleAutores(){
     $('#autores').slideToggle();
@@ -61,6 +62,8 @@ function slideToggleProductos(){
     $('#autores').slideUp();
     $('#entidades').slideUp();
 }
+*/
+/*
 
 async function cerrar() {
 
@@ -80,4 +83,5 @@ async function cerrar() {
     });
 
 }
+*/
 
