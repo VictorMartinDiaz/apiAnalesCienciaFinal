@@ -1,19 +1,19 @@
 function slideToggleAutores() {
-    $('#autores').slideToggle();
-    $('#entidades').slideUp();
-    $('#productos').slideUp();
+    $('#persons').slideToggle();
+    $('#entities').slideUp();
+    $('#products').slideUp();
 }
 
 function slideToggleEntidades() {
-    $('#entidades').slideToggle();
-    $('#autores').slideUp();
-    $('#productos').slideUp();
+    $('#entities').slideToggle();
+    $('#persons').slideUp();
+    $('#products').slideUp();
 }
 
 function slideToggleProductos() {
-    $('#productos').slideToggle();
-    $('#autores').slideUp();
-    $('#entidades').slideUp();
+    $('#products').slideToggle();
+    $('#persons').slideUp();
+    $('#entities').slideUp();
 }
 
 async function cerrar() {
@@ -130,7 +130,7 @@ function imIn() {
 
 
 function retrievePersons() {
-    let personasElement = document.getElementById("autores");
+    let personasElement = document.getElementById("persons");
     //TODO meter esto en el localStorage y comprobar si existe antes de llamar al servidor en cada login
     $.ajax({
         type: 'GET',
@@ -154,7 +154,7 @@ function retrievePersons() {
 }
 
 function retrieveEntities() {
-    let entidadesElement = document.getElementById("entidades");
+    let entidadesElement = document.getElementById("entities");
 
     $.ajax({
         type: 'GET',
@@ -179,7 +179,7 @@ function retrieveEntities() {
 }
 
 function retrieveProducts() {
-    let productosElement = document.getElementById("productos");
+    let productosElement = document.getElementById("products");
 
     $.ajax({
         type: 'GET',
@@ -187,6 +187,7 @@ function retrieveProducts() {
         headers: {"Authorization": authHeader},
         dataType: 'json',
         success: function (data) {
+            //console.log(data);
             data['products'].forEach(i => {
                 productosElement.innerHTML +=
                     '<span class="dropdown-item" id="' + i['product'].name + '">' +
