@@ -48,7 +48,10 @@ function request() {
                 retrievePersons();
                 retrieveEntities();
                 retrieveUserType(authHeader, usuarioActual);
-            }
+            }, error: function (){
+                    window.alert("Usuario y/o contraseña no validos");
+                    location.reload();
+                },
         });
         return false;
     });
@@ -85,7 +88,7 @@ function retrieveUserType(authHeader, usuarioActual) {
 
 function imIn() {
         try {
-            const usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
+            let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
 
             if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
                 let bodyElement = "";
@@ -125,37 +128,10 @@ function imIn() {
         }
     }
 
-function retrieveProducts() {
-    let productosElement = document.getElementById("productos");
-
-    $.ajax({
-        type: 'GET',
-        url: 'api/v1/products',
-        headers: {"Authorization": authHeader},
-        dataType: 'json',
-        success: function (data) {
-            data['products'].forEach(i => {
-                productosElement.innerHTML +=
-                    '<a class="dropdown-item" href="" id="' + i['product'].name + '">' +
-                    '<img class="dropdownImg" src=' + i['product'].imageUrl+ ' />' +
-                    '<span class="name id="' + i['product'].name + '">' + i['product'].name +
-                    '</span>' +
-                    '</a>'
-            });
-            /*console.log(data['products']);
-            console.log(data['products'][1]);
-            console.log(data['products'][1]['product']);
-            console.log(data['products'][1]['product'].name);*/
-            //$('#info').html(JSON.stringify(data));
-
-
-        },
-    })
-}
 
 function retrievePersons() {
     let personasElement = document.getElementById("autores");
-
+    //TODO meter esto en el localStorage y comprobar si existe antes de llamar al servidor en cada login
     $.ajax({
         type: 'GET',
         url: 'api/v1/persons',
@@ -164,14 +140,17 @@ function retrievePersons() {
         success: function (data) {
             data['persons'].forEach(i => {
                 personasElement.innerHTML +=
-                    '<a class="dropdown-item" href="" id="' + i['person'].name + '">' +
+                    '<span class="dropdown-item" id="' + i['person'].name + '">' +
                     '<img class="dropdownImg" src=' + i['person'].imageUrl+ ' />' +
-                    '<span class="name id="' + i['person'].name + '">' + i['person'].name +
+                    '<span class="name" id="' + i['person'].name + '">' + i['person'].name +
                     '</span>' +
-                    '</a>'
+                    '</span>'
+                let enviar = JSON.stringify(data);
+                //crea elementos tipo paco:{json}, juan:{json}, etc...
+                window.localStorage.setItem(i['person'].name, enviar);
             });
         },
-    })
+    });
 }
 
 function retrieveEntities() {
@@ -185,12 +164,52 @@ function retrieveEntities() {
         success: function (data) {
             data['entities'].forEach(i => {
                 entidadesElement.innerHTML +=
-                    '<a class="dropdown-item" href="" id="' + i['entity'].name + '">' +
+                    '<span class="dropdown-item" id="' + i['entity'].name + '">' +
                     '<img class="dropdownImg" src=' + i['entity'].imageUrl+ ' />' +
-                    '<span class="name id="' + i['entity'].name + '">' + i['entity'].name +
+                    '<span class="name" id="' + i['entity'].name + '">' + i['entity'].name +
                     '</span>' +
-                    '</a>'
+                    '</span>'
+                let enviar = JSON.stringify(data);
+                //crea elementos tipo paco:{json}, juan:{json}, etc...
+                window.localStorage.setItem(i['entity'].name, enviar);
             });
         },
-    })
+    });
+
+}
+
+function retrieveProducts() {
+    let productosElement = document.getElementById("productos");
+
+    $.ajax({
+        type: 'GET',
+        url: 'api/v1/products',
+        headers: {"Authorization": authHeader},
+        dataType: 'json',
+        success: function (data) {
+            data['products'].forEach(i => {
+                productosElement.innerHTML +=
+                    '<span class="dropdown-item" id="' + i['product'].name + '">' +
+                    '<img class="dropdownImg" src=' + i['product'].imageUrl+ ' />' +
+                    '<span class="name" id="' + i['product'].name + '">' + i['product'].name +
+                    '</span>' +
+                    '</span>'
+                let enviar = JSON.stringify(data);
+                //crea elementos tipo paco:{json}, juan:{json}, etc...
+                window.localStorage.setItem(i['product'].name, enviar);
+            });
+            /*console.log(data['products']);
+            console.log(data['products'][1]);
+            console.log(data['products'][1]['product']);
+            console.log(data['products'][1]['product'].name);*/
+            //$('#info').html(JSON.stringify(data));
+
+
+        },
+    });
+
+}
+
+function createCard(name) {
+
 }

@@ -49,6 +49,7 @@
                     if(opacidad === 0) {
                         $("#username").removeAttr("disabled");
                         $("#password").removeAttr("disabled");
+                        $("#boton").removeAttr("disabled");
                         $("#login").animate({
                             opacity: '1'
                         });
@@ -57,6 +58,9 @@
                     else {
                         $('#username').attr('disabled', 'disabled');
                         $('#password').attr('disabled', 'disabled');
+                        // TODO deshabilitar el boton al estar escondido
+                        // TODO deshabilitar el boton para clicks muy seguidos
+                        $('#boton').attr('disabled', 'disabled');
                         {$("#login").animate({
                             opacity: '0'
                         });}
@@ -95,7 +99,7 @@
                         </li>
 
                         <li class="nav-item dropdown mr-5">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown " onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" onclick='slideToggleProductos()'><i class="fas fa-euro-sign"></i> Productos</a>
                             <div class="dropdown-menu" id="productos"></div>
                         </li>
                     </ul>
@@ -135,7 +139,7 @@
         </script>
 
         <script>
-            let existe = true;
+            /*let existe = true;
             let mostrado = false;
 
             //TODO cambiar localStorage por la BBDD con lo que ya sabes
@@ -154,42 +158,21 @@
                     if(dibujar.fechaDefuncion==="") dibujar.fechaDefuncion="-";
 
                     //Vamos a intentar recorrer todos los dropdown para ver si el elemento existe
-                    $(".dropdown-item").each(function(){
+                    /!*$(".dropdown-item").each(function(){
                         if(this.id===miNombre){
                             existe = true;
                         }
-                    });
+                    });*!/
                 }
-                console.log(existe);
-
-                if(!existe) {
-                    var jsonObj = "";
-                    jsonObj = $.parseJSON(recibir);
-                    let autorElement = document.getElementById("autores");
-                    let entidadElement = document.getElementById("entidades");
-                    let productosElement = document.getElementById("productos");
-                    let imagenNueva = dibujar.foto;
-                    let nombreNuevo = dibujar.nombre;
-
-                    switch(dibujar.tipo) {
-                        case "persona": {
-                            autorElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name" id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                            break;
-                        }
-                        case "entidad": {
-                            entidadElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                            break;
-                        }
-                        case "producto": {
-                            productosElement.innerHTML += '<a class="dropdown-item" href="" id="' + nombreNuevo + '"><img class="dropdownImg" src="' + imagenNueva + '" /><span class="name id="' + nombreNuevo + '">' + nombreNuevo + '</span></a>'
-                            break;
-                        }
-                    }
-                }
-                existe = true;
-            }
-            $(".dropdown-item").click( async function(event) {
-
+                //console.log(existe);
+            }*/
+            $('.dropdown-menu').on('click','.dropdown-item', function(){
+                console.log(this.id);
+                let elemento = localStorage.getItem('this.id');
+                console.log(elemento);
+                //createCard(this.id);
+            });
+                /*await new Promise(r => setTimeout(r, 1350));
                 let dibujar = "";
                 let mostrar = "";
 
@@ -227,7 +210,6 @@
                                 width: '550px',
                             });
                     }
-
 
                     $('.banda').animate({
                         opacity: '0'
@@ -294,7 +276,6 @@
 
 
                 $('#eliminar').click(function(){
-
                     for(let i=0; i<=localStorage.length-1; i++) {
                         if(localStorage.getItem(i)!=null){
                             if(localStorage.getItem(i)===dibujar.nombre){
@@ -310,13 +291,14 @@
                         existe = false;
                      }
                     cerrar();
-                });
-            });
+                });*/
+
         </script>
         
         <script>
             $(function() {
                 let bodyElement = document.getElementById("ficha");
+                let jsonObj = '';
 
                 $.each(jsonObj, function(imagen, nombre, fechaNacimiento, fechaDefuncion, wiki) {
                     bodyElement += '<div>';
