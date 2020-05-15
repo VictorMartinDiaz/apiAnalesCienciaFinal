@@ -1,5 +1,4 @@
 <!-- TODO dependecias de eliminacion -->
-<!-- TODO creacion de ficha -->
 <!-- TODO cargar los elementos de la base de datos al cargar la pagina, sin tener que identificarse -->
 
 <!DOCTYPE html>
@@ -24,8 +23,8 @@
                 $("#login").animate({
                     opacity: '0'
                 });
-                $('#username').attr('disabled', 'disabled');
-                $('#password').attr('disabled', 'disabled');
+                $('input').attr('disabled', 'disabled');
+                $('#boton').attr('disabled', 'disabled');
 
                 // TODO hacer algo que haga intuitivo el login
                 /* var playing = true;
@@ -47,8 +46,8 @@
 
                 $(".indexLogo").click(function() {
                     if(opacidad === 0) {
-                        $("#username").removeAttr("disabled");
-                        $("#password").removeAttr("disabled");
+                        $("input").removeAttr("disabled");
+                        //$("#password").removeAttr("disabled");
                         $("#boton").removeAttr("disabled");
                         $("#login").animate({
                             opacity: '1'
@@ -56,9 +55,8 @@
                         opacidad = 1;
                     }
                     else {
-                        $('#username').attr('disabled', 'disabled');
-                        $('#password').attr('disabled', 'disabled');
-                        // TODO deshabilitar el boton al estar escondido
+                        $('input').attr('disabled', 'disabled');
+                        //$('#password').attr('disabled', 'disabled');
                         // TODO deshabilitar el boton para clicks muy seguidos
                         $('#boton').attr('disabled', 'disabled');
                         {$("#login").animate({
@@ -127,15 +125,7 @@
             <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
         </footer>
         <script>
-                    //TODO ver si esto sirve para algo
-                    /*if(resultado.innerHTML === "") {
-                    for (let i in data) {
-                        let producto = data[i];
-                        if (producto.name === "WWW") {
-                            resultado.innerHTML += producto.name + " " + producto.birthDate + " tiene " + producto.deathDate + " años." + "<br/>";
-                        } console.log(producto.name);
-                    }
-                }*/
+
         </script>
 
         <script>
@@ -160,11 +150,6 @@
                     //let miNombre = "";
                     //let recibir = "";
 
-                    /*TODO
-                    * Ahora mismo aqui tienes lo que necesitas para identificar el elemento
-                    * que se ha pinchado así como los pares clave:valor del JSON. Solo queda
-                    * pintar la tarjeta.
-                    * */
                     dibujar = JSON.parse(elemento);
                     console.log(dibujar);
                     console.log(tipo);
@@ -392,7 +377,7 @@
                     });
 
 
-                    //TODO cambiar localStorage por BBDD
+
                     for (let i = 0; i <= localStorage.length - 1; i++) {
 
                         if (localStorage.getItem(elemento) === mostrar && !mostrado) {
@@ -429,7 +414,7 @@
 
                             if (usuarioRegistrado === "writer") {
                                 bodyElement.innerHTML += '<div>';
-                                //TODO hacer funcionar el boton "editar"
+
                                 bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
                                 bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
                                 bodyElement.innerHTML += '</div>';
