@@ -110,13 +110,7 @@ function imIn() {
                         return false;
 
                     });
-                    /*let blurred = false;
-                    window.onblur = function () {
-                        blurred = true;
-                    };
-                    window.onfocus = function () {
-                        blurred && (location.reload());
-                    };*/
+
                 }
                 $("#logout").click(function () {
                     localStorage.removeItem('usuarioRegistrado');
@@ -211,6 +205,69 @@ function retrieveProducts() {
 
 }
 
-function createCard(name) {
+function deleteFromDB(id, category){
+    jQuery.ajax({
+        url: 'http://127.0.0.1:8000/api/v1/' + category + '/' + id,
+        headers: {"Authorization": authHeader},
+        type: 'DELETE',
+        success: function(data) {
+            //show_items();
+        }
+    });
+}
 
+async function localizarElemento(elemento, tipo, nombre) {
+    //console.log(elemento);
+    //let existe = false;
+
+    let dibujar = "";
+    let i = 0;
+
+    for (let found = false; i <= localStorage.length - 1 && !found; i++) {
+        //let miNombre = "";
+        //let recibir = "";
+
+        dibujar = JSON.parse(elemento);
+        console.log(dibujar);
+        console.log(tipo);
+        switch (tipo) {
+            case 'persons': {
+                console.log(dibujar['persons'][i]['person'].name);
+                if (dibujar['persons'][i]['person'].name === nombre) {
+                    found = true;
+                    dibujar = dibujar['persons'][i]['person'];
+                }
+                break;
+            }
+            case 'entities': {
+                console.log(dibujar['entities'][i]['entity'].name);
+                if (dibujar['entities'][i]['entity'].name === nombre) {
+                    found = true;
+                    dibujar = dibujar['entities'][i]['entity'];
+                }
+                break;
+            }
+            case 'products': {
+                console.log(dibujar['products'][i]['product'].name);
+                if (dibujar['products'][i]['product'].name === nombre) {
+                    found = true;
+                    dibujar = dibujar['products'][i]['product'];
+                }
+                break;
+            }
+        }
+    }
+    await pintarFicha(nombre, tipo, dibujar);
+}
+
+async function eliminar(associatedJson, tipo) {
+
+    console.log(localStorage);
+    localStorage.removeItem(associatedJson.name);
+    document.getElementById(associatedJson.name).innerHTML='';
+
+    deleteFromDB(associatedJson.id, tipo);
+
+    existe = false;
+    await cerrar();
 }

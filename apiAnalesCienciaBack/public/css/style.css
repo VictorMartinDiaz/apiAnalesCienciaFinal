@@ -136,6 +136,11 @@ a:link{
     color: #666;
 }
 
+.navbar{
+    min-height: 70px;
+    max-height: 70px;
+}
+
 .indexFooter {
     position: fixed;
     bottom: 0;
@@ -152,3 +157,44 @@ a:link{
     color: goldenrod;
 }
 
+
+
+
+
+/*
+@keyframes glowing {
+    0% { box-shadow: 0 0 10px #c4a300; }
+    40% { box-shadow: 0 0 20px #c4a300; }
+    60% { box-shadow: 0 0 20px #c4a300; }
+    100% { box-shadow: 0 0 10px #c4a300; }
+}
+
+.glowed {
+    animation: glowing 5000ms infinite;
+}*/
+
+/*
+.indexLogoWrap{
+    list-style:none;
+    width:40px;
+    height:40px;
+    background:#fff;
+    border-radius:50%;
+    animation:grow 1.6s ease-in-out infinite;
+}
+@keyframes grow
+{
+    0% , 40% , 100%
+    {
+        transform:scale(0.2);
+    }
+    20%{
+        transform:scale(1);
+
+    }
+}
+.glowed{
+    animation-delay:-0.8s;
+    background:#4fc3f7;
+    box-shadow:0 0 50px #4fc3f7;
+}*/
