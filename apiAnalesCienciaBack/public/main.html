@@ -1,4 +1,5 @@
 <!-- TODO dependecias de eliminacion -->
+<!-- TODO Falta el Crear -->
 <!-- TODO cargar los elementos de la base de datos al cargar la pagina, sin tener que identificarse -->
 
 <!DOCTYPE html>
@@ -116,7 +117,7 @@
         <div class="banda">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
         </div>
-        <div id="ficha"></div>
+        <div id="ficha" class="ficha"></div>
 
         <footer class="indexFooter">
             <span class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la </span><span class="d inline"> Universidad Politécnica de Madrid.</span>
@@ -136,105 +137,9 @@
                 //console.log(elemento);
                 //createCard(this.id);
                 localizarElemento(elemento, tipo, nombre);
+
             });
 
-
-            // TODO SEGUIR CON ESTA FUNCION: ESTAMOS PINTANDO LA TARJETA
-            async function pintarFicha(nombre, tipo, dibujar) {
-
-                let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
-                let mostrado = false;
-                console.log(nombre);
-                console.log(dibujar);
-
-                $('#persons').slideUp();
-                $('#entities').slideUp();
-                $('#products').slideUp();
-
-                if (dibujar.deathDate === null) dibujar.deathDate = "-";
-                console.log(dibujar);
-
-                if (mostrado) {
-                    mostrado = false;
-
-                    $("#ficha").animate({
-                        opacity: '0',
-                        height: '0px',
-                        width: '0px',
-                    });
-                    $('.banda').animate({
-                        opacity: '0.87'
-                    });
-
-                    await new Promise(r => setTimeout(r, 666));
-                    $("#ficha").hide();
-                    document.getElementById("ficha").innerHTML = "";
-
-                    $("#ficha").show();
-                    $("#ficha").animate({
-                        opacity: '1',
-                        height: '550px',
-                        width: '550px',
-                    });
-                }
-
-                $('.banda').animate({
-                    opacity: '0'
-                });
-                await new Promise(r => setTimeout(r, 150));
-                $('.logoCentral').addClass("escondida");
-                $('.banda').addClass("escondida");
-
-                document.getElementById("ficha").innerHTML = "";
-                await new Promise(r => setTimeout(r, 200));
-                $("#ficha").show();
-                $("#ficha").animate({
-                    opacity: '1',
-                    height: '550px',
-                    width: '550px',
-                });
-
-
-               // if (localStorage.getItem(elemento) === mostrar && !mostrado) {
-
-                let template = [
-                    {
-                        '<>': 'img', 'src': '${imageUrl}', 'class': 'laImg'
-                    },
-                    {
-                        '<>': 'h1', 'html': '${name}'
-                    },
-                    {
-                        '<>': 'p', 'html': 'Fecha de nacimiento: ${birthDate}'
-                    },
-                    {
-                        '<>': 'p', 'html': 'Fecha de defunción: ${deathDate}'
-                    },
-                    {
-                        '<>': 'a', 'href': '${wikiUrl}', 'html': 'wikipedia', 'class': 'linkWiki'
-                    }
-                ];
-                let bodyElement = document.getElementById("ficha");
-                bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
-                let data = [dibujar];
-                document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
-
-
-                if (usuarioRegistrado === "writer") {
-
-
-                    bodyElement.innerHTML += '<div>';
-                    //TODO hacer funcionar el boton "editar"
-                    //TODO hacer funcionar el boton "eliminar"
-                    bodyElement.innerHTML += '<button href="formulario.html" class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
-                    bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
-                    bodyElement.innerHTML += '</div>';
-                }
-
-                $('#eliminar').click(function () {
-                    eliminar(dibujar, tipo);
-                });
-            }
                         /*if (localStorage.getItem(elemento) != null) {
                             if (localStorage.getItem(elemento) === dibujar.name) {
                                 console.log(dibujar.name);
@@ -399,7 +304,11 @@
                     cerrar();
                 });
             }*/
+            $('#crear').click(function () {
+                newElement('', 0, "persons");
+            });
 
+        // TODO para animar la ficha, hacer un onclick al dropdown-item con el fade in y out a la ficha, y a correr
         </script>
         
         <script>
