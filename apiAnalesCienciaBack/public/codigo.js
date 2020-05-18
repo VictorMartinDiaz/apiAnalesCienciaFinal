@@ -16,6 +16,29 @@
         $('#entities').slideUp();
     }
 
+    function login(){
+        let opacidad = 0;
+
+        if(opacidad === 0) {
+            $(".loginElement").removeAttr("disabled");
+            $("#login").animate({
+                opacity: '1'
+            });
+            opacidad = 1;
+        }
+        else {
+            $('.loginElement').attr('disabled', 'disabled');
+            // TODO deshabilitar el boton para clicks muy seguidos
+            {$("#login").animate({
+                opacity: '0'
+            });}
+            opacidad=0;
+        }
+        $('#entities').slideUp();
+        $('#persons').slideUp();
+        $('#products').slideUp();
+    }
+
     async function cerrar() {
 
         /*$('.banda').animate({
@@ -37,9 +60,24 @@
         });
     }
 
+    //TODO Terminar la funcion abrir
     async function abrir(){
 
+        $('.banda').animate({
+            opacity: '0'
+        });
 
+        $('.logoCentral').addClass("escondida");
+        $('.banda').addClass("escondida");
+
+        await new Promise(r => setTimeout(r, 300));
+
+        $("#ficha").show();
+        $("#ficha").animate({
+            opacity: '1',
+            height: '550px',
+            width: '550px',
+        });
 
     }
 
@@ -111,16 +149,7 @@
                     bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
 
                     if (usuarioRegistrado === "writer") {
-                        // TODO Hacer un formulario más cuco
-                        // TODO Hacer funcionar el boton crear
                         bodyElement.innerHTML += '<a class="btn btn-primary" rel="pop-up" id="crear" onclick="newElement()">Crear</a>';
-                        /*$("a[rel='pop-up']").click(function () {
-                            let caracteristicas = "height=550,width=1150,scrollTo,resizable=1,scrollbars=1,location=0";
-                            window.open(this.href, 'Popup', caracteristicas);
-                            return false;
-
-                        });*/
-
                     }
                     $("#logout").click(function () {
                         localStorage.removeItem('usuarioRegistrado');
@@ -276,9 +305,9 @@
         $('#persons').slideUp();
         $('#entities').slideUp();
         $('#products').slideUp();
-
-        if (dibujar.deathDate === null) dibujar.deathDate = "-";
-        console.log(dibujar);
+        let dibujarTemp = dibujar;
+        //if (dibujar.deathDate === null) dibujarTemp.deathDate = "-";
+        console.log(dibujarTemp);
 
       /*  if (mostrado) {
             mostrado = false;
@@ -343,7 +372,7 @@
         ];
         let bodyElement = document.getElementById("ficha");
         bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
-        let data = [dibujar];
+        let data = [dibujarTemp];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
 
@@ -365,12 +394,6 @@
             console.log(dibujar.id);
             console.log(tipo);*/
             //TODO AQUI ANIMA FORMULARIO
-
-
-
-
-
-
 
 
 
@@ -411,7 +434,7 @@
 
     function createForm(associatedJson, id, tipo) {
         console.log(associatedJson);
-        if(associatedJson.deathDate==='-'){associatedJson.deathDate = null}
+       // if(associatedJson.deathDate==='-'){associatedJson.deathDate = null}
         let bodyElement = document.getElementById("ficha");
 
         bodyElement.innerHTML = '';
@@ -585,6 +608,13 @@
                 console.log(data);
                 console.log(id);
                 console.log(tipo);
+
+               //let dataJSON  = JSON.parse(data);
+
+             /*   if(data["birthDate"] === "") data["birthDate"]=null;
+                if(data["deathDate"] === "") data["deathDate"]=null;*/
+
+                console.log(data);
                 if(id != -1) {
 
                     updateElement(data, id, tipo);
@@ -597,13 +627,27 @@
 
         });
         });
+        console.log(associatedJson);
     }
+
+    /*function nullFormat($element, $data) {
+        $.each($data =>{
+            if ($attr  === 'bithDate' && ($date = DateTime::createFromFormat('!Y-m-d', $datum))) ? $element->setBirthDate($date) : null;
+        ($attr  === 'deathDate' && ($date = DateTime::createFromFormat('!Y-m-d', $datum))) ? $element->setDeathDate($date) : null;
+    })*/
 
     function createElement (info, category) {
         console.log(category);
         /*  console.log(info);
           delete info[id];
           console.log(info);*/
+
+        console.log(info);
+        if(info["birthDate"] === "") delete info["birthDate"];
+        if(info["deathDate"] === "") delete info["deathDate"];
+        console.log(info);
+
+
         jQuery.ajax({
             type: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/' + category,
@@ -618,17 +662,63 @@
     }
 
     function updateElement (info, id, category) {
-        console.log(id);
+        let tipo = "tipo";
+        delete info[tipo];
+       /* console.log(id);
         console.log(info);
-        /*delete info[id];
-        console.log(info);*/
+        delete info[id];
+        let tipo = "tipo";
+        delete info[tipo];
+
+        let fechaNacimiento = info["birthDate"];
+        if(fechaNacimiento!==null) fechaNacimiento.toString();
+        delete info["birthDate"];
+        info["birthDate"]=fechaNacimiento;*/
+
+        console.log(info.deathDate);
+        /*let fechaMuerte = info["deathDate"];
+        if(fechaMuerte==="") fechaMuerte.toString();
+        delete info["deathDate"];
+        info["deathDate"]=fechaMuerte;
+        console.log (info);*/
+        if(info["birthDate"] === "") delete info["birthDate"];
+        if(info["deathDate"] === "") delete info["deathDate"];
+        let myInfo = JSON.stringify(info);
+        console.log(myInfo);
+        let final = myInfo;
+        final = final.replace (/["']["']/g,"");
+        console.log(final);
+
+       /* switch (category) {
+            case "persons": {
+                info["products"]=null;
+                info["entities"]=null;
+                break;
+            }
+            case "entities": {
+                info.push({
+                    products: null,
+                    persons: null
+                });
+                break;
+            }
+            case "products": {
+                info.push({
+                    persons: null,
+                    entities: null
+                });
+                break;
+            }
+        }*/
+        console.log(info);
+
         jQuery.ajax({
             url: 'http://127.0.0.1:8000/api/v1/' + category + '/' + id,
             headers: {"Authorization": authHeader},
             type: 'PUT',
-            data: info,
+            data: myInfo,
             contentType: 'application/json',
-            success: function(info) {
+            success: function(data) {
                 console.log(info);
             }
         });

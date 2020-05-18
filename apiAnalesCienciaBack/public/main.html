@@ -20,7 +20,6 @@
         
         <script>
             $(document).ready(function() {
-                let opacidad = 0;
                 $("#login").animate({
                     opacity: '0'
                 });
@@ -45,24 +44,7 @@
                   });
   */
                 $(".indexLogo").click(function() {
-                    if(opacidad === 0) {
-                        $(".loginElement").removeAttr("disabled");
-                        $("#login").animate({
-                            opacity: '1'
-                        });
-                        opacidad = 1;
-                    }
-                    else {
-                        $('.loginElement').attr('disabled', 'disabled');
-                        // TODO deshabilitar el boton para clicks muy seguidos
-                        {$("#login").animate({
-                            opacity: '0'
-                        });}
-                        opacidad=0;
-                    }
-                    $('#entities').slideUp();
-                    $('#persons').slideUp();
-                    $('#products').slideUp();
+                    login();
                 });
             });
         </script>
@@ -120,9 +102,6 @@
             <span class="d-none d-md-inline"> Página diseñada en la asignatura de Tecnologías para el Desarrollo de la WEB en la </span><span class="d inline"> Universidad Politécnica de Madrid.</span>
             <p><time datetime="2020-02-14 20:00">14/02/2020</time></p>
         </footer>
-        <script>
-
-        </script>
 
         <script>
             $('.dropdown-menu').on('click', '.dropdown-item', function () {
@@ -136,6 +115,12 @@
                 localizarElemento(elemento, tipo, name);
 
             });
+
+            $('#crear').click(function () {
+                newElement('', 0, "persons");
+            });
+
+            // TODO para animar la ficha, hacer un onclick al dropdown-item con el fade in y out a la ficha, y a correr
 
                         /*if (localStorage.getItem(elemento) != null) {
                             if (localStorage.getItem(elemento) === dibujar.name) {
@@ -155,9 +140,6 @@
                         existe = false;
                     //}
                     cerrar();*/
-
-
-
 
 
                    /* if (dibujar['this.parentNode.id'] != null) {
@@ -301,11 +283,7 @@
                     cerrar();
                 });
             }*/
-            $('#crear').click(function () {
-                newElement('', 0, "persons");
-            });
 
-        // TODO para animar la ficha, hacer un onclick al dropdown-item con el fade in y out a la ficha, y a correr
         </script>
         
         <script>
