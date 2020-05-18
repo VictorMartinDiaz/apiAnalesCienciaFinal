@@ -18,9 +18,10 @@
 
     async function cerrar() {
 
-        $('.banda').animate({
+        /*$('.banda').animate({
             opacity: '0'
-        });
+        });*/
+
         await new Promise(r => setTimeout(r, 200));
         $("#ficha").animate({
             opacity: '0',
@@ -34,6 +35,12 @@
         $('.banda').animate({
             opacity: '0.87'
         });
+    }
+
+    async function abrir(){
+
+
+
     }
 
     function request() {
@@ -208,7 +215,7 @@
 
     }
 
-    async function localizarElemento(elemento, tipo, nombre) {
+    async function localizarElemento(elemento, tipo, name) {
         //console.log(elemento);
         //let existe = false;
 
@@ -225,7 +232,7 @@
             switch (tipo) {
                 case 'persons': {
                     console.log(dibujar['persons'][i]['person'].name);
-                    if (dibujar['persons'][i]['person'].name === nombre) {
+                    if (dibujar['persons'][i]['person'].name === name) {
                         found = true;
                         dibujar = dibujar['persons'][i]['person'];
                     }
@@ -233,7 +240,7 @@
                 }
                 case 'entities': {
                     console.log(dibujar['entities'][i]['entity'].name);
-                    if (dibujar['entities'][i]['entity'].name === nombre) {
+                    if (dibujar['entities'][i]['entity'].name === name) {
                         found = true;
                         dibujar = dibujar['entities'][i]['entity'];
                     }
@@ -241,7 +248,7 @@
                 }
                 case 'products': {
                     console.log(dibujar['products'][i]['product'].name);
-                    if (dibujar['products'][i]['product'].name === nombre) {
+                    if (dibujar['products'][i]['product'].name === name) {
                         found = true;
                         dibujar = dibujar['products'][i]['product'];
                     }
@@ -250,11 +257,11 @@
             }
         }
         await cerrar();
-        await pintarFicha(nombre, tipo, dibujar);
+        await pintarFicha(name, tipo, dibujar);
     }
 
 
-    async function pintarFicha(nombre, tipo, dibujar) {
+    async function pintarFicha(name, tipo, dibujar) {
 
         if($('#ficha').hasClass("form-style")){
             $('#ficha').removeClass("form-style");
@@ -263,7 +270,7 @@
 
         let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
         let mostrado = false;
-        console.log(nombre);
+        console.log(name);
         console.log(dibujar);
 
         $('#persons').slideUp();
@@ -345,7 +352,7 @@
 
             bodyElement.innerHTML += '<div>';
             //TODO hacer funcionar el boton "editar"
-            bodyElement.innerHTML += '<button class="btn btn-info" rel="pop-up" id="editar">Editar</button>';
+            bodyElement.innerHTML += '<button class="btn btn-info transition" rel="pop-up" id="editar">Editar</button>';
             bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
             bodyElement.innerHTML += '</div>';
         }
@@ -476,23 +483,23 @@
                 bodyElement = document.getElementById("fieldDates");
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldBirthDate">';
                     bodyElement = document.getElementById("fieldBirthDate");
-                        bodyElement.innerHTML += '<label for="fechaNacimiento">Fecha de nacimiento</label>';
+                        bodyElement.innerHTML += '<label for="birthDate">Fecha de nacimiento</label>';
                         if(associatedJson===''){
-                            bodyElement.innerHTML += '<input type="date" name="fechaNacimiento" id="fechaNacimiento" >';
+                            bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" >';
                         }
                         else {
-                            bodyElement.innerHTML += '<input type="date" name="fechaNacimiento" id="fechaNacimiento" value=' + associatedJson.birthDate + '>';
+                            bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" value=' + associatedJson.birthDate + '>';
                         }
                     bodyElement = document.getElementById("fieldDates");
                     bodyElement.innerHTML += '</div>';
 
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldDeathDate">';
                     bodyElement = document.getElementById("fieldDeathDate");
-                        bodyElement.innerHTML += '<label for="fechaDefuncion">Fecha de defuncion</label>';
+                        bodyElement.innerHTML += '<label for="deathDate">Fecha de defuncion</label>';
                         if(associatedJson===''){
-                            bodyElement.innerHTML += '<input type="date" name="fechaDefuncion" id="fechaDefuncion" >';
+                            bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" >';
                         } else {
-                            bodyElement.innerHTML += '<input type="date" name="fechaDefuncion" id="fechaDefuncion" value=' + associatedJson.deathDate + '>';
+                            bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" value=' + associatedJson.deathDate + '>';
                         }
                         bodyElement = document.getElementById("fieldDates");
                         bodyElement.innerHTML += '</div>';
@@ -501,34 +508,34 @@
 
                 bodyElement.innerHTML += '<div class="fieldElement" id="fieldName">';
                 bodyElement = document.getElementById("fieldName");
-                    bodyElement.innerHTML += '<label for="nombre" class="fieldTag">Nombre:</label>';
+                    bodyElement.innerHTML += '<label for="name" class="fieldTag">Nombre:</label>';
                     if(associatedJson===''){
-                                bodyElement.innerHTML += '<input type="text" name="nombre" id="nombre" class="field-style">';}
+                                bodyElement.innerHTML += '<input type="text" name="name" id="name" class="field-style">';}
                     else {
                         //TODO Cuando puedas editar, comprueba que el nombre se ve bien y no con %20 en lugar de espacio
-                        bodyElement.innerHTML += '<input type="text" name="nombre" id="nombre" class="field-style" value=' + encodeURIComponent(associatedJson.name) + '>';
+                        bodyElement.innerHTML += '<input type="text" name="name" id="name" class="field-style" value=' + encodeURIComponent(associatedJson.name) + '>';
                     }
                 bodyElement = document.getElementById("campos");
                 bodyElement.innerHTML += '</div>';
 
                 bodyElement.innerHTML += '<div class="fieldElement" id="fieldWiki">';
                 bodyElement = document.getElementById("fieldWiki");
-                    bodyElement.innerHTML += '<label for="wiki" class="fieldTag">Wiki:</label>';
+                    bodyElement.innerHTML += '<label for="wikiUrl" class="fieldTag">Wiki:</label>';
                     if(associatedJson==='') {
-                        bodyElement.innerHTML += '<input type="url" name="wiki" id="wiki" class="field-style" placeholder="página de la wikipedia">';
+                        bodyElement.innerHTML += '<input type="url" name="wikiUrl" id="wikiUrl" class="field-style" placeholder="página de la wikipedia">';
                     } else {
-                        bodyElement.innerHTML += '<input type="url" name="wiki" id="wiki" class="field-style" value=' + associatedJson.wikiUrl + '>';
+                        bodyElement.innerHTML += '<input type="url" name="wikiUrl" id="wikiUrl" class="field-style" value=' + associatedJson.wikiUrl + '>';
                     }
                 bodyElement = document.getElementById("campos");
                 bodyElement.innerHTML += '</div>';
 
                 bodyElement.innerHTML += '<div class="fieldElement" id="fieldPhoto">';
                 bodyElement = document.getElementById("fieldPhoto");
-                    bodyElement.innerHTML += '<label for="foto" class="fieldTag">Foto:</label>';
+                    bodyElement.innerHTML += '<label for="imageUrl" class="fieldTag">Foto:</label>';
                     if(associatedJson==='') {
-                        bodyElement.innerHTML += '<input type="text" name="foto" id="foto" class="field-style" placeholder="página donde se aloja la imagen">';
+                        bodyElement.innerHTML += '<input type="text" name="imageUrl" id="imageUrl" class="field-style" placeholder="página donde se aloja la imagen">';
                     } else {
-                        bodyElement.innerHTML += '<input type="text" name="foto" id="foto" class="field-style" placeholder="página donde se aloja la imagen" value=' + associatedJson.imageUrl + '>';
+                        bodyElement.innerHTML += '<input type="text" name="imageUrl" id="imageUrl" class="field-style" placeholder="página donde se aloja la imagen" value=' + associatedJson.imageUrl + '>';
                     }
                 bodyElement = document.getElementById("campos");
                 bodyElement.innerHTML += '</div>';
@@ -540,7 +547,7 @@
             bodyElement.innerHTML += '<br/>';
             bodyElement.innerHTML += '<div id="formButton">';
                 bodyElement = document.getElementById("formButton");
-                bodyElement.innerHTML += '<input type="submit" value="Send" id="sendButton" onclick="close()"/>';
+                bodyElement.innerHTML += '<input type="submit" value="Send" id="sendButton" class="transition" onclick="close()"/>';
             bodyElement.innerHTML += '</div>';
             bodyElement = document.getElementById("form");
         bodyElement.innerHTML += '</form>';
@@ -579,6 +586,7 @@
                 console.log(id);
                 console.log(tipo);
                 if(id != -1) {
+
                     updateElement(data, id, tipo);
                 }
                 else {
@@ -611,14 +619,14 @@
 
     function updateElement (info, id, category) {
         console.log(id);
-      /*  console.log(info);
-        delete info[id];
+        console.log(info);
+        /*delete info[id];
         console.log(info);*/
         jQuery.ajax({
             url: 'http://127.0.0.1:8000/api/v1/' + category + '/' + id,
             headers: {"Authorization": authHeader},
             type: 'PUT',
-            data: JSON.stringify(info),
+            data: info,
             contentType: 'application/json',
             success: function(info) {
                 console.log(info);

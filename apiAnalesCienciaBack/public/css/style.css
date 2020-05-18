@@ -308,7 +308,7 @@ a:link{
     margin-bottom: 0;
 }
 
-#fechaDefuncion, #fechaNacimiento{
+#deathDate, #birthDate{
     display: block;
 }
 

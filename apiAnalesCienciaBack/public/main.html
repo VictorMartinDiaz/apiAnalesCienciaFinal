@@ -24,40 +24,37 @@
                 $("#login").animate({
                     opacity: '0'
                 });
-                $('input').attr('disabled', 'disabled');
-                $('#boton').attr('disabled', 'disabled');
+                $('.loginElement').attr('disabled', 'disabled');
 
                 // TODO hacer algo que haga intuitivo el login
-                 let playing = true;
-               /*function loop(){
-                    if(playing){
-                        $('.indexLogo').fadeIn(400, function(){
-                            $(this).fadeOut(700,loop);
-                        });
-                    }
-                }
+                /*   let playing = true;
+                 function loop(){
+                      if(playing){
+                          $('.indexLogo').fadeIn(400, function(){
+                              $(this).fadeOut(700,loop);
+                          });
+                      }
+                  }
 
-                loop(); // start loop
+                  loop(); // start loop
 
-                $('.glowed').click(async function(){
-                    playing = false;
-                    await new Promise(r => setTimeout(r, 500));
-                    $('.indexLogo').fadeIn();
-                });
-*/
+                  $('.glowed').click(async function(){
+                      playing = false;
+                      await new Promise(r => setTimeout(r, 500));
+                      $('.indexLogo').fadeIn();
+                  });
+  */
                 $(".indexLogo").click(function() {
                     if(opacidad === 0) {
-                        $("input").removeAttr("disabled");
-                        $("#boton").removeAttr("disabled");
+                        $(".loginElement").removeAttr("disabled");
                         $("#login").animate({
                             opacity: '1'
                         });
                         opacidad = 1;
                     }
                     else {
-                        $('input').attr('disabled', 'disabled');
+                        $('.loginElement').attr('disabled', 'disabled');
                         // TODO deshabilitar el boton para clicks muy seguidos
-                        $('#boton').attr('disabled', 'disabled');
                         {$("#login").animate({
                             opacity: '0'
                         });}
@@ -106,15 +103,15 @@
 
         <div id=botonera>
             <form id="login">
-                <label for="username" class="texto">Nombre:</label>
-                <input type="text" id="username" name="username"/>
-                <label for="password" class="texto">Password:</label>
-                <input type="password" id="password" name="password"/>
-                <input type="submit" value="Submit" id="boton" onclick="request()">
+                <label for="username" class="texto loginElement">Nombre:</label>
+                <input type="text" id="username" class="loginElement" name="username"/>
+                <label for="password" class="texto loginElement">Password:</label>
+                <input type="password" id="password" class="loginElement" name="password"/>
+                <input type="submit" value="Submit" id="boton" class="loginElement" onclick="request()">
             </form>
         </div>
 
-        <div class="banda">
+        <div class="banda banda1" id="banda">
             <img src="img/logoETSISI1.png" class="logoCentral" alt="logo de la escuela" />
         </div>
         <div id="ficha" class="ficha"></div>
@@ -132,11 +129,11 @@
                 console.log(this.parentNode.id);
                 let tipo = this.parentNode.id;
                 console.log(this.id);
-                let nombre = this.id;
+                let name = this.id;
                 let elemento = localStorage.getItem(this.id);
                 //console.log(elemento);
                 //createCard(this.id);
-                localizarElemento(elemento, tipo, nombre);
+                localizarElemento(elemento, tipo, name);
 
             });
 
@@ -230,7 +227,7 @@
                     $('.banda').addClass("escondida");
 
                     document.getElementById("ficha").innerHTML = "";
-                    await new Promise(r => setTimeout(r, 200));
+                    await new Promise(r => setTimeout(r, 500));
                     $("#ficha").show();
                     $("#ficha").animate({
                         opacity: '1',
