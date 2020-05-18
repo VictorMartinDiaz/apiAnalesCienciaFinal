@@ -41,10 +41,6 @@
 
     async function cerrar() {
 
-        /*$('.banda').animate({
-            opacity: '0'
-        });*/
-
         await new Promise(r => setTimeout(r, 200));
         $("#ficha").animate({
             opacity: '0',
@@ -60,36 +56,30 @@
         });
     }
 
-    //TODO Terminar la funcion abrir
-    async function abrir(){
 
+    async function abrir(){
         $('.banda').animate({
             opacity: '0'
         });
-
         $('.logoCentral').addClass("escondida");
         $('.banda').addClass("escondida");
 
         await new Promise(r => setTimeout(r, 300));
-
         $("#ficha").show();
         $("#ficha").animate({
             opacity: '1',
             height: '550px',
             width: '550px',
         });
-
     }
 
     function request() {
         $('form').bind('submit', function () {
-
             $.ajax({
                 type: 'POST',
                 url: '/access_token',
                 data: $('form').serialize(),
                 success: function (data, textStatus, request) {
-                    //alert('form was submitted');
                     authHeader = request.getResponseHeader('Authorization');
                     let usuarioActual = document.getElementById('username').value;
                     retrieveProducts();
@@ -106,23 +96,14 @@
     }
 
     function retrieveUserType(authHeader, usuarioActual) {
-
         $.ajax({
             type: 'GET',
             url: 'api/v1/users',
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
-
-               /* console.log(data['users']);
-                console.log(data['users'][1]);
-                console.log(data['users'][1]['user']);
-                console.log(data['users'][1]['user'].username);*/
                 data['users'].forEach(i =>
                 {
-                    /*console.log(i);
-                    console.log(i['user'].username);
-                    console.log(i['user'].role);*/
                     if (usuarioActual === i['user'].username) {
                         const tipo = i['user'].role;
                         localStorage.usuarioRegistrado = tipo;
@@ -140,14 +121,12 @@
 
                 if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
                     let bodyElement = "";
-
                     $("#ficha").click(function () {
                         document.getElementById("logout").style.visibility = "visible";
                     });
 
                     bodyElement = document.getElementById("botonera");
                     bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
-
                     if (usuarioRegistrado === "writer") {
                         bodyElement.innerHTML += '<a class="btn btn-primary" rel="pop-up" id="crear" onclick="newElement()">Crear</a>';
                     }
@@ -188,7 +167,6 @@
 
     function retrieveEntities() {
         let entidadesElement = document.getElementById("entities");
-
         $.ajax({
             type: 'GET',
             url: 'api/v1/entities',
@@ -208,19 +186,16 @@
                 });
             },
         });
-
     }
 
     function retrieveProducts() {
         let productosElement = document.getElementById("products");
-
         $.ajax({
             type: 'GET',
             url: 'api/v1/products',
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
-                //console.log(data);
                 data['products'].forEach(i => {
                     productosElement.innerHTML +=
                         '<span class="dropdown-item" id="' + i['product'].name + '">' +
@@ -232,29 +207,15 @@
                     //crea elementos tipo paco:{json}, juan:{json}, etc...
                     window.localStorage.setItem(i['product'].name, enviar);
                 });
-                /*console.log(data['products']);
-                console.log(data['products'][1]);
-                console.log(data['products'][1]['product']);
-                console.log(data['products'][1]['product'].name);*/
-                //$('#info').html(JSON.stringify(data));
-
-
             },
         });
-
     }
 
     async function localizarElemento(elemento, tipo, name) {
-        //console.log(elemento);
-        //let existe = false;
-
         let dibujar = "";
         let i = 0;
 
         for (let found = false; i <= localStorage.length - 1 && !found; i++) {
-            //let miNombre = "";
-            //let recibir = "";
-
             dibujar = JSON.parse(elemento);
             console.log(dibujar);
             console.log(tipo);
@@ -289,70 +250,22 @@
         await pintarFicha(name, tipo, dibujar);
     }
 
-
     async function pintarFicha(name, tipo, dibujar) {
-
         if($('#ficha').hasClass("form-style")){
             $('#ficha').removeClass("form-style");
             $('#ficha').addClass("ficha");
         }
-
-        let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
-        let mostrado = false;
-        console.log(name);
-        console.log(dibujar);
-
         $('#persons').slideUp();
         $('#entities').slideUp();
         $('#products').slideUp();
-        let dibujarTemp = dibujar;
-        //if (dibujar.deathDate === null) dibujarTemp.deathDate = "-";
-        console.log(dibujarTemp);
-
-      /*  if (mostrado) {
-            mostrado = false;
-
-            $("#ficha").animate({
-                opacity: '0',
-                height: '0px',
-                width: '0px',
-            });
-            $('.banda').animate({
-                opacity: '0.87'
-            });
-
-            await new Promise(r => setTimeout(r, 1000));
-            $("#ficha").hide();
-            document.getElementById("ficha").innerHTML = "";
-
-            $("#ficha").show();
-            $("#ficha").animate({
-                opacity: '1',
-                height: '550px',
-                width: '550px',
-            });
-        }*/
-
-        $('.banda').animate({
-            opacity: '0'
-        });
-
-        $('.logoCentral').addClass("escondida");
-        $('.banda').addClass("escondida");
 
         document.getElementById("ficha").innerHTML = "";
-        // ESTE ES EL JODIDO
-        await new Promise(r => setTimeout(r, 300));
-        $("#ficha").show();
-        $("#ficha").animate({
-            opacity: '1',
-            height: '550px',
-            width: '550px',
-        });
+       await abrir();
+       rellenarFicha(tipo, dibujar);
+    }
 
-
-        // if (localStorage.getItem(elemento) === mostrar && !mostrado) {
-
+    function rellenarFicha(tipo, dibujar){
+        let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
         let template = [
             {
                 '<>': 'img', 'src': '${imageUrl}', 'class': 'laImg'
@@ -372,34 +285,23 @@
         ];
         let bodyElement = document.getElementById("ficha");
         bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
-        let data = [dibujarTemp];
+        let data = [dibujar];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
-
         if (usuarioRegistrado === "writer") {
-
-
             bodyElement.innerHTML += '<div>';
-            //TODO hacer funcionar el boton "editar"
             bodyElement.innerHTML += '<button class="btn btn-info transition" rel="pop-up" id="editar">Editar</button>';
             bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
             bodyElement.innerHTML += '</div>';
         }
-
-        $('#eliminar').click(function () {
-            eliminar(dibujar, tipo);
+        $('#eliminar').click(async function () {
+            await eliminar(dibujar, tipo);
         });
-        $('#editar').click(function () {
-            /*console.log(dibujar);
-            console.log(dibujar.id);
-            console.log(tipo);*/
-            //TODO AQUI ANIMA FORMULARIO
-
-
-
-
-
+        $('#editar').click(async function () {
+            $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
+            await new Promise(r => setTimeout(r, 300));
             createForm(dibujar, dibujar.id, tipo);
+            $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
         });
     }
 
@@ -409,36 +311,28 @@
             headers: {"Authorization": authHeader},
             type: 'DELETE',
             success: function(data) {
-                //show_items();
             }
         });
     }
 
     async function eliminar(associatedJson, tipo) {
-
         console.log(localStorage);
         localStorage.removeItem(associatedJson.name);
         document.getElementById(associatedJson.name).innerHTML='';
 
         deleteFromDB(associatedJson.id, tipo);
-
-        existe = false;
         await cerrar();
     }
 
     function newElement() {
-        pintarFicha('', '', '').then(r => createForm('', -1, "persons"));
-
+        pintarFicha('', '', '').then(r => createForm('', -1, ""));
     }
-
 
     function createForm(associatedJson, id, tipo) {
         console.log(associatedJson);
-       // if(associatedJson.deathDate==='-'){associatedJson.deathDate = null}
         let bodyElement = document.getElementById("ficha");
-
-        bodyElement.innerHTML = '';
-        bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+            bodyElement.innerHTML = '';
+            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
         $('#ficha').addClass("form-style");
         $('#ficha').removeClass("ficha");
 
@@ -491,7 +385,6 @@
             bodyElement.innerHTML += '</fieldset>';
             bodyElement = document.getElementById("form");
 
-
             bodyElement.innerHTML += '<div class="encabezado" id="encabezadoCampos">';
             bodyElement = document.getElementById("encabezadoCampos");
                 bodyElement.innerHTML += '<label class="formTag">Campos</label>';
@@ -535,8 +428,7 @@
                     if(associatedJson===''){
                                 bodyElement.innerHTML += '<input type="text" name="name" id="name" class="field-style">';}
                     else {
-                        //TODO Cuando puedas editar, comprueba que el nombre se ve bien y no con %20 en lugar de espacio
-                        bodyElement.innerHTML += '<input type="text" name="name" id="name" class="field-style" value=' + encodeURIComponent(associatedJson.name) + '>';
+                        bodyElement.innerHTML += '<input type="text" name="name" id="name" class="field-style" value=' + encodeURIComponent(associatedJson.name).replace("%20", " ") + '>';
                     }
                 bodyElement = document.getElementById("campos");
                 bodyElement.innerHTML += '</div>';
@@ -563,7 +455,6 @@
                 bodyElement = document.getElementById("campos");
                 bodyElement.innerHTML += '</div>';
 
-
             bodyElement.innerHTML += '</fieldset>';
             bodyElement = document.getElementById("form");
 
@@ -574,10 +465,8 @@
             bodyElement.innerHTML += '</div>';
             bodyElement = document.getElementById("form");
         bodyElement.innerHTML += '</form>';
-        //bodyElement.innerHTML += '</div>';
 
         $('#sendButton').click(function () {
-
             (function ($) {
                 $.fn.serializeFormJSON = function () {
                     let o = {};
@@ -596,7 +485,6 @@
                 };
             })(jQuery);
 
-
             $("input[type='radio']").click(function(){
                 tipo = $("input[type='radio']:checked").val();
                     console.log(tipo);
@@ -609,14 +497,11 @@
                 console.log(id);
                 console.log(tipo);
 
-               //let dataJSON  = JSON.parse(data);
-
-             /*   if(data["birthDate"] === "") data["birthDate"]=null;
-                if(data["deathDate"] === "") data["deathDate"]=null;*/
+                if(data["birthDate"] === "") delete data["birthDate"];
+                if(data["deathDate"] === "") delete data["deathDate"];
 
                 console.log(data);
                 if(id != -1) {
-
                     updateElement(data, id, tipo);
                 }
                 else {
@@ -624,39 +509,23 @@
                     console.log(tipo);
                     createElement(data, tipo);
                 }
-
         });
         });
         console.log(associatedJson);
     }
 
-    /*function nullFormat($element, $data) {
-        $.each($data =>{
-            if ($attr  === 'bithDate' && ($date = DateTime::createFromFormat('!Y-m-d', $datum))) ? $element->setBirthDate($date) : null;
-        ($attr  === 'deathDate' && ($date = DateTime::createFromFormat('!Y-m-d', $datum))) ? $element->setDeathDate($date) : null;
-    })*/
-
     function createElement (info, category) {
-        console.log(category);
-        /*  console.log(info);
-          delete info[id];
-          console.log(info);*/
-
-        console.log(info);
-        if(info["birthDate"] === "") delete info["birthDate"];
-        if(info["deathDate"] === "") delete info["deathDate"];
-        console.log(info);
-
-
         jQuery.ajax({
             type: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/' + category,
             headers: {"Authorization": authHeader},
             data: info,
             beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
-            success: function() { alert('Success!' + authHeader); },
+            success: function() {
+                cerrar().then(r => alert(info["name"] + " ha sido creado"));
+                //TODO LocalStorage
+                },
             //contentType: 'application/json',
-
             dataType: 'json',
         });
     }
@@ -664,54 +533,7 @@
     function updateElement (info, id, category) {
         let tipo = "tipo";
         delete info[tipo];
-       /* console.log(id);
-        console.log(info);
-        delete info[id];
-        let tipo = "tipo";
-        delete info[tipo];
-
-        let fechaNacimiento = info["birthDate"];
-        if(fechaNacimiento!==null) fechaNacimiento.toString();
-        delete info["birthDate"];
-        info["birthDate"]=fechaNacimiento;*/
-
-        console.log(info.deathDate);
-        /*let fechaMuerte = info["deathDate"];
-        if(fechaMuerte==="") fechaMuerte.toString();
-        delete info["deathDate"];
-        info["deathDate"]=fechaMuerte;
-        console.log (info);*/
-        if(info["birthDate"] === "") delete info["birthDate"];
-        if(info["deathDate"] === "") delete info["deathDate"];
         let myInfo = JSON.stringify(info);
-        console.log(myInfo);
-        let final = myInfo;
-        final = final.replace (/["']["']/g,"");
-        console.log(final);
-
-       /* switch (category) {
-            case "persons": {
-                info["products"]=null;
-                info["entities"]=null;
-                break;
-            }
-            case "entities": {
-                info.push({
-                    products: null,
-                    persons: null
-                });
-                break;
-            }
-            case "products": {
-                info.push({
-                    persons: null,
-                    entities: null
-                });
-                break;
-            }
-        }*/
-        console.log(info);
-
         jQuery.ajax({
             url: 'http://127.0.0.1:8000/api/v1/' + category + '/' + id,
             headers: {"Authorization": authHeader},
@@ -719,7 +541,8 @@
             data: myInfo,
             contentType: 'application/json',
             success: function(data) {
-                console.log(info);
+                 cerrar().then(r => alert(info["name"] + " ha sido actualizado"));
+                 //TODO LocalStorage
             }
         });
     }
