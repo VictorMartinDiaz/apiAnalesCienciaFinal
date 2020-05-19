@@ -106,7 +106,7 @@
                     bodyElement = document.getElementById("botonera");
                     bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
                     if (usuarioRegistrado === "writer") {
-                        bodyElement.innerHTML += '<a class="btn btn-primary" rel="pop-up" id="crear" onclick="newElement()">Crear</a>';
+                        bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
                     }
                     $("#logout").click(function () {
                         localStorage.removeItem('usuarioRegistrado');
@@ -299,7 +299,8 @@
     }
 
     function newElement() {
-        pintarFicha('', '', '').then(r => createForm('', -1, ""));
+        let emptyJson = {'name': '','birthDate': '','deathDate': '','wikiUrl': '','imageUrl': ''};
+        pintarFicha('', '', emptyJson).then(r => createForm('', -1, "person"));
     }
 
     function createForm(associatedJson, id, tipo) {
@@ -310,7 +311,7 @@
         $('#ficha').addClass("form-style");
         $('#ficha').removeClass("ficha");
 
-        bodyElement.innerHTML += '<form id="form" action="">';
+        bodyElement.innerHTML += '<form id="form">';
         bodyElement = document.getElementById("form");
         bodyElement.innerHTML += '<div class="encabezado" id="encabezadoRadio">';
             bodyElement = document.getElementById("encabezadoRadio");
@@ -324,11 +325,11 @@
 
                 bodyElement.innerHTML += '<div class="radioElement" id="radioPersona">';
                     bodyElement = document.getElementById("radioPersona");
-                    if(tipo==="persons"){
-                        bodyElement.innerHTML += '<input type="radio" id="persona" name="tipo" value="persona" checked>';
+                    if(tipo==="persons" || tipo===""){
+                        bodyElement.innerHTML += '<input type="radio" id="persona" name="tipo" value="person" checked>';
                     }
                     else {
-                        bodyElement.innerHTML += '<input type="radio" id="persona" name="tipo" value="persona">';
+                        bodyElement.innerHTML += '<input type="radio" id="persona" name="tipo" value="person">';
                     }
                     bodyElement.innerHTML += '<label for="persona" class="radioLabel">Persona</label><br>';
                 bodyElement.innerHTML += '</div>';
@@ -337,25 +338,27 @@
                 bodyElement.innerHTML += '<div class="radioElement" id="radioEntidad">';
                     bodyElement = document.getElementById("radioEntidad");
                     if(tipo==="entities") {
-                        bodyElement.innerHTML += '<input type="radio" id="entidad" name="tipo" value="entidad" checked>';
+                        bodyElement.innerHTML += '<input type="radio" id="entidad" name="tipo" value="entity" checked>';
                     }
                     else {
-                        bodyElement.innerHTML += '<input type="radio" id="entidad" name="tipo" value="entidad">';
+                        bodyElement.innerHTML += '<input type="radio" id="entidad" name="tipo" value="entity">';
                     }
                     bodyElement.innerHTML += '<label for="entidad" class="radioLabel">Entidad</label><br>';
                 bodyElement.innerHTML += '</div>';
                 bodyElement = document.getElementById("radioBotones");
 
                 bodyElement.innerHTML += '<div class="radioElement" id="radioProducto">';
-                    bodyElement = document.getElementById("radioProducto");
-                    if(tipo==="products") {
-                        bodyElement.innerHTML += '<input type="radio" id="producto" name="tipo" value="producto" checked>';
-                    }
-                    else {
-                        bodyElement.innerHTML += '<input type="radio" id="producto" name="tipo" value="producto">';
-                    }
-                    bodyElement.innerHTML += '<label for="producto " class="radioLabel">Producto</label>';
+                bodyElement = document.getElementById("radioProducto");
+                if(tipo==="products"){
+                    bodyElement.innerHTML += '<input type="radio" id="producto" name="tipo" value="product" checked>';
+                }
+                else {
+                    bodyElement.innerHTML += '<input type="radio" id="producto" name="tipo" value="product">';
+                }
+                bodyElement.innerHTML += '<label for="producto" class="radioLabel">Producto</label><br>';
                 bodyElement.innerHTML += '</div>';
+
+
             bodyElement.innerHTML += '</fieldset>';
             bodyElement = document.getElementById("form");
 
@@ -374,7 +377,7 @@
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldBirthDate">';
                     bodyElement = document.getElementById("fieldBirthDate");
                         bodyElement.innerHTML += '<label for="birthDate">Fecha de nacimiento</label>';
-                        if(associatedJson===''){
+                        if(associatedJson.birthDate===''){
                             bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" >';
                         }
                         else {
@@ -386,7 +389,7 @@
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldDeathDate">';
                     bodyElement = document.getElementById("fieldDeathDate");
                         bodyElement.innerHTML += '<label for="deathDate">Fecha de defuncion</label>';
-                        if(associatedJson===''){
+                        if(associatedJson.deathDate===''){
                             bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" >';
                         } else {
                             bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" value=' + associatedJson.deathDate + '>';
@@ -440,6 +443,11 @@
             bodyElement = document.getElementById("form");
         bodyElement.innerHTML += '</form>';
 
+        $('input[name ="tipo"]').click(function () {
+            tipo = this.value;
+            console.log(tipo);
+        })
+
         $('#sendButton').click(function () {
             (function ($) {
                 $.fn.serializeFormJSON = function () {
@@ -459,10 +467,32 @@
                 };
             })(jQuery);
 
-            $("input[type='radio']").click(function(){
+            $("div[class='radioElement']").click(function(){
                 tipo = $("input[type='radio']:checked").val();
                     console.log(tipo);
             });
+
+            switch(tipo) {
+                case "persons": {
+                    associatedJson["entities"] = '';
+                    associatedJson["products"] = '';
+                    delete associatedJson["persons"];
+                    break;
+                }
+                case "entities": {
+                    associatedJson["persons"] = '';
+                    associatedJson["products"] = '';
+                    delete associatedJson["entities"];
+                    break;
+                }
+                case "products": {
+                    associatedJson["entities"] = '';
+                    associatedJson["persons"] = '';
+                    delete associatedJson["products"];
+                    break;
+                }
+            }
+            console.log(associatedJson);
 
             $('form').submit(function (e) {
                 e.preventDefault();
@@ -489,17 +519,41 @@
     }
 
     function createElement (info, category) {
+
+    console.log(info);
+    console.log(category);
+
+    switch (category) {
+        case "person": {
+            category = "persons";
+            break;
+        }
+        case "product": {
+            category = "products";
+            break;
+        }
+        case "entity": {
+            category = "entities";
+            break;
+        }
+    }
+
+        console.log(category);
+
+        let tipo = "tipo";
+        delete info[tipo];
+        let myInfo = JSON.stringify(info);
+        console.log(myInfo);
         jQuery.ajax({
             type: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/' + category,
             headers: {"Authorization": authHeader},
-            data: info,
-            beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
+            data: myInfo,
+            contentType: 'application/json',
             success: function() {
                 cerrar().then(r => alert(info["name"] + " ha sido creado"));
                 //TODO LocalStorage
                 },
-            //contentType: 'application/json',
             dataType: 'json',
         });
     }
