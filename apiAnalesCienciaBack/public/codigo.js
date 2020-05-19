@@ -3,44 +3,18 @@
         $('#entities').slideUp();
         $('#products').slideUp();
     }
-
     function slideToggleEntidades() {
         $('#entities').slideToggle();
         $('#persons').slideUp();
         $('#products').slideUp();
     }
-
     function slideToggleProductos() {
         $('#products').slideToggle();
         $('#persons').slideUp();
         $('#entities').slideUp();
     }
 
-    function login(){
-        let opacidad = 0;
-
-        if(opacidad === 0) {
-            $(".loginElement").removeAttr("disabled");
-            $("#login").animate({
-                opacity: '1'
-            });
-            opacidad = 1;
-        }
-        else {
-            $('.loginElement').attr('disabled', 'disabled');
-            // TODO deshabilitar el boton para clicks muy seguidos
-            {$("#login").animate({
-                opacity: '0'
-            });}
-            opacidad=0;
-        }
-        $('#entities').slideUp();
-        $('#persons').slideUp();
-        $('#products').slideUp();
-    }
-
     async function cerrar() {
-
         await new Promise(r => setTimeout(r, 200));
         $("#ficha").animate({
             opacity: '0',
@@ -55,7 +29,6 @@
             opacity: '0.87'
         });
     }
-
 
     async function abrir(){
         $('.banda').animate({
@@ -73,8 +46,13 @@
         });
     }
 
-    function request() {
+    async function request(qualifiedName, value) {
+        $('#entities').slideUp();
+        $('#persons').slideUp();
+        $('#products').slideUp();
+
         $('form').bind('submit', function () {
+            document.getElementById("boton").disabled = true;
             $.ajax({
                 type: 'POST',
                 url: '/access_token',
@@ -140,7 +118,6 @@
             }
         }
 
-
     function retrievePersons() {
         let personasElement = document.getElementById("persons");
         //TODO meter esto en el localStorage y comprobar si existe antes de llamar al servidor en cada login
@@ -164,7 +141,6 @@
             },
         });
     }
-
     function retrieveEntities() {
         let entidadesElement = document.getElementById("entities");
         $.ajax({
@@ -187,7 +163,6 @@
             },
         });
     }
-
     function retrieveProducts() {
         let productosElement = document.getElementById("products");
         $.ajax({
@@ -319,7 +294,6 @@
         console.log(localStorage);
         localStorage.removeItem(associatedJson.name);
         document.getElementById(associatedJson.name).innerHTML='';
-
         deleteFromDB(associatedJson.id, tipo);
         await cerrar();
     }
@@ -509,7 +483,7 @@
                     console.log(tipo);
                     createElement(data, tipo);
                 }
-        });
+            });
         });
         console.log(associatedJson);
     }

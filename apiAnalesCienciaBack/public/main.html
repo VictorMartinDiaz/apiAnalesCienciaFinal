@@ -16,35 +16,9 @@
         <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet"/>
     
         <title>Página Principal</title>
-        
         <script>
             $(document).ready(function() {
-                $("#login").animate({
-                    opacity: '0'
-                });
-                $('.loginElement').attr('disabled', 'disabled');
-
-                // TODO hacer algo que haga intuitivo el login
-                /*   let playing = true;
-                 function loop(){
-                      if(playing){
-                          $('.indexLogo').fadeIn(400, function(){
-                              $(this).fadeOut(700,loop);
-                          });
-                      }
-                  }
-
-                  loop(); // start loop
-
-                  $('.glowed').click(async function(){
-                      playing = false;
-                      await new Promise(r => setTimeout(r, 500));
-                      $('.indexLogo').fadeIn();
-                  });
-  */
-                $(".indexLogo").click(function() {
-                    login();
-                });
+                document.getElementById("boton").disabled = false;
             });
         </script>
     </head>
