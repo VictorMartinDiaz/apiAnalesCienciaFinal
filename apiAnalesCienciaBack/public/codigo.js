@@ -377,7 +377,7 @@
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldBirthDate">';
                     bodyElement = document.getElementById("fieldBirthDate");
                         bodyElement.innerHTML += '<label for="birthDate">Fecha de nacimiento</label>';
-                        if(associatedJson.birthDate===''){
+                        if(associatedJson.birthDate==='' || associatedJson.birthDate===null || associatedJson.birthDate===undefined){
                             bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" >';
                         }
                         else {
@@ -389,7 +389,7 @@
                     bodyElement.innerHTML += '<div class="fieldElement" id="fieldDeathDate">';
                     bodyElement = document.getElementById("fieldDeathDate");
                         bodyElement.innerHTML += '<label for="deathDate">Fecha de defuncion</label>';
-                        if(associatedJson.deathDate===''){
+                        if(associatedJson.deathDate==='' || associatedJson.deathDate===null || associatedJson.deathDate===undefined){
                             bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" >';
                         } else {
                             bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" value=' + associatedJson.deathDate + '>';
