@@ -21,7 +21,6 @@
             height: '0px',
             width: '0px',
         });
-
         await new Promise(r => setTimeout(r, 300));
         $('.logoCentral').removeClass("escondida");
         $('.banda').removeClass("escondida");
@@ -36,7 +35,6 @@
         });
         $('.logoCentral').addClass("escondida");
         $('.banda').addClass("escondida");
-
         await new Promise(r => setTimeout(r, 300));
         $("#ficha").show();
         $("#ficha").animate({
@@ -46,7 +44,7 @@
         });
     }
 
-    async function request(qualifiedName, value) {
+    async function request() {
         $('#entities').slideUp();
         $('#persons').slideUp();
         $('#products').slideUp();
@@ -120,13 +118,13 @@
 
     function retrievePersons() {
         let personasElement = document.getElementById("persons");
-        //TODO meter esto en el localStorage y comprobar si existe antes de llamar al servidor en cada login
         $.ajax({
             type: 'GET',
             url: 'api/v1/persons',
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
+                personasElement.innerHTML = '';
                 data['persons'].forEach(i => {
                     personasElement.innerHTML +=
                         '<span class="dropdown-item" id="' + i['person'].name + '">' +
@@ -149,16 +147,19 @@
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
+                entidadesElement.innerHTML = '';
                 data['entities'].forEach(i => {
-                    entidadesElement.innerHTML +=
-                        '<span class="dropdown-item" id="' + i['entity'].name + '">' +
-                        '<img class="dropdownImg" src=' + i['entity'].imageUrl+ ' />' +
-                        '<span class="name" id="' + i['entity'].name + '">' + i['entity'].name +
-                        '</span>' +
-                        '</span>'
-                    let enviar = JSON.stringify(data);
-                    //crea elementos tipo paco:{json}, juan:{json}, etc...
-                    window.localStorage.setItem(i['entity'].name, enviar);
+                    {
+                        entidadesElement.innerHTML +=
+                            '<span class="dropdown-item" id="' + i['entity'].name + '">' +
+                            '<img class="dropdownImg" src=' + i['entity'].imageUrl + ' />' +
+                            '<span class="name" id="' + i['entity'].name + '">' + i['entity'].name +
+                            '</span>' +
+                            '</span>'
+                        let enviar = JSON.stringify(data);
+                        //crea elementos tipo paco:{json}, juan:{json}, etc...
+                        window.localStorage.setItem(i['entity'].name, enviar);
+                    }
                 });
             },
         });
@@ -171,13 +172,14 @@
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
+                productosElement.innerHTML = '';
                 data['products'].forEach(i => {
                     productosElement.innerHTML +=
                         '<span class="dropdown-item" id="' + i['product'].name + '">' +
                         '<img class="dropdownImg" src=' + i['product'].imageUrl+ ' />' +
                         '<span class="name" id="' + i['product'].name + '">' + i['product'].name +
                         '</span>' +
-                        '</span>'
+                        '</span>';
                     let enviar = JSON.stringify(data);
                     //crea elementos tipo paco:{json}, juan:{json}, etc...
                     window.localStorage.setItem(i['product'].name, enviar);
@@ -189,7 +191,6 @@
     async function localizarElemento(elemento, tipo, name) {
         let dibujar = "";
         let i = 0;
-
         for (let found = false; i <= localStorage.length - 1 && !found; i++) {
             dibujar = JSON.parse(elemento);
             console.log(dibujar);
@@ -235,8 +236,8 @@
         $('#products').slideUp();
 
         document.getElementById("ficha").innerHTML = "";
-       await abrir();
-       rellenarFicha(tipo, dibujar);
+        await abrir();
+        rellenarFicha(tipo, dibujar);
     }
 
     function rellenarFicha(tipo, dibujar){
@@ -290,11 +291,11 @@
         });
     }
 
-    async function eliminar(associatedJson, tipo) {
+    async function eliminar(associatedJson, category) {
         console.log(localStorage);
         localStorage.removeItem(associatedJson.name);
         document.getElementById(associatedJson.name).innerHTML='';
-        deleteFromDB(associatedJson.id, tipo);
+        deleteFromDB(associatedJson.id, category);
         await cerrar();
     }
 
@@ -357,7 +358,6 @@
                 }
                 bodyElement.innerHTML += '<label for="producto" class="radioLabel">Producto</label><br>';
                 bodyElement.innerHTML += '</div>';
-
 
             bodyElement.innerHTML += '</fieldset>';
             bodyElement = document.getElementById("form");
@@ -471,7 +471,7 @@
                 tipo = $("input[type='radio']:checked").val();
                     console.log(tipo);
             });
-
+/*
             switch(tipo) {
                 case "persons": {
                     associatedJson["entities"] = '';
@@ -492,7 +492,7 @@
                     break;
                 }
             }
-            console.log(associatedJson);
+            console.log(associatedJson);*/
 
             $('form').submit(function (e) {
                 e.preventDefault();
@@ -506,6 +506,7 @@
 
                 console.log(data);
                 if(id != -1) {
+                    console.log(tipo);
                     updateElement(data, id, tipo);
                 }
                 else {
@@ -520,45 +521,60 @@
 
     function createElement (info, category) {
 
-    console.log(info);
-    console.log(category);
-
-    switch (category) {
-        case "person": {
-            category = "persons";
-            break;
-        }
-        case "product": {
-            category = "products";
-            break;
-        }
-        case "entity": {
-            category = "entities";
-            break;
-        }
-    }
-
+        console.log(info);
         console.log(category);
 
-        let tipo = "tipo";
-        delete info[tipo];
-        let myInfo = JSON.stringify(info);
-        console.log(myInfo);
-        jQuery.ajax({
-            type: 'POST',
-            url: 'http://127.0.0.1:8000/api/v1/' + category,
-            headers: {"Authorization": authHeader},
-            data: myInfo,
-            contentType: 'application/json',
-            success: function() {
-                cerrar().then(r => alert(info["name"] + " ha sido creado"));
-                //TODO LocalStorage
-                },
-            dataType: 'json',
-        });
+        switch (category) {
+            case "person": {
+                category = "persons";
+                break;
+            }
+            case "product": {
+                category = "products";
+                break;
+            }
+            case "entity": {
+                category = "entities";
+                break;
+            }
+        }
+
+            console.log(category);
+
+            let tipo = "tipo";
+            delete info[tipo];
+            let myInfo = JSON.stringify(info);
+            console.log(myInfo);
+            jQuery.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/api/v1/' + category,
+                headers: {"Authorization": authHeader},
+                data: myInfo,
+                contentType: 'application/json',
+                success: function() {
+                    switch (category) {
+                        case "persons": {
+                            retrievePersons();
+                            break;
+                        }
+                        case "products": {
+                            retrieveProducts();
+                            break;
+                        }
+                        case "entities": {
+                            retrieveEntities();
+                            break;
+                        }
+                    }
+                    cerrar().then(r => confirm(info["name"] + " ha sido creado"));
+                    //TODO LocalStorage
+                    },
+                dataType: 'json',
+            });
     }
 
     function updateElement (info, id, category) {
+        console.log(category);
         let tipo = "tipo";
         delete info[tipo];
         let myInfo = JSON.stringify(info);
@@ -569,7 +585,21 @@
             data: myInfo,
             contentType: 'application/json',
             success: function(data) {
-                 cerrar().then(r => alert(info["name"] + " ha sido actualizado"));
+                switch (category) {
+                    case "persons": {
+                        retrievePersons();
+                        break;
+                    }
+                    case "products": {
+                        retrieveProducts();
+                        break;
+                    }
+                    case "entities": {
+                        retrieveEntities();
+                        break;
+                    }
+                }
+                 cerrar().then(r => confirm(info["name"] + " ha sido actualizado"));
                  //TODO LocalStorage
             }
         });

@@ -78,9 +78,7 @@
 
         <script>
             $('.dropdown-menu').on('click', '.dropdown-item', function () {
-                console.log(this.parentNode.id);
                 let tipo = this.parentNode.id;
-                console.log(this.id);
                 let name = this.id;
                 let elemento = localStorage.getItem(this.id);
                 localizarElemento(elemento, tipo, name);
