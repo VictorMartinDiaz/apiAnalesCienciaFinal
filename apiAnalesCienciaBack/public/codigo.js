@@ -117,8 +117,6 @@
         }
     }
 
-
-    //TODO terminar aqui
     function retrieveUsers() {
         if($('#ficha').hasClass("form-style")){
             $('#ficha').removeClass("form-style");
@@ -162,7 +160,7 @@
     }
 
     function  suspendUser(userId) {
-        let dato = {'role': 'inactivo'};
+        let dato = {'standby': 'true'};
         userId = recortar(userId);
 
         $.ajax({
@@ -321,7 +319,7 @@
                 personasElement.innerHTML = '';
                 data['persons'].forEach(i => {
                     personasElement.innerHTML +=
-                        '<span class="dropdown-item" id="' + i['person'].name + '">' +
+                        '<span class="dropdown-item" id="'+ i['person'].name + '">' +
                         '<img class="dropdownImg" src=' + i['person'].imageUrl+ ' />' +
                         '<span class="name" id="' + i['person'].name + '">' + i['person'].name +
                         '</span>' +
@@ -455,17 +453,17 @@
         ];
         let bodyElement = document.getElementById("ficha");
         bodyElement.innerHTML = '';
-        bodyElement.innerHTML += '<div id="rel_close_list">';
-        bodyElement = document.getElementById("rel_close_list");
-        bodyElement.innerHTML += '<button class="btn btn-secondary" id="listaRel"><i class="fas fa-project-diagram"></i></button>';
-        bodyElement.innerHTML += '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>';
-        bodyElement.innerHTML += '</div>';
+        bodyElement.innerHTML +=
+            '<div id="rel_close_list">' +
+            '<button class="btn btn-secondary" id="listaRel"><i class="fas fa-project-diagram"></i></button>' +
+            '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+            '</div>';
+
+
         bodyElement = document.getElementById("ficha");
 
 
-        $('#listaRel').click(function () {
-            listRelations(tipo, dibujar);
-        });
+
 
         let data = [dibujar];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
@@ -484,6 +482,10 @@
             await new Promise(r => setTimeout(r, 300));
             createForm(dibujar, dibujar.id, tipo, true);
             $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
+        });
+
+        $('#listaRel').click(function () {
+            listRelations(tipo, dibujar);
         });
     }
 
@@ -784,13 +786,89 @@
 
     function listRelations(tipo, dibujar){
         console.log("listando");
+        console.log(tipo);
+        console.log(dibujar);
+
+        switch (tipo) {
+            case("entities"): {
+                buscaPersona(dibujar);
+                buscaProducto(dibujar);
+                break;
+            }
+            case("products"): {
+                buscaEntidad(dibujar);
+                buscaPersona(dibujar);
+
+                break;
+            }
+            case("persons"): {
+                buscaProducto(dibujar);
+                buscaEntidad(dibujar);
+                break;
+            }
+        }
+
         /*let clave = '';
         for (let x=0; x<=localStorage.length-1; x++)  {
             clave = localStorage.key(x);
             console.log("La clave " + clave + " contiene el valor " + localStorage.getItem(clave));
         }*/
     }
-
-    function editRelations(tipo, dibujar){
-            console.log("editando");
+    function buscaPersona(dibujar) {
+        for(let i in dibujar["persons"])
+        {
+            console.log(dibujar["persons"][i]);
+            $.ajax({
+                type: 'GET',
+                url: 'api/v1/persons/' + dibujar["persons"][i],
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Persona: ");
+                    console.log(data['person'].name);
+                }});
+        }
     }
+    function buscaEntidad(dibujar) {
+        for(let i in dibujar["entities"])
+        {
+            console.log(dibujar["entities"][i]);
+            $.ajax({
+                type: 'GET',
+                url: 'api/v1/entities/' + dibujar["entities"][i],
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Entidad: ");
+                    console.log(data['entity'].name);
+                }});
+        }
+    }
+    function buscaProducto(dibujar) {
+        for(let i in dibujar["products"])
+        {
+            console.log(dibujar["products"][i]);
+            $.ajax({
+                type: 'GET',
+                url: 'api/v1/entities/' + dibujar["products"][i],
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("producto: ");
+                    console.log(data['product'].name);
+                }});
+        }
+    }
+    //TODO editar relaciones EMPEZAR AQUI MAÑANA
+    function editRelations(tipo, dibujar){
+        console.log("editando");
+        console.log(tipo);
+        console.log(dibujar);
+    }
+
+    //TODO altas usuarios nuevos
+
+    /*TODO sobre el estado de Standby:
+       En local no se guarda casi nada, todo se guarda en el servidor Tendrás que añadir el atributo a la entidad,
+       añadir los getters y setters, y añadir las correspondientes operaciones en la API
+       (puedes añadir un endpoint específico o hacerlo a través del método PUT que ya tienes)*/
