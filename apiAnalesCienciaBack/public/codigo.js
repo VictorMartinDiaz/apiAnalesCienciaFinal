@@ -39,8 +39,8 @@
         $("#ficha").show();
         $("#ficha").animate({
             opacity: '1',
-            height: '550px',
-            width: '550px',
+            height: '600px',
+            width: '600px',
         });
     }
 
@@ -92,29 +92,223 @@
     }
 
     function imIn() {
-            try {
-                let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
+        try {
+            let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
 
-                if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
-                    let bodyElement = "";
-                    $("#ficha").click(function () {
-                        document.getElementById("logout").style.visibility = "visible";
-                    });
+            if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
+                let bodyElement = "";
+                $("#ficha").click(function () {
+                    document.getElementById("logout").style.visibility = "visible";
+                });
 
-                    bodyElement = document.getElementById("botonera");
-                    bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
-                    if (usuarioRegistrado === "writer") {
-                        bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
-                    }
-                    $("#logout").click(function () {
-                        localStorage.removeItem('usuarioRegistrado');
-                        location.reload();
-                    });
+                bodyElement = document.getElementById("botonera");
+                bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
+                if (usuarioRegistrado === "writer") {
+                    bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
+                    bodyElement.innerHTML += '<a class="btn btn-light text-secondary" id="crear" onclick="retrieveUsers()">Permisos</a>';
                 }
-            } catch (error) {
-                console.log(error)
+                $("#logout").click(function () {
+                    localStorage.removeItem('usuarioRegistrado');
+                    location.reload();
+                });
             }
+        } catch (error) {
+            console.log(error)
         }
+    }
+
+
+    //TODO terminar aqui
+    function retrieveUsers() {
+        if($('#ficha').hasClass("form-style")){
+            $('#ficha').removeClass("form-style");
+            $('#ficha').addClass("ficha");
+        }
+        let usersElement = document.getElementById("ficha");
+        $.ajax({
+            type: 'GET',
+            url: 'api/v1/users',
+            headers: {"Authorization": authHeader},
+            dataType: 'json',
+            success: async function (data) {
+               await pintaListaUsuarios(usersElement, data);
+            },
+        });
+        $("#editarPermisos").click(function () {
+
+        });
+
+    }
+
+    function  promoteUser(userId) {
+
+    let dato = {'role': 'writer'};
+        userId = recortar(userId);
+
+        $.ajax({
+            type: 'PUT',
+            url: 'api/v1/users/'+userId,
+            headers: {"Authorization": authHeader},
+            dataType: 'json',
+            data: dato,
+            success: function (data) {
+                window.alert("Usuario ascendido");
+                //sacar por consola el usuario
+                console.log(localStorage.getItem(userId));
+                retrieveUsers();
+
+            },
+        })
+    }
+
+    function  suspendUser(userId) {
+        let dato = {'role': 'inactivo'};
+        userId = recortar(userId);
+
+        $.ajax({
+            type: 'PUT',
+            url: 'api/v1/users/'+userId,
+            headers: {"Authorization": authHeader},
+            dataType: 'json',
+            data: dato,
+            success: function (data) {
+                window.alert("Usuario suspendido");
+                retrieveUsers();
+            },
+        })
+    }
+
+    function  deleteUser(userId) {
+        //let dato = "'role': 'writer'";
+        userId = recortar(userId);
+        console.log(userId);
+         $.ajax({
+             type: 'DELETE',
+             url: 'api/v1/users/'+userId,
+             headers: {"Authorization": authHeader},
+             dataType: 'json',
+             //data: dato,
+             success: function (data) {
+                 window.alert("Usuario borrado");
+                 retrieveUsers();
+             },
+         })
+    }
+
+    function recortar(userId) {
+        (userId).toString();
+        userId = userId.slice(0, -1);
+        userId = userId.substr(2);
+       return userId;
+    }
+
+    async function pintaListaUsuarios(usersElement, data) {
+        usersElement.innerHTML = '';
+        await abrir();
+        usersElement.innerHTML +=
+            '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+
+            '<div class="half">' +
+                '<h1 class="formTag">Escritores</h1>' +
+                '<hr class="bajoLinea"/>' +
+                '<div class="tbl-header">' +
+                    '<table>' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th><h1>id</h1></th>' +
+                                '<th><h1>nombre</h1></th>' +
+                                '<th><h1>e-mail</h1></th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>' +
+                '</div>' +
+                '<div class="tbl-content">' +
+                    '<table>' +
+                        '<tbody id="userWriter"></tbody>' +
+                    '</table>' +
+                '</div>' +
+            '</div>' +
+
+            '<div class="half">' +
+                '<h1 class="formTag">Lectores</h1>' +
+                '<hr class="bajoLinea"/>' +
+                '<div class="tbl-header">' +
+                    '<table>' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th><h1>id</h1></th>' +
+                                '<th><h1>nombre</h1></th>' +
+                                '<th><h1>e-mail</h1></th>' +
+                                '<th><h1>editar</h1></th>' +
+                                '<th><h1>suspender</h1></th>' +
+                                '<th><h1>eliminar</h1></th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>' +
+                '</div>' +
+                '<div class="tbl-content">' +
+                    '<table>' +
+                        '<tbody id="userReader"></tbody>' +
+                    '</table>' +
+                '</div>' +
+            '</div>' ;
+        let usersWriter = '';
+        let usersReader = '';
+        data['users'].forEach(i => {
+
+            console.log(i['user'].username);
+            console.log(i['user'].role);
+            console.log("------------------------");
+
+            if(i['user'].role==="writer" || i['user'].role==="inactivo"){
+                usersWriter = document.getElementById("userWriter");
+                if(i['user'].role==="writer") {
+                    usersWriter.innerHTML +=
+                        '<tr>' +
+                        '<td>' + i["user"].id + '</td>' +
+                        '<td>' + i["user"].username + '</td>' +
+                        '<td>' + i["user"].email + '</td>' +
+                        '</tr>';
+                }
+                if(i['user'].role==="inactivo") {
+                    usersWriter.innerHTML +=
+                        '<tr class="inactivo">' +
+                        '<td>' + i["user"].id + '</td>' +
+                        '<td>' + i["user"].username + '</td>' +
+                        '<td>' + i["user"].email + '</td>' +
+                        '</tr>';
+                }
+            }
+
+            if(i['user'].role==="reader"){
+                let userId = JSON.stringify(i["user"]);
+                window.localStorage.setItem(i['user'].id, userId);
+                //el JSON
+                console.log(i['user']);
+                //el valor
+                console.log(i['user'].id);
+                //Stringifeado
+                console.log(localStorage.getItem(i['user']));
+                //Stringifeado tambien
+                console.log(userId);
+                usersReader = document.getElementById("userReader");
+                usersReader.innerHTML +=
+                    '<tr>' +
+                        '<td>' + i["user"].id + '</td>' +
+                        '<td>'+ i["user"].username +'</td>' +
+                        '<td>' + i["user"].email + '</td>' +
+                        '<td><button class="btn btn-info " rel="pop-up" id="u\'' + i["user"].id  + '\'" onclick="promoteUser(this.id);">Upgrade</button></td>' +
+                        '<td><button class="btn btn-warning" rel="pop-up" id="s\'' + i["user"].id  + '\'" onclick="suspendUser(this.id);">Standby</button></td>' +
+                        '<td><button class="btn btn-danger" rel="pop-up" id="d\'' + i["user"].id  + '\'" onclick="deleteUser(this.id);">Delete</button></td>' +
+                    '</tr>';
+            }
+
+            let enviar = JSON.stringify(data);
+            //crea elementos tipo paco:{json}, juan:{json}, etc...
+
+        });
+    }
+
 
     function retrievePersons() {
         let personasElement = document.getElementById("persons");
@@ -260,15 +454,27 @@
             }
         ];
         let bodyElement = document.getElementById("ficha");
-        bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+        bodyElement.innerHTML = '';
+        bodyElement.innerHTML += '<div id="rel_close_list">';
+        bodyElement = document.getElementById("rel_close_list");
+        bodyElement.innerHTML += '<button class="btn btn-secondary" id="listaRel"><i class="fas fa-project-diagram"></i></button>';
+        bodyElement.innerHTML += '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>';
+        bodyElement.innerHTML += '</div>';
+        bodyElement = document.getElementById("ficha");
+
+
+        $('#listaRel').click(function () {
+            listRelations(tipo, dibujar);
+        });
+
         let data = [dibujar];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
         if (usuarioRegistrado === "writer") {
-            bodyElement.innerHTML += '<div>';
-            bodyElement.innerHTML += '<button class="btn btn-info transition" rel="pop-up" id="editar">Editar</button>';
-            bodyElement.innerHTML += '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>';
-            bodyElement.innerHTML += '</div>';
+            bodyElement.innerHTML += '<div class="botoneraFicha">' +
+            '<button class="btn btn-info transition" rel="pop-up" id="editar">Editar</button>' +
+            '<button class="btn btn-warning" rel="pop-up" id="eliminar">Eliminar</button>' +
+            '</div>';
         }
         $('#eliminar').click(async function () {
             await eliminar(dibujar, tipo);
@@ -276,7 +482,7 @@
         $('#editar').click(async function () {
             $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
             await new Promise(r => setTimeout(r, 300));
-            createForm(dibujar, dibujar.id, tipo);
+            createForm(dibujar, dibujar.id, tipo, true);
             $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
         });
     }
@@ -301,14 +507,19 @@
 
     function newElement() {
         let emptyJson = {'name': '','birthDate': '','deathDate': '','wikiUrl': '','imageUrl': ''};
-        pintarFicha('', '', emptyJson).then(r => createForm('', -1, "person"));
+        pintarFicha('', '', emptyJson).then(r => createForm('', -1, "person", false));
     }
 
-    function createForm(associatedJson, id, tipo) {
-        console.log(associatedJson);
+    function createForm(associatedJson, id, tipo, edit) {
+
         let bodyElement = document.getElementById("ficha");
             bodyElement.innerHTML = '';
-            bodyElement.innerHTML += '<button class="btn btn-danger" rel="pop-up" id="cerrar" onclick="cerrar();">X</button>';
+            bodyElement.innerHTML += '<div id="rel_close">';
+            bodyElement = document.getElementById("rel_close");
+            bodyElement.innerHTML += '<button class="btn btn-secondary" id="relaciones"><i class="fas fa-project-diagram"></i></button>';
+            bodyElement.innerHTML += '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>';
+            bodyElement.innerHTML += '</div>';
+        bodyElement = document.getElementById("ficha");
         $('#ficha').addClass("form-style");
         $('#ficha').removeClass("ficha");
 
@@ -319,6 +530,7 @@
             bodyElement.innerHTML += '<label class="formTag">Tipo</label>';
             bodyElement.innerHTML += '<hr class="bajoLinea"/>';
         bodyElement.innerHTML += '</div>';
+
 
         bodyElement = document.getElementById("form");
             bodyElement.innerHTML += '<fieldset id="radioBotones">';
@@ -358,6 +570,11 @@
                 }
                 bodyElement.innerHTML += '<label for="producto" class="radioLabel">Producto</label><br>';
                 bodyElement.innerHTML += '</div>';
+                if(edit){
+                    document.getElementById("persona").disabled = true;
+                    document.getElementById("entidad").disabled = true;
+                    document.getElementById("producto").disabled = true;
+                }
 
             bodyElement.innerHTML += '</fieldset>';
             bodyElement = document.getElementById("form");
@@ -445,8 +662,11 @@
 
         $('input[name ="tipo"]').click(function () {
             tipo = this.value;
-            console.log(tipo);
         })
+
+        $('#relaciones').click(function () {
+            editRelations(tipo, associatedJson);
+        });
 
         $('#sendButton').click(function () {
             (function ($) {
@@ -469,61 +689,23 @@
 
             $("div[class='radioElement']").click(function(){
                 tipo = $("input[type='radio']:checked").val();
-                    console.log(tipo);
             });
-/*
-            switch(tipo) {
-                case "persons": {
-                    associatedJson["entities"] = '';
-                    associatedJson["products"] = '';
-                    delete associatedJson["persons"];
-                    break;
-                }
-                case "entities": {
-                    associatedJson["persons"] = '';
-                    associatedJson["products"] = '';
-                    delete associatedJson["entities"];
-                    break;
-                }
-                case "products": {
-                    associatedJson["entities"] = '';
-                    associatedJson["persons"] = '';
-                    delete associatedJson["products"];
-                    break;
-                }
-            }
-            console.log(associatedJson);*/
 
             $('form').submit(function (e) {
                 e.preventDefault();
                 let data = $(this).serializeFormJSON();
-                console.log(data);
-                console.log(id);
-                console.log(tipo);
-
                 if(data["birthDate"] === "") delete data["birthDate"];
                 if(data["deathDate"] === "") delete data["deathDate"];
 
-                console.log(data);
-                if(id != -1) {
-                    console.log(tipo);
+                if(id !== -1)
                     updateElement(data, id, tipo);
-                }
-                else {
-                    console.log(data);
-                    console.log(tipo);
+                else
                     createElement(data, tipo);
-                }
             });
         });
-        console.log(associatedJson);
     }
 
     function createElement (info, category) {
-
-        console.log(info);
-        console.log(category);
-
         switch (category) {
             case "person": {
                 category = "persons";
@@ -538,13 +720,9 @@
                 break;
             }
         }
-
-            console.log(category);
-
             let tipo = "tipo";
             delete info[tipo];
             let myInfo = JSON.stringify(info);
-            console.log(myInfo);
             jQuery.ajax({
                 type: 'POST',
                 url: 'http://127.0.0.1:8000/api/v1/' + category,
@@ -566,15 +744,14 @@
                             break;
                         }
                     }
-                    cerrar().then(r => confirm(info["name"] + " ha sido creado"));
-                    //TODO LocalStorage
+                    cerrar().then(r => confirm(
+                        info["name"] + " ha sido creado"));
                     },
                 dataType: 'json',
             });
     }
 
     function updateElement (info, id, category) {
-        console.log(category);
         let tipo = "tipo";
         delete info[tipo];
         let myInfo = JSON.stringify(info);
@@ -599,8 +776,21 @@
                         break;
                     }
                 }
-                 cerrar().then(r => confirm(info["name"] + " ha sido actualizado"));
-                 //TODO LocalStorage
+                 cerrar().then(r => confirm(
+                     info["name"] + " ha sido actualizado"));
             }
         });
+    }
+
+    function listRelations(tipo, dibujar){
+        console.log("listando");
+        /*let clave = '';
+        for (let x=0; x<=localStorage.length-1; x++)  {
+            clave = localStorage.key(x);
+            console.log("La clave " + clave + " contiene el valor " + localStorage.getItem(clave));
+        }*/
+    }
+
+    function editRelations(tipo, dibujar){
+            console.log("editando");
     }
