@@ -81,9 +81,10 @@
                 data['users'].forEach(i =>
                 {
                     if (usuarioActual === i['user'].username) {
-                        const tipo = i['user'].role;
+                        let tipo = i['user'].role;
+                        let suspendido = i['user'].standby;
                         localStorage.usuarioRegistrado = tipo;
-                        imIn();
+                        imIn(tipo, suspendido);
                         return false;
                     }
                 })
@@ -91,11 +92,11 @@
         })
     }
 
-    function imIn() {
+    function imIn(tipo, suspendido) {
         try {
-            let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
+            //let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
 
-            if (usuarioRegistrado === "reader" || usuarioRegistrado === "writer") {
+            if ((tipo === "reader" && suspendido===false)|| tipo === "writer") {
                 let bodyElement = "";
                 $("#ficha").click(function () {
                     document.getElementById("logout").style.visibility = "visible";
@@ -103,7 +104,7 @@
 
                 bodyElement = document.getElementById("botonera");
                 bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
-                if (usuarioRegistrado === "writer") {
+                if (tipo === "writer") {
                     bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
                     bodyElement.innerHTML += '<a class="btn btn-light text-secondary" id="crear" onclick="retrieveUsers()">Permisos</a>';
                 }
@@ -111,6 +112,9 @@
                     localStorage.removeItem('usuarioRegistrado');
                     location.reload();
                 });
+            } else if(tipo === "reader" && suspendido===true){
+                window.alert("Este usuario esta suspendido");
+                location.reload();
             }
         } catch (error) {
             console.log(error)
@@ -141,8 +145,15 @@
     function  promoteUser(userId) {
 
         userId = recortar(userId);
-        let dato = {'role': 'writer'};
         let miJson = localStorage.getItem(userId)
+        miJson = JSON.parse(miJson);
+
+        let dato = '';
+        if(miJson["standby"]===false)
+            dato = {'role': 'writer'};
+        if(miJson["standby"]===true)
+            dato = {'standby': 0};
+
 
         //console.log(localStorage.getItem(userId));
 
@@ -161,18 +172,19 @@
             },
         })
     }
-
+    //TODO Anular la suspension no funciona
     function  suspendUser(userId) {
 
-            let dato = {'standby': 'true'};
+            let dato = {"standby": false};
             userId = recortar(userId);
+            console.log(userId);
 
             $.ajax({
                 type: 'PUT',
-                url: 'api/v1/users/' + userId,
+                url: 'api/v1/users/'+userId,
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
-                data: dato,
+                data: {"standby": 1},
                 success: function (data) {
                     window.alert("Usuario suspendido");
                     retrieveUsers();
@@ -876,9 +888,10 @@
                     console.log("producto: ");
                     console.log(data['product'].name);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                /*error: function (jqXHR, textStatus, errorThrown) {
                     console.log("borramos " + i)
-                    dibujar["products"].splice(dibujar["products"][i], 1); }});
+                    dibujar["products"].splice(dibujar["products"][i], 1); }*/
+            });
 
         }
     }
