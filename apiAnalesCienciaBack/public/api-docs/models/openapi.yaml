@@ -1194,6 +1194,9 @@ components:
           type: string
           default: reader
           enum: ['reader', 'writer']
+        standby:
+          description: 'User standby'
+          type: boolean
         _links:
           description: link relations
           type: object
@@ -1209,6 +1212,7 @@ components:
           id: 1508
           email: 'miw@upm.es'
           role: 'reader'
+          standby: false
           _links:
             parent:
               href: /api/v1/users
@@ -1368,11 +1372,15 @@ components:
                 type: string
                 default: reader
                 enum: ['reader', 'writer']
+              standby:
+                description: 'User standby'
+                type: boolean
             example:
               username: username
               email: User_email@example.com
               password: User_password
               role: reader
+              standby: false
     LoginRequestBody:
       description: Registered **username** and **password**
       required: true
@@ -1393,6 +1401,9 @@ components:
                 type: string
                 default: reader
                 enum: ['reader', 'reader+writer']
+              standby:
+                description: 'User standby'
+                type: boolean
         application/json:
           schema:
             type: object
@@ -1453,6 +1464,12 @@ components:
       description: 'User name'
       required: true
       schema: {"type": "string", pattern: '^[a-zA-Z0-9()áéíóúÁÉÍÓÚñÑ %$\.+-]+$'}
+    standby:
+        name: standby
+        in: path
+        description: 'User standby'
+        required: true
+        schema: {"type": "string", pattern: '^[a-zA-Z0-9()áéíóúÁÉÍÓÚñÑ %$\.+-]+$'}
     productname:
       name: productname
       in: path

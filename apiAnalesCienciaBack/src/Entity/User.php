@@ -79,24 +79,36 @@ class User implements JsonSerializable
     private Role $role;
 
     /**
+     * @ORM\Column(
+     *     name     = "standby",
+     *     type     = "boolean",
+     *     nullable = false
+     *     )
+     */
+    protected bool $standby;
+
+    /**
      * User constructor.
      *
      * @param string $username username
      * @param string $email email
      * @param string $password password
      * @param string $role Role::ROLE_READER | Role::ROLE_WRITER
+     * @param bool $standby standby
      */
     public function __construct(
         string $username = '',
         string $email = '',
         string $password = '',
-        string $role = Role::ROLE_READER
+        string $role = Role::ROLE_READER,
+        bool $standby = false
     ) {
         $this->id       = 0;
         $this->username = $username;
         $this->email    = $email;
         $this->setPassword($password);
         $this->role     = new Role($role);
+        $this->standby  = $standby;
     }
 
     /**
@@ -144,6 +156,24 @@ class User implements JsonSerializable
     public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getStandby(): bool
+    {
+        return $this->standby;
+    }
+
+    /**
+     * @param bool $standby standby
+     * @return boolean
+     */
+    public function setStandby(bool $standby): self
+    {
+        $this->standby = $standby;
         return $this;
     }
 
@@ -222,6 +252,7 @@ class User implements JsonSerializable
             'username="' . $this->getUsername() . '", ' .
             'email="' . $this->getEmail() . '", ' .
             'role="' . $this->role .
+            'standby="' . $this->getStandby() . '", ' .
             '")]';
     }
 
@@ -239,7 +270,8 @@ class User implements JsonSerializable
                 'id' => $this->getId(),
                 'username' => $this->getUsername(),
                 'email' => $this->getEmail(),
-                'role' => $this->role->__toString()
+                'role' => $this->role->__toString(),
+                'standby' => $this->getStandby()
             ]
         ];
     }

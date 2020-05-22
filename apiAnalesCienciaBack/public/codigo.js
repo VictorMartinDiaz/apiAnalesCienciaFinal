@@ -140,8 +140,11 @@
 
     function  promoteUser(userId) {
 
-    let dato = {'role': 'writer'};
         userId = recortar(userId);
+        let dato = {'role': 'writer'};
+        let miJson = localStorage.getItem(userId)
+
+        //console.log(localStorage.getItem(userId));
 
         $.ajax({
             type: 'PUT',
@@ -160,20 +163,21 @@
     }
 
     function  suspendUser(userId) {
-        let dato = {'standby': 'true'};
-        userId = recortar(userId);
 
-        $.ajax({
-            type: 'PUT',
-            url: 'api/v1/users/'+userId,
-            headers: {"Authorization": authHeader},
-            dataType: 'json',
-            data: dato,
-            success: function (data) {
-                window.alert("Usuario suspendido");
-                retrieveUsers();
-            },
-        })
+            let dato = {'standby': 'true'};
+            userId = recortar(userId);
+
+            $.ajax({
+                type: 'PUT',
+                url: 'api/v1/users/' + userId,
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                data: dato,
+                success: function (data) {
+                    window.alert("Usuario suspendido");
+                    retrieveUsers();
+                },
+            });
     }
 
     function  deleteUser(userId) {
@@ -258,7 +262,6 @@
             console.log(i['user'].role);
             console.log("------------------------");
 
-            if(i['user'].role==="writer" || i['user'].role==="inactivo"){
                 usersWriter = document.getElementById("userWriter");
                 if(i['user'].role==="writer") {
                     usersWriter.innerHTML +=
@@ -268,15 +271,6 @@
                         '<td>' + i["user"].email + '</td>' +
                         '</tr>';
                 }
-                if(i['user'].role==="inactivo") {
-                    usersWriter.innerHTML +=
-                        '<tr class="inactivo">' +
-                        '<td>' + i["user"].id + '</td>' +
-                        '<td>' + i["user"].username + '</td>' +
-                        '<td>' + i["user"].email + '</td>' +
-                        '</tr>';
-                }
-            }
 
             if(i['user'].role==="reader"){
                 let userId = JSON.stringify(i["user"]);
@@ -289,17 +283,34 @@
                 console.log(localStorage.getItem(i['user']));
                 //Stringifeado tambien
                 console.log(userId);
+                let tempStandby = i['user'].standby;
+                console.log(i['user'].standby);
                 usersReader = document.getElementById("userReader");
                 usersReader.innerHTML +=
-                    '<tr>' +
+                    '<tr id="i\'' + i["user"].id  + '\'">' +
                         '<td>' + i["user"].id + '</td>' +
                         '<td>'+ i["user"].username +'</td>' +
                         '<td>' + i["user"].email + '</td>' +
-                        '<td><button class="btn btn-info " rel="pop-up" id="u\'' + i["user"].id  + '\'" onclick="promoteUser(this.id);">Upgrade</button></td>' +
-                        '<td><button class="btn btn-warning" rel="pop-up" id="s\'' + i["user"].id  + '\'" onclick="suspendUser(this.id);">Standby</button></td>' +
+                        '<td><button class="btn btn-info " rel="pop-up" id="u\'' + i["user"].id  + '\'" onclick="promoteUser(this.id);">Promote</button></td>' +
+                        '<td><button class="btn btn-warning" rel="pop-up" id="s\'' + i["user"].id  + '\'" onclick="suspendUser(this.id);">Demote</button></td>' +
                         '<td><button class="btn btn-danger" rel="pop-up" id="d\'' + i["user"].id  + '\'" onclick="deleteUser(this.id);">Delete</button></td>' +
                     '</tr>';
+
+
+                //Pintamos la clase si esta o no en suspension
+                    let tempId = "i'"+ i["user"].id+"'";
+                    console.log(tempId);
+                    tempId = document.getElementById(tempId);
+                    console.log(tempId);
+                    if(i["user"].standby===true)
+                        tempId.classList.add("standby");
+                    if(i["user"].standby===false)
+                        tempId.classList.remove("standby");
+
+
+
             }
+
 
             let enviar = JSON.stringify(data);
             //crea elementos tipo paco:{json}, juan:{json}, etc...
@@ -879,8 +890,3 @@
     }
 
     //TODO altas usuarios nuevos
-
-    /*TODO sobre el estado de Standby:
-       En local no se guarda casi nada, todo se guarda en el servidor Tendrás que añadir el atributo a la entidad,
-       añadir los getters y setters, y añadir las correspondientes operaciones en la API
-       (puedes añadir un endpoint específico o hacerlo a través del método PUT que ya tienes)*/

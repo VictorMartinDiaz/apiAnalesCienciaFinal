@@ -460,6 +460,6 @@ th{
     text-align: center;
 }
 
-.inactivo {
-    background-color: rgba(142, 44, 59, 0.49);
+.standby {
+    background-color: rgba(142, 44, 59, 1)!important;
 }

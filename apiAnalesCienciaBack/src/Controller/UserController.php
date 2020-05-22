@@ -192,7 +192,8 @@ class UserController
             $req_data['username'],
             $req_data['email'],
             $req_data['password'],
-            $req_data['role'] ?? Role::ROLE_READER
+            $req_data['role'] ?? Role::ROLE_READER,
+            $req_data['standby']
         );
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
@@ -263,6 +264,11 @@ class UserController
                 return Error::error($response, StatusCode::STATUS_BAD_REQUEST);
             }
         }
+
+    // standby
+            if (isset($req_data['standby'])) {
+                $user->setStandby($req_data['standby']);
+            }
 
         $this->entityManager->flush($user);
 

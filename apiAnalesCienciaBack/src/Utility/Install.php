@@ -64,7 +64,8 @@ abstract class Install
             $_ENV['ADMIN_USER_NAME'],
             $_ENV['ADMIN_USER_EMAIL'],
             $_ENV['ADMIN_USER_PASSWD'],
-            true
+            true,
+            'false'
         );
     }
 }
