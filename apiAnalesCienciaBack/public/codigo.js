@@ -826,7 +826,11 @@
                 success: function (data) {
                     console.log("Persona: ");
                     console.log(data['person'].name);
-                }});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("borramos" + i)
+                    dibujar["persons"].splice(dibujar["persons"][i], 1); }
+            });
         }
     }
     function buscaEntidad(dibujar) {
@@ -841,7 +845,11 @@
                 success: function (data) {
                     console.log("Entidad: ");
                     console.log(data['entity'].name);
-                }});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("borramos" + i)
+                    dibujar["entities"].splice(dibujar["entities"][i], 1); }
+            });
         }
     }
     function buscaProducto(dibujar) {
@@ -856,7 +864,11 @@
                 success: function (data) {
                     console.log("producto: ");
                     console.log(data['product'].name);
-                }});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("borramos " + i)
+                    dibujar["products"].splice(dibujar["products"][i], 1); }});
+
         }
     }
     //TODO editar relaciones EMPEZAR AQUI MAÑANA
