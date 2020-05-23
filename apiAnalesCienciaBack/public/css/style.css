@@ -463,3 +463,12 @@ th{
 .standby {
     background-color: rgba(142, 44, 59, 1)!important;
 }
+
+/*
+Relaciones
+*/
+
+.listado{
+    display: inline-flex;
+    margin: 10px 20px;
+}

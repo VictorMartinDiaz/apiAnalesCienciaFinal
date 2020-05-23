@@ -142,8 +142,7 @@
 
     }
 
-    function  promoteUser(userId) {
-
+    async function  promoteUser(userId) {
         userId = recortar(userId);
         let miJson = localStorage.getItem(userId)
         miJson = JSON.parse(miJson);
@@ -155,29 +154,24 @@
             dato = {'standby': 0};
 
 
-        //console.log(localStorage.getItem(userId));
-
         $.ajax({
             type: 'PUT',
             url: 'api/v1/users/'+userId,
             headers: {"Authorization": authHeader},
             dataType: 'json',
             data: dato,
-            success: function (data) {
-                window.alert("Usuario ascendido");
-                //sacar por consola el usuario
-                console.log(localStorage.getItem(userId));
-                retrieveUsers();
+            success: async function (data) {
 
+                await cerrar();
+                await new Promise(r => setTimeout(r, 50));
+                retrieveUsers();
+                await abrir();
             },
         })
     }
-    //TODO Anular la suspension no funciona
-    function  suspendUser(userId) {
 
-            let dato = {"standby": false};
+    function  suspendUser(userId) {
             userId = recortar(userId);
-            console.log(userId);
 
             $.ajax({
                 type: 'PUT',
@@ -185,26 +179,30 @@
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 data: {"standby": 1},
-                success: function (data) {
-                    window.alert("Usuario suspendido");
+                success: async function (data) {
+
+                    await cerrar();
+                    await new Promise(r => setTimeout(r, 50));
                     retrieveUsers();
+                    await abrir();
                 },
             });
     }
 
     function  deleteUser(userId) {
-        //let dato = "'role': 'writer'";
         userId = recortar(userId);
-        console.log(userId);
          $.ajax({
              type: 'DELETE',
              url: 'api/v1/users/'+userId,
              headers: {"Authorization": authHeader},
              dataType: 'json',
              //data: dato,
-             success: function (data) {
+             success: async function (data) {
                  window.alert("Usuario borrado");
+                 await cerrar();
+                 await new Promise(r => setTimeout(r, 100));
                  retrieveUsers();
+                 await abrir();
              },
          })
     }
@@ -270,33 +268,18 @@
         let usersReader = '';
         data['users'].forEach(i => {
 
-            console.log(i['user'].username);
-            console.log(i['user'].role);
-            console.log("------------------------");
-
-                usersWriter = document.getElementById("userWriter");
-                if(i['user'].role==="writer") {
-                    usersWriter.innerHTML +=
-                        '<tr>' +
+            usersWriter = document.getElementById("userWriter");
+            if(i['user'].role==="writer") {
+                usersWriter.innerHTML +=
+                    '<tr>' +
                         '<td>' + i["user"].id + '</td>' +
                         '<td>' + i["user"].username + '</td>' +
                         '<td>' + i["user"].email + '</td>' +
-                        '</tr>';
-                }
-
+                    '</tr>';
+            }
             if(i['user'].role==="reader"){
                 let userId = JSON.stringify(i["user"]);
                 window.localStorage.setItem(i['user'].id, userId);
-                //el JSON
-                console.log(i['user']);
-                //el valor
-                console.log(i['user'].id);
-                //Stringifeado
-                console.log(localStorage.getItem(i['user']));
-                //Stringifeado tambien
-                console.log(userId);
-                let tempStandby = i['user'].standby;
-                console.log(i['user'].standby);
                 usersReader = document.getElementById("userReader");
                 usersReader.innerHTML +=
                     '<tr id="i\'' + i["user"].id  + '\'">' +
@@ -308,21 +291,14 @@
                         '<td><button class="btn btn-danger" rel="pop-up" id="d\'' + i["user"].id  + '\'" onclick="deleteUser(this.id);">Delete</button></td>' +
                     '</tr>';
 
-
                 //Pintamos la clase si esta o no en suspension
                     let tempId = "i'"+ i["user"].id+"'";
-                    console.log(tempId);
                     tempId = document.getElementById(tempId);
-                    console.log(tempId);
                     if(i["user"].standby===true)
                         tempId.classList.add("standby");
                     if(i["user"].standby===false)
                         tempId.classList.remove("standby");
-
-
-
             }
-
 
             let enviar = JSON.stringify(data);
             //crea elementos tipo paco:{json}, juan:{json}, etc...
@@ -408,11 +384,8 @@
         let i = 0;
         for (let found = false; i <= localStorage.length - 1 && !found; i++) {
             dibujar = JSON.parse(elemento);
-            console.log(dibujar);
-            console.log(tipo);
             switch (tipo) {
                 case 'persons': {
-                    console.log(dibujar['persons'][i]['person'].name);
                     if (dibujar['persons'][i]['person'].name === name) {
                         found = true;
                         dibujar = dibujar['persons'][i]['person'];
@@ -420,7 +393,6 @@
                     break;
                 }
                 case 'entities': {
-                    console.log(dibujar['entities'][i]['entity'].name);
                     if (dibujar['entities'][i]['entity'].name === name) {
                         found = true;
                         dibujar = dibujar['entities'][i]['entity'];
@@ -428,7 +400,6 @@
                     break;
                 }
                 case 'products': {
-                    console.log(dibujar['products'][i]['product'].name);
                     if (dibujar['products'][i]['product'].name === name) {
                         found = true;
                         dibujar = dibujar['products'][i]['product'];
@@ -508,6 +479,8 @@
         });
 
         $('#listaRel').click(function () {
+            //tipo = (products|persons|entities);
+            //dibujar = JSON del elemento mostrado en la ficha
             listRelations(tipo, dibujar);
         });
     }
@@ -523,7 +496,6 @@
     }
 
     async function eliminar(associatedJson, category) {
-        console.log(localStorage);
         localStorage.removeItem(associatedJson.name);
         document.getElementById(associatedJson.name).innerHTML='';
         deleteFromDB(associatedJson.id, category);
@@ -808,93 +780,147 @@
     }
 
     function listRelations(tipo, dibujar){
-        console.log("listando");
-        console.log(tipo);
-        console.log(dibujar);
 
         switch (tipo) {
             case("entities"): {
-                buscaPersona(dibujar);
-                buscaProducto(dibujar);
+                card4entities(dibujar).then(r => {});
                 break;
             }
             case("products"): {
-                buscaEntidad(dibujar);
-                buscaPersona(dibujar);
-
+                card4products(dibujar);
                 break;
             }
             case("persons"): {
-                buscaProducto(dibujar);
-                buscaEntidad(dibujar);
+                card4persons(dibujar);
                 break;
             }
         }
-
-        /*let clave = '';
-        for (let x=0; x<=localStorage.length-1; x++)  {
-            clave = localStorage.key(x);
-            console.log("La clave " + clave + " contiene el valor " + localStorage.getItem(clave));
-        }*/
     }
-    function buscaPersona(dibujar) {
+
+    //TODO, acaba esto (No esta funcionando) y has terminado
+
+    async function card4entities(dibujar) {
+        let ficha = document.getElementById("ficha");
+        ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+            '<h1>Relaciones</h1>';
+        ficha.innerHTML +=
+            '<div class="half" id="productCardRelation1">' +
+            '<h1>Autores</h1>' +
+            buscaPersona(dibujar, 1) +
+            '</div>' +
+            '<div class="half" id="productCardRelation2">' +
+            '<h1>Productos</h1>' +
+                buscaProducto(dibujar, 2) +
+            '</div>';
+
+    }
+
+    function card4products(dibujar) {
+        let ficha = document.getElementById("ficha");
+        ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+            '<h1>Relaciones</h1>';
+            ficha.innerHTML +=
+            '<div class="half" id="productCardRelation1">' +
+                '<h1>Autores</h1>' +
+                buscaPersona(dibujar, 1) +
+            '</div>' +
+            '<div class="half" id="productCardRelation2">' +
+                '<h1>Entidades</h1>' +
+                buscaEntidad(dibujar, 2) +
+            '</div>';
+
+    }
+
+    function card4persons(dibujar) {
+        let ficha = document.getElementById("ficha");
+        ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+            '<h1>Relaciones</h1>';
+        ficha.innerHTML +=
+            '<div class="half" id="productCardRelation1">' +
+                '<h1>Productos</h1>' +
+                buscaProducto(dibujar, 1) +
+            '</div>' +
+            '<div class="half" id="productCardRelation2">' +
+                '<h1>Entidades</h1>' +
+                buscaEntidad(dibujar, 2) +
+            '</div>';
+    }
+
+    function buscaPersona(dibujar, pos) {
         for(let i in dibujar["persons"])
         {
-            console.log(dibujar["persons"][i]);
             $.ajax({
                 type: 'GET',
                 url: 'api/v1/persons/' + dibujar["persons"][i],
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 success: function (data) {
-                    console.log("Persona: ");
-                    console.log(data['person'].name);
+                    dibujaRel(data['person'].name, data['person'].imageUrl, pos, "persons", data['person']).then(r => {});
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("borramos" + i)
-                    dibujar["persons"].splice(dibujar["persons"][i], 1); }
+                /*error: function (jqXHR, textStatus, errorThrown) {
+                    dibujar["persons"].splice(dibujar["persons"][i], 1); }*/
             });
         }
+        return "";
     }
-    function buscaEntidad(dibujar) {
+    function buscaEntidad(dibujar, pos) {
         for(let i in dibujar["entities"])
         {
-            console.log(dibujar["entities"][i]);
             $.ajax({
                 type: 'GET',
                 url: 'api/v1/entities/' + dibujar["entities"][i],
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 success: function (data) {
-                    console.log("Entidad: ");
-                    console.log(data['entity'].name);
+                    dibujaRel(data['entity'].name, data['entity'].imageUrl, pos, "entities", data['entity']).then(r => {});
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("borramos" + i)
-                    dibujar["entities"].splice(dibujar["entities"][i], 1); }
+                /*error: function (jqXHR, textStatus, errorThrown) {
+                    dibujar["entities"].splice(dibujar["entities"][i], 1); }*/
             });
         }
+        return "";
     }
-    function buscaProducto(dibujar) {
+    function buscaProducto(dibujar, pos) {
         for(let i in dibujar["products"])
         {
-            console.log(dibujar["products"][i]);
             $.ajax({
                 type: 'GET',
                 url: 'api/v1/entities/' + dibujar["products"][i],
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 success: function (data) {
-                    console.log("producto: ");
-                    console.log(data['product'].name);
+                    dibujaRel(data['product'].name, data['product'].imageUrl, pos, "products", data['product']).then(r => {});
                 },
                 /*error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("borramos " + i)
                     dibujar["products"].splice(dibujar["products"][i], 1); }*/
             });
-
         }
+        return "";
     }
+
+    async function dibujaRel(name, imageUrl, pos, tipo, dibujar){
+        await new Promise(r => setTimeout(r, 100));
+        let mitad = document.getElementById("productCardRelation"+pos);
+        let cleanName = name.replace(/ /g,'')
+        let id = "dr"+cleanName;
+            mitad.innerHTML +=
+                '<span class="listado">' +
+                '<div id="'+ id + '">' +
+                '<img src="' + imageUrl + '" class="dropdownImg"/>' +
+                '<p>' + name + '</p>' +
+                '</div>' +
+                '</span>';
+
+        $('#'+ id +'').click(async function () {
+            await cerrar();
+            await new Promise(r => setTimeout(r, 50));
+            await pintarFicha(name, tipo, dibujar);
+            await abrir();
+
+        });
+    }
+
+
     //TODO editar relaciones EMPEZAR AQUI MAÑANA
     function editRelations(tipo, dibujar){
         console.log("editando");
