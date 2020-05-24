@@ -472,3 +472,16 @@ Relaciones
     display: inline-flex;
     margin: 10px 20px;
 }
+
+.separador {
+    height: 3px;
+    background-color: #17445E;
+}
+
+.editRelations {
+    margin-top: 20px;
+}
+
+#relBut{
+margin-top: 40px;
+}

@@ -309,6 +309,7 @@
 
     function retrievePersons() {
         let personasElement = document.getElementById("persons");
+
         $.ajax({
             type: 'GET',
             url: 'api/v1/persons',
@@ -780,7 +781,7 @@
     }
 
     function listRelations(tipo, dibujar){
-
+        console.log(dibujar);
         switch (tipo) {
             case("entities"): {
                 card4entities(dibujar).then(r => {});
@@ -797,19 +798,21 @@
         }
     }
 
-    //TODO, acaba esto (No esta funcionando) y has terminado
+    //TODO, el primer elemento de cada listado falla dios sabe por qué
 
     async function card4entities(dibujar) {
         let ficha = document.getElementById("ficha");
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
         ficha.innerHTML +=
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation1">' +
-            '<h1>Autores</h1>' +
-            buscaPersona(dibujar, 1) +
+                '<h1>Autores</h1>' +
+                buscaPersona(dibujar, 1) +
             '</div>' +
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation2">' +
-            '<h1>Productos</h1>' +
+                '<h1>Productos</h1>' +
                 buscaProducto(dibujar, 2) +
             '</div>';
 
@@ -819,11 +822,13 @@
         let ficha = document.getElementById("ficha");
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
-            ficha.innerHTML +=
+        ficha.innerHTML +=
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation1">' +
                 '<h1>Autores</h1>' +
                 buscaPersona(dibujar, 1) +
             '</div>' +
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation2">' +
                 '<h1>Entidades</h1>' +
                 buscaEntidad(dibujar, 2) +
@@ -836,10 +841,12 @@
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
         ficha.innerHTML +=
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation1">' +
                 '<h1>Productos</h1>' +
                 buscaProducto(dibujar, 1) +
             '</div>' +
+            '<hr class="separador">' +
             '<div class="half" id="productCardRelation2">' +
                 '<h1>Entidades</h1>' +
                 buscaEntidad(dibujar, 2) +
@@ -855,7 +862,7 @@
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 success: function (data) {
-                    dibujaRel(data['person'].name, data['person'].imageUrl, pos, "persons", data['person']).then(r => {});
+                        dibujaRel(data['person'].name, data['person'].imageUrl, pos, "persons", data['person']).then(r => {});
                 },
                 /*error: function (jqXHR, textStatus, errorThrown) {
                     dibujar["persons"].splice(dibujar["persons"][i], 1); }*/
@@ -881,11 +888,15 @@
         return "";
     }
     function buscaProducto(dibujar, pos) {
+    console.log("----------------------------------------");
+        console.log(dibujar);
+        console.log(pos);
         for(let i in dibujar["products"])
         {
+            console.log(dibujar["products"][i]);
             $.ajax({
                 type: 'GET',
-                url: 'api/v1/entities/' + dibujar["products"][i],
+                url: 'api/v1/products/' + dibujar["products"][i],
                 headers: {"Authorization": authHeader},
                 dataType: 'json',
                 success: function (data) {
@@ -911,8 +922,9 @@
                 '</div>' +
                 '</span>';
 
-        $('#'+ id +'').click(async function () {
+        $('#'+id+'').click(async function () {
             await cerrar();
+            mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
             await pintarFicha(name, tipo, dibujar);
             await abrir();
@@ -923,9 +935,128 @@
 
     //TODO editar relaciones EMPEZAR AQUI MAÑANA
     function editRelations(tipo, dibujar){
-        console.log("editando");
+        let personsRetrieved = false;
+        let productsRetrieved = false;
+        let entitiesRetrieved = false;
+
+        //tipo = (products|entities|persons)
         console.log(tipo);
+        //El JSON completo
         console.log(dibujar);
+        //estos tienen que entrar ckecked
+        console.log(dibujar["entities"]);
+        console.log(dibujar["persons"]);
+
+        let mId = '';
+        let ficha = document.getElementById("ficha");
+        let miJson = '';
+        ficha.innerHTML = '';
+        ficha.innerHTML += '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>';
+
+        for (let x=0; x<=localStorage.length-1; x++) {
+            miJson = localStorage.key(x);
+            miJson = localStorage.getItem(miJson);
+
+            if(miJson.substr(0, 7)==='{"perso' && !personsRetrieved && tipo!=="persons") {
+
+                let miJsonTemp = JSON.parse(miJson);
+                console.log(miJsonTemp["persons"]);
+                ficha.innerHTML += '<div class="editRelations" id="autRel">' +
+                '<h3>Autores</h3>';
+
+                for (let i = 0; i < miJsonTemp["persons"].length; i++) {
+                    mId = miJsonTemp["persons"][i]["person"]["id"];
+                    mId = mId.toString();
+                    mId = "per"+mId;
+                    console.log(mId);
+
+                    /*for(let k=0; k<dibujar["persons"].length;k++){
+                        console.log(dibujar["persons"][k]);
+                        console.log(miJsonTemp["persons"][i]["person"]["id"]);
+                        if(dibujar["persons"][k]===miJsonTemp["persons"][i]["person"]["id"]){
+                            /!*console.log("----------------------------------------------------------");
+                            console.log(miJsonTemp["persons"][i]["person"]["id"] +"="+ dibujar["persons"][k]);
+                            console.log("----------------------------------------------------------");*!/
+                            mId = miJsonTemp["persons"][i]["person"]["id"];
+                            mId = mId.toString();
+                            mId = "per"+mId;
+                            console.log(mId);
+
+                            $("div").next("input").prop('checked', true);
+
+                        }
+                    }*/
+
+
+                    console.log(miJsonTemp["persons"][i]["person"]["id"]);
+                    document.getElementById("autRel").innerHTML +=
+                    '<div class="custom-control custom-checkbox">' +
+                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
+                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["persons"][i]["person"]["name"]+'</label>' +
+                        '<br/>' +
+                    '</div>';
+                    mId++;
+
+
+
+
+
+                }
+                ficha.innerHTML += '</div>';
+                personsRetrieved = true;
+                }
+
+            if(miJson.substr(0, 7)==='{"produ' && !productsRetrieved &&tipo!=="products"){
+
+                let miJsonTemp = JSON.parse(miJson);
+                ficha.innerHTML += '<div class="editRelations" id="prodRel">' +
+                    '<h3>Productos</h3>';
+                for(let i=0; i<miJsonTemp["products"].length; i++) {
+                    mId = miJsonTemp["products"][i]["product"]["id"];
+
+                    for(let k=0; k<dibujar["products"];k++){
+                        console.log(dibujar["products"][k]);
+                        console.log(["products"][i]["product"]["id"]);
+                        if(dibujar["products"][k]===["products"][i]["product"]["id"]){
+                            console.log("----------------------------------------------------------");
+                            console.log(["products"][i]["product"]["id"] +"="+ dibujar["products"][k]);
+                            console.log("----------------------------------------------------------");
+                        }
+                    }
+
+
+                    document.getElementById("prodRel").innerHTML +=
+                        '<div class="custom-control custom-checkbox">' +
+                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
+                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["products"][i]["product"]["name"]+'</label>' +
+                        '<br/>' +
+                        '</div>';
+                    mId++;
+                }
+                ficha.innerHTML += '</div>';
+                productsRetrieved = true;
+            }
+
+            if(miJson.substr(0, 7)==='{"entit' && !entitiesRetrieved && tipo!=="entities"){
+                mId = -33333;
+                let miJsonTemp = JSON.parse(miJson);
+                ficha.innerHTML += '<div class="editRelations" id="entRel">' +
+                    '<h3>Entidades</h3>';
+                for(let i=0; i<miJsonTemp["entities"].length; i++) {
+                    document.getElementById("entRel").innerHTML +=
+                        '<div class="custom-control custom-checkbox">' +
+                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
+                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["entities"][i]["entity"]["name"]+'</label>' +
+                        '<br/>' +
+                        '</div>';
+                    mId++;
+                }
+                ficha.innerHTML += '</div>';
+                entitiesRetrieved = true;
+            }
+        }
+        ficha.innerHTML += '<div class="text-center"><button type="button" class="btn btn-info" id="relBut">Confirmar</button></div>';
     }
 
     //TODO altas usuarios nuevos
+
