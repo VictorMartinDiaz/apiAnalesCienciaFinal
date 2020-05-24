@@ -787,7 +787,8 @@
         }
     }
 
-    //TODO, el primer elemento de cada listado falla dios sabe por qué
+    //TODO, la mitad los elementos en cada listado fallan dios sabe por qué
+    //TODO La ficha de relaciones no carga a la primera si se le meten muchas relaciones. Si se le llama una segunda vez, carga
 
     async function card4entities(dibujar) {
         let ficha = document.getElementById("ficha");
@@ -917,8 +918,6 @@
         });
     }
 
-    //TODO editar relaciones EMPEZAR AQUI MAÑANA
-    //TODO si las relaciones estan vacias, un for a todas las entitades y/o productos y/o personas con el check quitado
     function editRelations(tipo, dibujar){
         let personsRetrieved = false;
         let personsRelatedArray = [];
@@ -1091,14 +1090,11 @@
         let myId = dibujar["id"];
         ficha.innerHTML += '<div class="text-center"><button type="button" class="btn btn-info" id="relBut">Confirmar</button></div>';
 
-            //TODO llamar a los metodos de añadir/borrar relaciones pasando como parametro los Array que he creado al principio de la funcion
+
         $(document).ready(function() {
 
-            let entityChanged = false;
             let originalEntity = entitiesRelatedArray;
-            let productChanged = false;
             let originalProduct = productsRelatedArray;
-            let personChanged = false;
             let originalPerson = personsRelatedArray;
 
             $(".custom-control-input").change(function () {
@@ -1201,16 +1197,25 @@
                 }
             });
 
-            $("#relBut").click(function () {
+            $("#relBut").click(async function () {
 
                 let comparaEntidades = $(originalEntity).not(entitiesRelatedArray).length === 0 && $(entitiesRelatedArray).not(originalEntity).length === 0;
-                if(!comparaEntidades) actualizaElemento(originalEntity, entitiesRelatedArray, myId, "entities", tipo);
+                if(!comparaEntidades) {
+                    actualizaElemento(originalEntity, entitiesRelatedArray, myId, "entities", tipo);
+                    await cerrar();
+                }
 
                 let comparaProductos = $(originalProduct).not(productsRelatedArray).length === 0 && $(productsRelatedArray).not(originalProduct).length === 0;
-                if (!comparaProductos) actualizaElemento(originalProduct, productsRelatedArray, myId, "products", tipo);
+                if (!comparaProductos) {
+                    actualizaElemento(originalProduct, productsRelatedArray, myId, "products", tipo);
+                    await cerrar();
+                }
 
                 let comparaPersonas = $(originalPerson).not(personsRelatedArray).length === 0 && $(personsRelatedArray).not(originalPerson).length === 0;
-                if (!comparaPersonas) actualizaElemento(originalPerson, personsRelatedArray, myId, "persons", tipo);
+                if (!comparaPersonas) {
+                    actualizaElemento(originalPerson, personsRelatedArray, myId, "persons", tipo);
+                    await cerrar();
+                }
 
 
             });
@@ -1243,6 +1248,9 @@
                 }
             });
         }
+        retrieveEntities();
+        retrieveProducts();
+        retrievePersons();
     }
 
     //TODO altas usuarios nuevos
