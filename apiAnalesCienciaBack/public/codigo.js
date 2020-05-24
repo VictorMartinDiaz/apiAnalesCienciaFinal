@@ -937,18 +937,18 @@
 
         switch (tipo) {
             case("persons"): {
-                productsRelatedArray = dibujar["products"].slice();
-                entitiesRelatedArray = dibujar["entities"].slice();
+                if(dibujar["products"]!==null) productsRelatedArray = dibujar["products"].slice();
+                if(dibujar["entities"]!==null) entitiesRelatedArray = dibujar["entities"].slice();
                 break;
             }
             case("entities"): {
-                productsRelatedArray = dibujar["products"].slice();
-                personsRelatedArray = dibujar["persons"].slice();
+                if(dibujar["products"]!==null) productsRelatedArray = dibujar["products"].slice();
+                if(dibujar["persons"]!==null) personsRelatedArray = dibujar["persons"].slice();
                 break;
             }
             case("products"): {
-                entitiesRelatedArray = dibujar["entities"].slice();
-                personsRelatedArray = dibujar["persons"].slice();
+                if(dibujar["entities"]!==null) entitiesRelatedArray = dibujar["entities"].slice();
+                if(dibujar["persons"]!==null) personsRelatedArray = dibujar["persons"].slice();
                 console.log("----------------------------");
                 console.log(entitiesRelatedArray);
                 console.log(personsRelatedArray);
@@ -966,6 +966,7 @@
             miJson = localStorage.key(x);
             miJson = localStorage.getItem(miJson);
 
+            //Dibujamos las personas
             if(miJson.substr(0, 7)==='{"perso' && !personsRetrieved && tipo!=="persons") {
                 let k=0;
                 let miJsonTemp = JSON.parse(miJson);
@@ -976,8 +977,11 @@
                     mId = miJsonTemp["persons"][i]["person"]["id"];
                     mId = mId.toString();
                     mId = "per"+mId;
+                    if(dibujar["persons"]===null){
+                        dibujar["persons"]=[];
+                    }
 
-                    if (dibujar["persons"][k] !== miJsonTemp["persons"][i]["person"]["id"]) {
+                    if ((dibujar["persons"][k] !== miJsonTemp["persons"][i]["person"]["id"])) {
                         document.getElementById("autRel").innerHTML +=
                             '<div class="custom-control custom-checkbox">' +
                             '<input type="checkbox" class="custom-control-input" id="' + mId + '">' +
@@ -1001,6 +1005,7 @@
                 personsRetrieved = true;
             }
 
+            //Dibujamos los productos
             if(miJson.substr(0, 7)==='{"produ' && !productsRetrieved &&tipo!=="products"){
                 let k=0;
                 let miJsonTemp = JSON.parse(miJson);
@@ -1011,6 +1016,9 @@
                     mId = miJsonTemp["products"][i]["product"]["id"];
                     mId = mId.toString();
                     mId = "pro" + mId;
+                    if(dibujar["products"]===null){
+                        dibujar["products"]=[];
+                    }
 
                     if (dibujar["products"][k] !== miJsonTemp["products"][i]["product"]["id"]) {
                         document.getElementById("prodRel").innerHTML +=
@@ -1036,9 +1044,11 @@
                 productsRetrieved = true;
             }
 
+            //Dibujamos las entidades
             if(miJson.substr(0, 7)==='{"entit' && !entitiesRetrieved && tipo!=="entities"){
                 let k=0;
                 let miJsonTemp = JSON.parse(miJson);
+                console.log(miJsonTemp);
                 ficha.innerHTML += '<div class="editRelations" id="entRel">' +
                 '<h3>Entidades</h3>';
 
@@ -1046,8 +1056,11 @@
                     mId = miJsonTemp["entities"][i]["entity"]["id"];
                     mId = mId.toString();
                     mId = "ent"+mId;
+                    if(dibujar["entities"]===null){
+                        dibujar["entities"]=[];
+                    }
 
-                    if (dibujar["entities"][k] !== miJsonTemp["entities"][i]["entity"]["id"]) {
+                     if (dibujar["entities"][k] !== miJsonTemp["entities"][i]["entity"]["id"]) {
                         document.getElementById("entRel").innerHTML +=
                             '<div class="custom-control custom-checkbox">' +
                             '<input type="checkbox" class="custom-control-input" id="' + mId + '">' +
@@ -1073,8 +1086,6 @@
                 }
                 ficha.innerHTML += '</div>';
                 entitiesRetrieved = true;
-
-
             }
         }
         let myId = dibujar["id"];
