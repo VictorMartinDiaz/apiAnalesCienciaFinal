@@ -63,9 +63,9 @@
                     retrieveEntities();
                     retrieveUserType(authHeader, usuarioActual);
                 }, error: function (){
-                        window.alert("Usuario y/o contraseña no validos");
-                        location.reload();
-                    },
+                    window.alert("Usuario y/o contraseña no validos");
+                    location.reload();
+                },
             });
             return false;
         });
@@ -146,13 +146,11 @@
         userId = recortar(userId);
         let miJson = localStorage.getItem(userId)
         miJson = JSON.parse(miJson);
-
         let dato = '';
         if(miJson["standby"]===false)
             dato = {'role': 'writer'};
         if(miJson["standby"]===true)
             dato = {'standby': 0};
-
 
         $.ajax({
             type: 'PUT',
@@ -171,22 +169,21 @@
     }
 
     function  suspendUser(userId) {
-            userId = recortar(userId);
+        userId = recortar(userId);
+        $.ajax({
+            type: 'PUT',
+            url: 'api/v1/users/'+userId,
+            headers: {"Authorization": authHeader},
+            dataType: 'json',
+            data: {"standby": 1},
+            success: async function (data) {
 
-            $.ajax({
-                type: 'PUT',
-                url: 'api/v1/users/'+userId,
-                headers: {"Authorization": authHeader},
-                dataType: 'json',
-                data: {"standby": 1},
-                success: async function (data) {
-
-                    await cerrar();
-                    await new Promise(r => setTimeout(r, 50));
-                    retrieveUsers();
-                    await abrir();
-                },
-            });
+                await cerrar();
+                await new Promise(r => setTimeout(r, 50));
+                retrieveUsers();
+                await abrir();
+            },
+        });
     }
 
     function  deleteUser(userId) {
@@ -240,7 +237,6 @@
                     '</table>' +
                 '</div>' +
             '</div>' +
-
             '<div class="half">' +
                 '<h1 class="formTag">Lectores</h1>' +
                 '<hr class="bajoLinea"/>' +
@@ -267,7 +263,6 @@
         let usersWriter = '';
         let usersReader = '';
         data['users'].forEach(i => {
-
             usersWriter = document.getElementById("userWriter");
             if(i['user'].role==="writer") {
                 usersWriter.innerHTML +=
@@ -305,7 +300,6 @@
 
         });
     }
-
 
     function retrievePersons() {
         let personasElement = document.getElementById("persons");
@@ -454,12 +448,7 @@
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '</div>';
 
-
         bodyElement = document.getElementById("ficha");
-
-
-
-
         let data = [dibujar];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
 
@@ -718,35 +707,35 @@
                 break;
             }
         }
-            let tipo = "tipo";
-            delete info[tipo];
-            let myInfo = JSON.stringify(info);
-            jQuery.ajax({
-                type: 'POST',
-                url: 'http://127.0.0.1:8000/api/v1/' + category,
-                headers: {"Authorization": authHeader},
-                data: myInfo,
-                contentType: 'application/json',
-                success: function() {
-                    switch (category) {
-                        case "persons": {
-                            retrievePersons();
-                            break;
-                        }
-                        case "products": {
-                            retrieveProducts();
-                            break;
-                        }
-                        case "entities": {
-                            retrieveEntities();
-                            break;
-                        }
+        let tipo = "tipo";
+        delete info[tipo];
+        let myInfo = JSON.stringify(info);
+        jQuery.ajax({
+            type: 'POST',
+            url: 'http://127.0.0.1:8000/api/v1/' + category,
+            headers: {"Authorization": authHeader},
+            data: myInfo,
+            contentType: 'application/json',
+            success: function() {
+                switch (category) {
+                    case "persons": {
+                        retrievePersons();
+                        break;
                     }
-                    cerrar().then(r => confirm(
-                        info["name"] + " ha sido creado"));
-                    },
-                dataType: 'json',
-            });
+                    case "products": {
+                        retrieveProducts();
+                        break;
+                    }
+                    case "entities": {
+                        retrieveEntities();
+                        break;
+                    }
+                }
+                cerrar().then(r => confirm(
+                    info["name"] + " ha sido creado"));
+                },
+            dataType: 'json',
+        });
     }
 
     function updateElement (info, id, category) {
@@ -815,7 +804,6 @@
                 '<h1>Productos</h1>' +
                 buscaProducto(dibujar, 2) +
             '</div>';
-
     }
 
     function card4products(dibujar) {
@@ -888,9 +876,6 @@
         return "";
     }
     function buscaProducto(dibujar, pos) {
-    console.log("----------------------------------------");
-        console.log(dibujar);
-        console.log(pos);
         for(let i in dibujar["products"])
         {
             console.log(dibujar["products"][i]);
@@ -932,12 +917,15 @@
         });
     }
 
-
     //TODO editar relaciones EMPEZAR AQUI MAÑANA
+    //TODO si las relaciones estan vacias, un for a todas las entitades y/o productos y/o personas con el check quitado
     function editRelations(tipo, dibujar){
         let personsRetrieved = false;
+        let personsRelatedArray = [];
         let productsRetrieved = false;
+        let productsRelatedArray = [];
         let entitiesRetrieved = false;
+        let entitiesRelatedArray = [];
 
         //tipo = (products|entities|persons)
         console.log(tipo);
@@ -946,6 +934,27 @@
         //estos tienen que entrar ckecked
         console.log(dibujar["entities"]);
         console.log(dibujar["persons"]);
+
+        switch (tipo) {
+            case("persons"): {
+                productsRelatedArray = dibujar["products"].slice();
+                entitiesRelatedArray = dibujar["entities"].slice();
+                break;
+            }
+            case("entities"): {
+                productsRelatedArray = dibujar["products"].slice();
+                personsRelatedArray = dibujar["persons"].slice();
+                break;
+            }
+            case("products"): {
+                entitiesRelatedArray = dibujar["entities"].slice();
+                personsRelatedArray = dibujar["persons"].slice();
+                console.log("----------------------------");
+                console.log(entitiesRelatedArray);
+                console.log(personsRelatedArray);
+                break;
+            }
+        }
 
         let mId = '';
         let ficha = document.getElementById("ficha");
@@ -967,9 +976,6 @@
                     mId = miJsonTemp["persons"][i]["person"]["id"];
                     mId = mId.toString();
                     mId = "per"+mId;
-                   /* console.log(mId);
-
-                    console.log(miJsonTemp["persons"][i]["person"]["id"]);*/
 
                     if (dibujar["persons"][k] !== miJsonTemp["persons"][i]["person"]["id"]) {
                         document.getElementById("autRel").innerHTML +=
@@ -979,18 +985,17 @@
                             '<br/>' +
                             '</div>';
                     }
-                        else  {
-                            console.log((dibujar["persons"][k]));
-                            document.getElementById("autRel").innerHTML +=
-                                '<div class="custom-control custom-checkbox">' +
-                                '<input type="checkbox" class="custom-control-input" id="' + mId + '" checked>' +
-                                '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["persons"][i]["person"]["name"] + '</label>' +
-                                '<br/>' +
-                                '</div>';
-                            console.log(k);
-                            k++;
-                            console.log((dibujar["persons"][k]));
-                        }
+                    else  {
+                        console.log((dibujar["persons"][k]));
+                        document.getElementById("autRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '" checked>' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["persons"][i]["person"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                        console.log(k);
+                        k++;
+                    }
                 }
                 ficha.innerHTML += '</div>';
                 personsRetrieved = true;
@@ -1006,7 +1011,6 @@
                     mId = miJsonTemp["products"][i]["product"]["id"];
                     mId = mId.toString();
                     mId = "pro" + mId;
-
 
                     if (dibujar["products"][k] !== miJsonTemp["products"][i]["product"]["id"]) {
                         document.getElementById("prodRel").innerHTML +=
@@ -1026,29 +1030,22 @@
                             '</div>';
                         console.log(k);
                         k++;
-                        console.log((dibujar["products"][k]));
                     }
-
-
                 }
                 ficha.innerHTML += '</div>';
                 productsRetrieved = true;
             }
 
             if(miJson.substr(0, 7)==='{"entit' && !entitiesRetrieved && tipo!=="entities"){
-
                 let k=0;
                 let miJsonTemp = JSON.parse(miJson);
                 ficha.innerHTML += '<div class="editRelations" id="entRel">' +
                 '<h3>Entidades</h3>';
 
-
-
                 for(let i=0; i<miJsonTemp["entities"].length; i++) {
                     mId = miJsonTemp["entities"][i]["entity"]["id"];
                     mId = mId.toString();
                     mId = "ent"+mId;
-
 
                     if (dibujar["entities"][k] !== miJsonTemp["entities"][i]["entity"]["id"]) {
                         document.getElementById("entRel").innerHTML +=
@@ -1068,17 +1065,173 @@
                             '</div>';
                         console.log(k);
                         k++;
-                        console.log((dibujar["persons"][k]));
                     }
+
+                    $('#'+mId).click(function (){
+                        console.log("Has pulsado "+mId);
+                    });
                 }
                 ficha.innerHTML += '</div>';
                 entitiesRetrieved = true;
+
+
             }
         }
-
-
+        let myId = dibujar["id"];
         ficha.innerHTML += '<div class="text-center"><button type="button" class="btn btn-info" id="relBut">Confirmar</button></div>';
+
+            //TODO llamar a los metodos de añadir/borrar relaciones pasando como parametro los Array que he creado al principio de la funcion
+        $(document).ready(function() {
+
+            let entityChanged = false;
+            let originalEntity = entitiesRelatedArray;
+            let productChanged = false;
+            let originalProduct = productsRelatedArray;
+            let personChanged = false;
+            let originalPerson = personsRelatedArray;
+
+            $(".custom-control-input").change(function () {
+                console.log("Has pulsado " + this.id);
+                console.log(tipo);
+                console.log(dibujar);
+                let encontrado = false;
+
+                //Si es una entidad
+                if(this.id.substr(0,3)==="ent"){
+                    entitiesRelatedArray = dibujar.entities;
+                    console.log(entitiesRelatedArray);
+                    //sacamos el id del elemento pulsado
+                    let elemento = this.id.substr(3,1);
+                    elemento = parseInt(elemento);
+                    console.log(elemento);
+                    console.log(entitiesRelatedArray);
+                    //Esto recorre el array SOLO SI EL ELEMENTO EXISTE: Hay que hacer el push fuera de aqui
+                    for(let x=0; x<entitiesRelatedArray.length; x++){
+                        console.log(entitiesRelatedArray[x]);
+                        //Si el elemento ya existia marcado
+                        if(entitiesRelatedArray[x]===elemento) {
+                            encontrado = true;
+                            //cuando quitamos el check
+                            if(this.checked !== true) {
+                                entitiesRelatedArray.splice(x,1);
+                            }
+                        }
+                    }
+                    if(!encontrado)
+                    {
+                        dibujar.entities.push(elemento);
+                        console.log(entitiesRelatedArray);
+                        entitiesRelatedArray = dibujar.entities;
+                        console.log(entitiesRelatedArray);
+                    }
+                    console.log(dibujar);
+                }
+
+                //Si es un producto
+                if(this.id.substr(0,3)==="pro"){
+                    productsRelatedArray = dibujar.products;
+                    console.log(productsRelatedArray);
+                    //sacamos el id del elemento pulsado
+                    let elemento = this.id.substr(3,1);
+                    elemento = parseInt(elemento);
+                    console.log(elemento);
+                    console.log(productsRelatedArray);
+                    //Esto recorre el array SOLO SI EL ELEMENTO EXISTE: Hay que hacer el push fuera de aqui
+                    for(let x=0; x<productsRelatedArray.length; x++){
+                        console.log(productsRelatedArray[x]);
+                        //Si el elemento ya existia marcado
+                        if(productsRelatedArray[x]===elemento) {
+                            encontrado = true;
+                            //cuando quitamos el check
+                            if(this.checked !== true) {
+                                productsRelatedArray.splice(x,1);
+                            }
+                        }
+                    }
+                    if(!encontrado)
+                    {
+                        dibujar.products.push(elemento);
+                        console.log(productsRelatedArray);
+                        productsRelatedArray = dibujar.products;
+                        console.log(productsRelatedArray);
+                    }
+                    console.log(dibujar);
+                }
+
+                //Si es una persona
+                if(this.id.substr(0,3)==="per"){
+                    personsRelatedArray = dibujar.persons;
+                    console.log(personsRelatedArray);
+                    //sacamos el id del elemento pulsado
+                    let elemento = this.id.substr(3,1);
+                    elemento = parseInt(elemento);
+                    console.log(elemento);
+                    console.log(personsRelatedArray);
+                    //Esto recorre el array SOLO SI EL ELEMENTO EXISTE: Hay que hacer el push fuera de aqui
+                    for(let x=0; x<personsRelatedArray.length; x++){
+                        console.log(personsRelatedArray[x]);
+                        //Si el elemento ya existia marcado
+                        if(personsRelatedArray[x]===elemento) {
+                            encontrado = true;
+                            //cuando quitamos el check
+                            if(this.checked !== true) {
+                                personsRelatedArray.splice(x,1);
+                            }
+                        }
+                    }
+                    if(!encontrado)
+                    {
+                        dibujar.persons.push(elemento);
+                        console.log(personsRelatedArray);
+                        personsRelatedArray = dibujar.persons;
+                        console.log(personsRelatedArray);
+                    }
+                    console.log(dibujar);
+                }
+            });
+
+            $("#relBut").click(function () {
+
+                let comparaEntidades = $(originalEntity).not(entitiesRelatedArray).length === 0 && $(entitiesRelatedArray).not(originalEntity).length === 0;
+                if(!comparaEntidades) actualizaElemento(originalEntity, entitiesRelatedArray, myId, "entities", tipo);
+
+                let comparaProductos = $(originalProduct).not(productsRelatedArray).length === 0 && $(productsRelatedArray).not(originalProduct).length === 0;
+                if (!comparaProductos) actualizaElemento(originalProduct, productsRelatedArray, myId, "products", tipo);
+
+                let comparaPersonas = $(originalPerson).not(personsRelatedArray).length === 0 && $(personsRelatedArray).not(originalPerson).length === 0;
+                if (!comparaPersonas) actualizaElemento(originalPerson, personsRelatedArray, myId, "persons", tipo);
+
+
+            });
+
+        });
+    }
+
+    function actualizaElemento(OriginalArray, NuevoArray, myId, tipoOrigen, tipoDestino) {
+    console.log(myId);
+
+        for(let i in OriginalArray){
+            $.ajax({
+                type: "PUT",
+                url: 'api/v1/' + tipoDestino + '/' + myId + '/' + tipoOrigen + '/rem/' + OriginalArray[i],
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("vacio");
+                }
+            });
+        }
+        for(let i in NuevoArray){
+            $.ajax({
+                type: "PUT",
+                url: 'api/v1/' + tipoDestino + '/' + myId + '/' + tipoOrigen + '/add/' + NuevoArray[i],
+                headers: {"Authorization": authHeader},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("lleno");
+                }
+            });
+        }
     }
 
     //TODO altas usuarios nuevos
-
