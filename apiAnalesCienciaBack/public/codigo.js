@@ -958,9 +958,8 @@
             miJson = localStorage.getItem(miJson);
 
             if(miJson.substr(0, 7)==='{"perso' && !personsRetrieved && tipo!=="persons") {
-
+                let k=0;
                 let miJsonTemp = JSON.parse(miJson);
-                console.log(miJsonTemp["persons"]);
                 ficha.innerHTML += '<div class="editRelations" id="autRel">' +
                 '<h3>Autores</h3>';
 
@@ -968,93 +967,116 @@
                     mId = miJsonTemp["persons"][i]["person"]["id"];
                     mId = mId.toString();
                     mId = "per"+mId;
-                    console.log(mId);
+                   /* console.log(mId);
 
-                    /*for(let k=0; k<dibujar["persons"].length;k++){
-                        console.log(dibujar["persons"][k]);
-                        console.log(miJsonTemp["persons"][i]["person"]["id"]);
-                        if(dibujar["persons"][k]===miJsonTemp["persons"][i]["person"]["id"]){
-                            /!*console.log("----------------------------------------------------------");
-                            console.log(miJsonTemp["persons"][i]["person"]["id"] +"="+ dibujar["persons"][k]);
-                            console.log("----------------------------------------------------------");*!/
-                            mId = miJsonTemp["persons"][i]["person"]["id"];
-                            mId = mId.toString();
-                            mId = "per"+mId;
-                            console.log(mId);
+                    console.log(miJsonTemp["persons"][i]["person"]["id"]);*/
 
-                            $("div").next("input").prop('checked', true);
-
+                    if (dibujar["persons"][k] !== miJsonTemp["persons"][i]["person"]["id"]) {
+                        document.getElementById("autRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '">' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["persons"][i]["person"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                    }
+                        else  {
+                            console.log((dibujar["persons"][k]));
+                            document.getElementById("autRel").innerHTML +=
+                                '<div class="custom-control custom-checkbox">' +
+                                '<input type="checkbox" class="custom-control-input" id="' + mId + '" checked>' +
+                                '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["persons"][i]["person"]["name"] + '</label>' +
+                                '<br/>' +
+                                '</div>';
+                            console.log(k);
+                            k++;
+                            console.log((dibujar["persons"][k]));
                         }
-                    }*/
-
-
-                    console.log(miJsonTemp["persons"][i]["person"]["id"]);
-                    document.getElementById("autRel").innerHTML +=
-                    '<div class="custom-control custom-checkbox">' +
-                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
-                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["persons"][i]["person"]["name"]+'</label>' +
-                        '<br/>' +
-                    '</div>';
-                    mId++;
-
-
-
-
-
                 }
                 ficha.innerHTML += '</div>';
                 personsRetrieved = true;
-                }
+            }
 
             if(miJson.substr(0, 7)==='{"produ' && !productsRetrieved &&tipo!=="products"){
-
+                let k=0;
                 let miJsonTemp = JSON.parse(miJson);
                 ficha.innerHTML += '<div class="editRelations" id="prodRel">' +
                     '<h3>Productos</h3>';
+
                 for(let i=0; i<miJsonTemp["products"].length; i++) {
                     mId = miJsonTemp["products"][i]["product"]["id"];
+                    mId = mId.toString();
+                    mId = "pro" + mId;
 
-                    for(let k=0; k<dibujar["products"];k++){
-                        console.log(dibujar["products"][k]);
-                        console.log(["products"][i]["product"]["id"]);
-                        if(dibujar["products"][k]===["products"][i]["product"]["id"]){
-                            console.log("----------------------------------------------------------");
-                            console.log(["products"][i]["product"]["id"] +"="+ dibujar["products"][k]);
-                            console.log("----------------------------------------------------------");
-                        }
+
+                    if (dibujar["products"][k] !== miJsonTemp["products"][i]["product"]["id"]) {
+                        document.getElementById("prodRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '">' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["products"][i]["product"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                    }
+                    else  {
+                        console.log((dibujar["products"][k]));
+                        document.getElementById("prodRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '" checked>' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["products"][i]["product"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                        console.log(k);
+                        k++;
+                        console.log((dibujar["products"][k]));
                     }
 
 
-                    document.getElementById("prodRel").innerHTML +=
-                        '<div class="custom-control custom-checkbox">' +
-                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
-                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["products"][i]["product"]["name"]+'</label>' +
-                        '<br/>' +
-                        '</div>';
-                    mId++;
                 }
                 ficha.innerHTML += '</div>';
                 productsRetrieved = true;
             }
 
             if(miJson.substr(0, 7)==='{"entit' && !entitiesRetrieved && tipo!=="entities"){
-                mId = -33333;
+
+                let k=0;
                 let miJsonTemp = JSON.parse(miJson);
                 ficha.innerHTML += '<div class="editRelations" id="entRel">' +
-                    '<h3>Entidades</h3>';
+                '<h3>Entidades</h3>';
+
+
+
                 for(let i=0; i<miJsonTemp["entities"].length; i++) {
-                    document.getElementById("entRel").innerHTML +=
-                        '<div class="custom-control custom-checkbox">' +
-                        '<input type="checkbox" class="custom-control-input" id="'+mId+'">' +
-                        '<label class="custom-control-label" for="'+mId+'">'+ miJsonTemp["entities"][i]["entity"]["name"]+'</label>' +
-                        '<br/>' +
-                        '</div>';
-                    mId++;
+                    mId = miJsonTemp["entities"][i]["entity"]["id"];
+                    mId = mId.toString();
+                    mId = "ent"+mId;
+
+
+                    if (dibujar["entities"][k] !== miJsonTemp["entities"][i]["entity"]["id"]) {
+                        document.getElementById("entRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '">' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["entities"][i]["entity"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                    }
+                    else  {
+                        console.log((dibujar["entities"][k]));
+                        document.getElementById("entRel").innerHTML +=
+                            '<div class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input" id="' + mId + '" checked>' +
+                            '<label class="custom-control-label" for="' + mId + '">' + miJsonTemp["entities"][i]["entity"]["name"] + '</label>' +
+                            '<br/>' +
+                            '</div>';
+                        console.log(k);
+                        k++;
+                        console.log((dibujar["persons"][k]));
+                    }
                 }
                 ficha.innerHTML += '</div>';
                 entitiesRetrieved = true;
             }
         }
+
+
         ficha.innerHTML += '<div class="text-center"><button type="button" class="btn btn-info" id="relBut">Confirmar</button></div>';
     }
 
