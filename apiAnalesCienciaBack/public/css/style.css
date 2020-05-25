@@ -198,6 +198,7 @@ a:link {
     height: 12px;
     width: 400px;
     margin-top: 0;
+    margin-bottom: 8px;
     align-self: center;
     box-shadow: inset 0 12px 12px -12px #2D77A2;
 }
@@ -260,6 +261,7 @@ a:link {
 }
 
 .formTag {
+    margin-top: 5px;
     margin-bottom: 0;
 }
 
@@ -305,32 +307,12 @@ a:link {
     color: #FB667A;
 }
 
-.tbl-content tr:hover {
-    background-color: #464A52;
-    -webkit-box-shadow: 0 6px 6px -6px #0E1119;
-    -moz-box-shadow: 0 6px 6px -6px #0E1119;
-    box-shadow: 0 6px 6px -6px #0E1119;
-}
-
-.tbl-content tbody > tr:hover {
-    background-color: #FFF842;
-    color: #403E10;
-    font-weight: bold;
-    box-shadow: #7F7C21 -1px 1px, #7F7C21 2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
-    transform: translate3d(6px, -6px, 0);
-
-    transition-delay: 0s;
-    transition-duration: 0.4s;
-    transition-property: all;
-    transition-timing-function: frames(5);
-}
-
 .formTag {
     font-size:20px;
     font-weight: 300;
     line-height:1em;
     text-align: center;
-    color: #4DC3FA;
+    color: #0a293b;
 }
 
 table{
@@ -394,23 +376,24 @@ th{
     box-shadow: 0 6px 6px -6px #0E1119;
 }
 
-.tbl-content tbody > tr:hover {
-    background-color: #FFF842;
-    color: #403E10;
-    font-weight: bold;
-    box-shadow: #7F7C21 -1px 1px, #7F7C21 2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
+#ficha > div > div.tbl-header > table > thead > tr > th > h1{
+    font-size: 20px;
+}
+
+.tbl-content tr:hover {
+    background-color: rgba(40, 102, 118, 0.91);
     transform: translate3d(6px, -6px, 0);
+    -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+    -moz-box-shadow: 0 6px 6px -6px #0E1119;
+    box-shadow: 0 6px 6px -6px #0E1119;
 
     transition-delay: 0s;
     transition-duration: 0.4s;
     transition-property: all;
     transition-timing-function: frames(5);
 }
-#ficha > div > div.tbl-header > table > thead > tr > th > h1{
-    font-size: 20px;
-}
-
 /*id*/
+/*Cabecera*/
 #ficha > div> div.tbl-header > table > thead > tr > th:nth-child(1) > h1{
     max-width: 10px;
     min-width: 10px;
@@ -419,28 +402,37 @@ th{
     max-width: 10px;
     min-width: 10px;
 }
+#userWriter > tr:nth-child(1) > td:nth-child(1){
+    width: 30px;
+    padding-right: 0px;
+}
+td:nth-child(1) {
+    text-align: left;
+    min-width: 20px;
+    max-width: 20px;
+}
 /*Nombre*/
-#ficha > div > div.tbl-header > table > thead > tr > th:nth-child(1){
-    max-width: 30px;
+/*Cabecera*/
+#table1stHalf > div.tbl-header > table > thead > tr > th:nth-child(2) > h1{
+    min-width: 120px;
+    max-width: 120px;
 }
-#userWriter > tr > td:nth-child(2){
-    max-width: 30px;
-    min-width: 30px;
+
+#userWriter > td:nth-child(2){
+    text-align: center;
+    min-width: 280px;
+    max-width: 280px;
 }
+
 /*correo*/
-#ficha > div> div.tbl-header > table > thead > tr > th:nth-child(2){
-    max-width: 80px;
-    min-width: 80px;
+/*Cabecera*/
+#table1stHalf > div.tbl-header > table > thead > tr > th:nth-child(3) > h1{
+    min-width: 210px;
+    max-width: 210px;
 }
+
 #userWriter > tr > td:nth-child(3){
     max-width: 80px;
-    min-width: 80px;
-}
-#ficha > div:nth-child(3) > div.tbl-header > table > thead > tr > th:nth-child(3){
-
-}
-
-#ficha > div> div.tbl-header > table > thead > tr > th:nth-child(3){
     min-width: 80px;
 }
 
@@ -454,19 +446,65 @@ th{
     -webkit-box-shadow: inset 0 0 6px rgb(255, 255, 255);
 }
 
-#editarPermisos, #suspenderUser, #eliminarUser{
-    margin: 0;
-    max-width: 70px;
-    text-align: center;
-}
 
 .standby {
     background-color: rgba(142, 44, 59, 1)!important;
 }
 
-/*
-Relaciones
-*/
+/*Segunda Tabla*/
+/*Nombre*/
+#userReader> tr > td:nth-child(2){
+    max-width: 120px;
+    min-width: 120px;
+}
+
+/*Cuerpo*/
+#table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(1){
+    max-width: 50px;
+    min-width: 50px;
+}
+
+#table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(2){
+    max-width: 70px;
+    min-width: 70px;
+    padding-left: 0;
+}
+
+#table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(4){
+    padding-left: 10px;
+    padding-right: 5px;
+
+}
+
+#table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(6){
+    max-width: 70px;
+    min-width: 70px;
+}
+#userReader > tr > td:nth-child(2){
+    max-width: 120px;
+    min-width: 120px;
+}
+
+#table2ndHalf > div.tbl-header.header2 > table > thead > tr > th:nth-child(2) > h1, #table2ndHalf > div.tbl-header.header2 > table > thead > tr > th:nth-child(3) > h1{
+    padding-right: 100px;
+
+}
+
+/*Botones*/
+#table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(4), #table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(4), #table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(4){
+    width: 60px;
+    text-align: right;
+}
+#userReader > tr > td:nth-child(5), #userReader > tr > td:nth-child(6), #userReader > tr > td:nth-child(4){
+    font-size: smaller;
+    width: 60px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+    /*****************************************************************************************
+    Relaciones
+    ********************************************************************************************/
 
 .listado{
     display: inline-flex;

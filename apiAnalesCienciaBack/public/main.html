@@ -57,12 +57,17 @@
 
         <div id=botonera>
             <form id="login">
-                <label for="username" class="texto loginElement">Nombre:</label>
-                <input type="text" id="username" class="loginElement" name="username"/>
-                <label for="password" class="texto loginElement">Password:</label>
-                <input type="password" id="password" class="loginElement" name="password"/>
-                <input type="submit" value="Submit" id="boton" class="loginElement" onclick="request()">
-                <input type="submit" value="New User" id="newUserboton" class="loginElement" onclick="createUser()">
+                <div id="preReqBlockOpen">
+                    <label for="username" class="texto loginElement">Nombre:</label>
+                    <input type="text" id="username" class="loginElement" name="username"/>
+                    <label for="password" class="texto loginElement">Password:</label>
+                    <input type="password" id="password" class="loginElement" name="password"/>
+                    <input type="submit" value="Submit" id="boton" class="loginElement" onclick="request()">
+                </div>
+                <div id="preReqBlockClose">
+                    <input type="submit" value="" id="loginBoton" class="loginElement" onclick="PreRequest()">
+                    <input type="submit" value="New User" id="newUserBoton" class="loginElement" onclick="createUser()">
+                </div>
             </form>
         </div>
 

@@ -45,6 +45,10 @@
         });
     }
 
+    function PreRequest(){
+
+    }
+
     async function request() {
         $('#entities').slideUp();
         $('#persons').slideUp();
@@ -131,9 +135,9 @@
                 window.alert("Este usuario esta suspendido");
                 location.reload();
             }
-            else {
+            /*else {
                 bodyElement.innerHTML += '<a class="btn btn-warning" id="crear" onclick="newElement()">New User</a>';
-            }
+            }*/
         } catch (error) {
             console.log(error)
         }
@@ -235,7 +239,7 @@
         usersElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
 
-            '<div class="half">' +
+            '<div class="half" id =table1stHalf>' +
                 '<h1 class="formTag">Escritores</h1>' +
                 '<hr class="bajoLinea"/>' +
                 '<div class="tbl-header">' +
@@ -255,19 +259,19 @@
                     '</table>' +
                 '</div>' +
             '</div>' +
-            '<div class="half">' +
+            '<div class="half" id="table2ndHalf">' +
                 '<h1 class="formTag">Lectores</h1>' +
                 '<hr class="bajoLinea"/>' +
-                '<div class="tbl-header">' +
+                '<div class="tbl-header header2">' +
                     '<table>' +
                         '<thead>' +
                             '<tr>' +
                                 '<th><h1>id</h1></th>' +
                                 '<th><h1>nombre</h1></th>' +
                                 '<th><h1>e-mail</h1></th>' +
-                                '<th><h1>editar</h1></th>' +
-                                '<th><h1>suspender</h1></th>' +
-                                '<th><h1>eliminar</h1></th>' +
+                                '<th><h1></h1></th>' +
+                                '<th><h1></h1></th>' +
+                                '<th><h1></h1></th>' +
                             '</tr>' +
                         '</thead>' +
                     '</table>' +
@@ -1109,7 +1113,7 @@
         ficha.innerHTML += '<div class="text-center"><button type="button" class="btn btn-info" id="relBut">Confirmar</button></div>';
 
 
-        $(document).ready(function() {
+        $("#ficha").ready(function() {
 
             let originalEntity = entitiesRelatedArray;
             let originalProduct = productsRelatedArray;
