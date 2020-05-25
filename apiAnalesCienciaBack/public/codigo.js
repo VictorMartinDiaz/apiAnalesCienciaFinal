@@ -16,6 +16,7 @@
 
     async function cerrar() {
         await new Promise(r => setTimeout(r, 200));
+        document.getElementById("ficha").innerHTML = '';
         $("#ficha").animate({
             opacity: '0',
             height: '0px',
@@ -71,6 +72,21 @@
         });
     }
 
+    function altaUser(userInfo) {
+         $.ajax({
+                type: 'POST',
+                url: 'api/v1/users',
+                //headers: {"Authorization": authHeader},
+                data: userInfo,
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Success: ");
+                    console.log(userInfo);
+                },
+            })
+
+    }
+
     function retrieveUserType(authHeader, usuarioActual) {
         $.ajax({
             type: 'GET',
@@ -95,9 +111,8 @@
     function imIn(tipo, suspendido) {
         try {
             //let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
-
+            let bodyElement = "";
             if ((tipo === "reader" && suspendido===false)|| tipo === "writer") {
-                let bodyElement = "";
                 $("#ficha").click(function () {
                     document.getElementById("logout").style.visibility = "visible";
                 });
@@ -115,6 +130,9 @@
             } else if(tipo === "reader" && suspendido===true){
                 window.alert("Este usuario esta suspendido");
                 location.reload();
+            }
+            else {
+                bodyElement.innerHTML += '<a class="btn btn-warning" id="crear" onclick="newElement()">New User</a>';
             }
         } catch (error) {
             console.log(error)
@@ -1253,4 +1271,59 @@
         retrievePersons();
     }
 
-    //TODO altas usuarios nuevos
+    async function createUser() {
+        let bodyElement = document.getElementById("ficha");
+        let userData = {};
+        bodyElement.innerHTML = '';
+        bodyElement.innerHTML +=
+            '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
+            '<div>' +
+                '<form id="newUserForm">' +
+                    '<div class="fieldElement" id="fieldName">' +
+                        '<label for="name" class="fieldTag">Nombre:</label>' +
+                        '<input type="text" name="username" id="name" class="field-style">' +
+                    '</div>' +
+                    '<div class="fieldElement" id="fieldMail">' +
+                        '<label for="wikiUrl" class="fieldTag">Correo:</label>' +
+                        '<input type="email" name="email" id="e-mail" class="field-style">' +
+                    '</div>' +
+                    '<div class="fieldElement" id="fieldPhoto">' +
+                        '<label for="wikiUrl" class="fieldTag">Password:</label>' +
+                        '<input type="password" name="password" id="newPass" class="field-style">' +
+                    '</div>' +
+                    '<button class="btn-success" id="sendForm">Enviar</button>' +
+                    '<button class="btn-danger" onclick="cerrar();">Cancelar</button>' +
+                '</form>' +
+            '</div>';
+        await abrir();
+
+        $('#sendForm').click(function () {
+            (function ($) {
+                $.fn.serializeFormJSON = function () {
+                    let o = {};
+                    let a = this.serializeArray();
+                    $.each(a, function () {
+                        if (o[this.name]) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                    return o;
+                };
+            })(jQuery);
+
+            $('#newUserForm').submit(function (e) {
+                e.preventDefault();
+                let data = $(this).serializeFormJSON();
+                    data["role"] = "reader";
+                    data["standby"] = true;
+                console.log(data);
+                altaUser(data);
+            });
+        });
+    }
+
