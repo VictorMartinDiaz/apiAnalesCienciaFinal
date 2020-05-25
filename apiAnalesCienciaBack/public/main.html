@@ -18,6 +18,7 @@
             $(document).ready(function() {
                 document.getElementById("boton").disabled = false;
                 $("#success-alert").hide();
+                $("#preReqBlockOpen").hide();
             });
         </script>
     </head>
@@ -62,11 +63,11 @@
                     <input type="text" id="username" class="loginElement" name="username"/>
                     <label for="password" class="texto loginElement">Password:</label>
                     <input type="password" id="password" class="loginElement" name="password"/>
-                    <input type="submit" value="Submit" id="boton" class="loginElement" onclick="request()">
+                    <input type="submit" value="Submit" id="boton" class="loginElement btn btn-dark" onclick="request()">
                 </div>
                 <div id="preReqBlockClose">
-                    <input type="submit" value="" id="loginBoton" class="loginElement" onclick="PreRequest()">
-                    <input type="submit" value="New User" id="newUserBoton" class="loginElement" onclick="createUser()">
+                    <input type="submit" value="Login" id="loginBoton" class="loginElement btn btn-light" onclick="PreRequest()">
+                    <input type="submit" value="New User" id="newUserBoton" class="loginElement btn btn-dark" onclick="createUser()">
                 </div>
             </form>
         </div>

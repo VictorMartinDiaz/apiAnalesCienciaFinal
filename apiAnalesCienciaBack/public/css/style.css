@@ -38,6 +38,16 @@
     background-color: #333;
 }
 
+.loginElement{
+    padding: 1px 6px 2px !important;
+    margin-bottom: 2px;
+
+}
+
+#preReqBlockOpen{
+    margin-left: 10px;
+}
+
 /*********************************************************************************************************************************************************/
 /* Ficha */
 /*********************************************************************************************************************************************************/
@@ -467,13 +477,13 @@ td:nth-child(1) {
 #table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(2){
     max-width: 70px;
     min-width: 70px;
-    padding-left: 0;
+
 }
 
 #table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(4){
     padding-left: 10px;
     padding-right: 5px;
-
+    padding-left: 0;
 }
 
 #table2ndHalf > div.tbl-header > table > thead > tr > th:nth-child(6){
@@ -483,6 +493,7 @@ td:nth-child(1) {
 #userReader > tr > td:nth-child(2){
     max-width: 120px;
     min-width: 120px;
+    padding-left: 60px;
 }
 
 #table2ndHalf > div.tbl-header.header2 > table > thead > tr > th:nth-child(2) > h1, #table2ndHalf > div.tbl-header.header2 > table > thead > tr > th:nth-child(3) > h1{
@@ -522,4 +533,18 @@ td:nth-child(1) {
 
 #relBut{
 margin-top: 40px;
+}
+
+/*****************************************************************************************
+Formulario Nuevo Usuario
+********************************************************************************************/
+
+#newUserFormWrapper{
+    margin: 30px 0;
+    text-align: center;
+    vertical-align: center;
+}
+
+#noSendForm, #sendForm{
+    margin: 0 10px;
 }

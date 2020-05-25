@@ -30,7 +30,10 @@
         });
     }
 
-    async function abrir(){
+    async function abrir(size){
+        $('#persons').slideUp();
+        $('#products').slideUp();
+        $('#entities').slideUp();
         $('.banda').animate({
             opacity: '0'
         });
@@ -40,13 +43,14 @@
         $("#ficha").show();
         $("#ficha").animate({
             opacity: '1',
-            height: '600px',
-            width: '600px',
+            height: size,
+            width: size,
         });
     }
 
     function PreRequest(){
-
+        $("#preReqBlockOpen").show();
+        $("#preReqBlockClose").hide();
     }
 
     async function request() {
@@ -185,7 +189,7 @@
                 await cerrar();
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
-                await abrir();
+                await abrir("600");
             },
         })
     }
@@ -203,7 +207,7 @@
                 await cerrar();
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
-                await abrir();
+                await abrir("600");
             },
         });
     }
@@ -221,7 +225,7 @@
                  await cerrar();
                  await new Promise(r => setTimeout(r, 100));
                  retrieveUsers();
-                 await abrir();
+                 await abrir("600");
              },
          })
     }
@@ -235,7 +239,7 @@
 
     async function pintaListaUsuarios(usersElement, data) {
         usersElement.innerHTML = '';
-        await abrir();
+        await abrir("600");
         usersElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
 
@@ -439,7 +443,7 @@
         $('#products').slideUp();
 
         document.getElementById("ficha").innerHTML = "";
-        await abrir();
+        await abrir("600");
         rellenarFicha(tipo, dibujar);
     }
 
@@ -459,7 +463,7 @@
                 '<>': 'p', 'html': 'Fecha de defunción: ${deathDate}'
             },
             {
-                '<>': 'a', 'href': '${wikiUrl}', 'html': 'wikipedia', 'class': 'linkWiki'
+                '<>': 'a', 'href': '${wikiUrl}', 'html': 'wikipedia', 'class': 'linkWiki', 'target': '_blank'
             }
         ];
         let bodyElement = document.getElementById("ficha");
@@ -469,7 +473,6 @@
             '<button class="btn btn-secondary" id="listaRel"><i class="fas fa-project-diagram"></i></button>' +
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '</div>';
-
         bodyElement = document.getElementById("ficha");
         let data = [dibujar];
         document.getElementById("ficha").innerHTML += (json2html.transform(data, template));
@@ -531,6 +534,9 @@
         bodyElement = document.getElementById("ficha");
         $('#ficha').addClass("form-style");
         $('#ficha').removeClass("ficha");
+
+        //No se pueden crear relaciones a un elemento que no existe. Escondemos la posibilidad
+        if(id===-1) {$("#relaciones").hide();}
 
         bodyElement.innerHTML += '<form id="form">';
         bodyElement = document.getElementById("form");
@@ -935,7 +941,7 @@
             mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
             await pintarFicha(name, tipo, dibujar);
-            await abrir();
+            await abrir("600");
 
         });
     }
@@ -1276,30 +1282,43 @@
     }
 
     async function createUser() {
+    //Deshabilitamos el boton «login» cuando abrimos la ficha y lo rehabilitamos al cerrarla
+        document.getElementById("loginBoton").disabled = true;
+        $("#ficha").ready(function () {
+            document.getElementById("cerrar").onclick=function () {
+                document.getElementById("loginBoton").disabled = false;
+                cerrar();
+            };
+            document.getElementById("noSendForm").onclick=function () {
+                document.getElementById("loginBoton").disabled = false;
+            }
+        })
+
         let bodyElement = document.getElementById("ficha");
-        let userData = {};
+        $('#ficha').css("background-color", "#739cc2");
         bodyElement.innerHTML = '';
         bodyElement.innerHTML +=
-            '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
-            '<div>' +
-                '<form id="newUserForm">' +
+            '<button class="btn btn-danger" id="cerrar">X</button>' +
+
+            '<form id="newUserForm">' +
+                '<div id="newUserFormWrapper">' +
                     '<div class="fieldElement" id="fieldName">' +
-                        '<label for="name" class="fieldTag">Nombre:</label>' +
+                        '<label for="username" class="fieldTag">Nombre:</label>' +
                         '<input type="text" name="username" id="name" class="field-style">' +
                     '</div>' +
                     '<div class="fieldElement" id="fieldMail">' +
-                        '<label for="wikiUrl" class="fieldTag">Correo:</label>' +
+                        '<label for="email" class="fieldTag">Correo:</label>' +
                         '<input type="email" name="email" id="e-mail" class="field-style">' +
                     '</div>' +
                     '<div class="fieldElement" id="fieldPhoto">' +
-                        '<label for="wikiUrl" class="fieldTag">Password:</label>' +
+                        '<label for="password" class="fieldTag">Password:</label>' +
                         '<input type="password" name="password" id="newPass" class="field-style">' +
                     '</div>' +
+                '</div>'  +
                     '<button class="btn-success" id="sendForm">Enviar</button>' +
-                    '<button class="btn-danger" onclick="cerrar();">Cancelar</button>' +
-                '</form>' +
-            '</div>';
-        await abrir();
+                    '<button class="btn-danger" id="noSendForm" onclick="cerrar();">Cancelar</button>' +
+            '</form>' ;
+        await abrir("300");
 
         $('#sendForm').click(function () {
             (function ($) {
@@ -1328,6 +1347,8 @@
                 console.log(data);
                 altaUser(data);
             });
+            document.getElementById("loginBoton").disabled = false;
+            cerrar();
         });
     }
 
