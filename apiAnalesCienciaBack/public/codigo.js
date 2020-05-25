@@ -1295,7 +1295,7 @@
         })
 
         let bodyElement = document.getElementById("ficha");
-        $('#ficha').css("background-color", "#739cc2");
+        $('#ficha').css("background-color", "rgba(0,0,0,0.92)");
         bodyElement.innerHTML = '';
         bodyElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar">X</button>' +
