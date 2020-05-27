@@ -1430,11 +1430,23 @@
                 dataOrdenado["standby"] = data["standby"];
                 console.log(dataOrdenado);
                 if (usuario['id'] !== -1) {
-                    /*if(usuario["username"]===data["username"]){delete data["username"];}
-                    if(usuario["email"]===data["email"]){delete data["email"];}*/
-                }
+                    if(usuario["username"]===dataOrdenado["username"]){delete dataOrdenado["username"];}
+                    if(usuario["email"]===dataOrdenado["email"]){delete dataOrdenado["email"];}
+                    delete dataOrdenado["role"];
+                    delete dataOrdenado["standby"];
+                    delete dataOrdenado["birthday"];
+                    console.log(dataOrdenado);
+                    $.ajax({
+                        type: 'PUT',
+                        url: 'api/v1/users/' + usuario["id"],
+                        data: dataOrdenado,
+                        //dataType: 'json',
+                        success: function(data) {
+                            console.log("Great Success");
+                        }
+                    })
 
-                console.log(dataOrdenado);
+                }else
                 altaUser(dataOrdenado);
             });
             if(usuario['id']===-1) {

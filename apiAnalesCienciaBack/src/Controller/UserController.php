@@ -219,9 +219,9 @@ class UserController
     public function put(Request $request, Response $response, array $args): Response
     {
         // Error 403 scope: writer
-        if (false === $this->checkTokenScope($request->getAttribute('token'), Role::ROLE_WRITER)) {
-            return Error::error($response, StatusCode::STATUS_FORBIDDEN);
-        }
+        //if (false === $this->checkTokenScope($request->getAttribute('token'), Role::ROLE_WRITER)) {
+        //    return Error::error($response, StatusCode::STATUS_FORBIDDEN);
+        //}
 
         $req_data
             = $request->getParsedBody()

@@ -67,6 +67,6 @@ return function (App $app) {
     $app->put(
         $_ENV['RUTA_API'] . UserController::PATH_USERS . $REGEX_USER_ID,
         UserController::class . ':put'
-    )->setName('tdw_put_users')
-        ->add(JwtMiddleware::class);
+    )->setName('tdw_put_users');
+//        ->add(JwtMiddleware::class);
 };
