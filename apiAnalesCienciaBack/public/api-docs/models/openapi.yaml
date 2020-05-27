@@ -1197,6 +1197,9 @@ components:
         standby:
           description: 'User standby'
           type: boolean
+        birthday:
+          description: 'User birthday'
+          type: string
         _links:
           description: link relations
           type: object
@@ -1213,6 +1216,7 @@ components:
           email: 'miw@upm.es'
           role: 'reader'
           standby: false
+          birthday: "1990/10/03"
           _links:
             parent:
               href: /api/v1/users
@@ -1372,6 +1376,9 @@ components:
                 type: string
                 default: reader
                 enum: ['reader', 'writer']
+              birthday:
+                description: 'User birthday'
+                type: string
               standby:
                 description: 'User standby'
                 type: boolean
@@ -1379,6 +1386,7 @@ components:
               username: username
               email: User_email@example.com
               password: User_password
+              birthday: 1990/10/03
               role: reader
               standby: false
     LoginRequestBody:
@@ -1401,6 +1409,9 @@ components:
                 type: string
                 default: reader
                 enum: ['reader', 'reader+writer']
+              birthday:
+                description: 'User birthday'
+                type: string
               standby:
                 description: 'User standby'
                 type: boolean
@@ -1470,6 +1481,7 @@ components:
         description: 'User standby'
         required: true
         schema: {"type": "string", pattern: '^[a-zA-Z0-9()áéíóúÁÉÍÓÚñÑ %$\.+-]+$'}
+
     productname:
       name: productname
       in: path

@@ -24,24 +24,27 @@
         });
         await new Promise(r => setTimeout(r, 300));
         $('.logoCentral').removeClass("escondida");
-        $('.banda').removeClass("escondida");
-        $('.banda').animate({
+        $('.banda')
+            .removeClass("escondida")
+            .animate({
             opacity: '0.87'
         });
     }
 
-    async function abrir(size){
+    async function abrir(size, color){
         $('#persons').slideUp();
         $('#products').slideUp();
         $('#entities').slideUp();
-        $('.banda').animate({
-            opacity: '0'
-        });
+        $('.banda')
+            .addClass("escondida")
+            .animate({
+                opacity: '0'
+            });
         $('.logoCentral').addClass("escondida");
-        $('.banda').addClass("escondida");
         await new Promise(r => setTimeout(r, 300));
-        $("#ficha").show();
-        $("#ficha").animate({
+        $("#ficha").show()
+            .css("background-color", color)
+            .animate({
             opacity: '1',
             height: size,
             width: size,
@@ -81,16 +84,33 @@
     }
 
     function altaUser(userInfo) {
+            let conFecha = userInfo;
+            delete userInfo["birthday"];
+            console.log(userInfo);
+            let info = JSON.stringify(userInfo);
+            console.log(info);
          $.ajax({
                 type: 'POST',
                 url: 'api/v1/users',
-                //headers: {"Authorization": authHeader},
                 data: userInfo,
-                dataType: 'json',
+                //dataType: 'json',
                 success: function (data) {
-                    console.log("Success: ");
-                    console.log(userInfo);
-                },
+                    console.log("Success");
+                   // console.log(info);
+                   /* $.ajax({
+                        type: 'PUT',
+                        url: 'api/v1/users' + conFecha["id"],
+                        data: conFecha,
+                        //dataType: 'json',
+                        success: function(data) {
+                            console.log("Great Success");
+                        }
+                    })*/
+                }, error: function (xhr, status, error) {
+                    let err = eval("(" + xhr.responseText + ")");
+                    if(err.code===400)
+                        alert("El usuario o el correo introducidos ya existen");
+             }
             })
 
     }
@@ -105,10 +125,9 @@
                 data['users'].forEach(i =>
                 {
                     if (usuarioActual === i['user'].username) {
-                        let tipo = i['user'].role;
-                        let suspendido = i['user'].standby;
-                        localStorage.usuarioRegistrado = tipo;
-                        imIn(tipo, suspendido);
+                        let usuario = i['user'];
+                        localStorage.usuarioRegistrado = i['user'].role;
+                        imIn(usuario);
                         return false;
                     }
                 })
@@ -116,7 +135,9 @@
         })
     }
 
-    function imIn(tipo, suspendido) {
+    function imIn(usuario) {
+        let tipo = usuario.role;
+        let suspendido = usuario.standby;
         try {
             //let usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
             let bodyElement = "";
@@ -126,7 +147,8 @@
                 });
 
                 bodyElement = document.getElementById("botonera");
-                bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>";
+                bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>" +
+                                         '<a class="btn btn-dark" id="crear">Edit Info</a>';
                 if (tipo === "writer") {
                     bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
                     bodyElement.innerHTML += '<a class="btn btn-light text-secondary" id="crear" onclick="retrieveUsers()">Permisos</a>';
@@ -139,12 +161,15 @@
                 window.alert("Este usuario esta suspendido");
                 location.reload();
             }
-            /*else {
-                bodyElement.innerHTML += '<a class="btn btn-warning" id="crear" onclick="newElement()">New User</a>';
-            }*/
+                //bodyElement.innerHTML += '<a class="btn btn-dark" id="crear" onclick="">Edit Info</a>';
         } catch (error) {
             console.log(error)
         }
+
+        $("#crear").click(async function () {
+            console.log(usuario);
+            await createUser(usuario);
+        })
     }
 
     function retrieveUsers() {
@@ -189,7 +214,8 @@
                 await cerrar();
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
-                await abrir("600");
+                let color = "rgba(12,43,62,0.92)";
+                await abrir("600", color);
             },
         })
     }
@@ -207,7 +233,8 @@
                 await cerrar();
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
-                await abrir("600");
+                let color = "rgba(12,43,62,0.92)";
+                await abrir("600", color);
             },
         });
     }
@@ -225,7 +252,8 @@
                  await cerrar();
                  await new Promise(r => setTimeout(r, 100));
                  retrieveUsers();
-                 await abrir("600");
+                 let color = "rgba(12,43,62,0.92)";
+                 await abrir("600", color);
              },
          })
     }
@@ -239,7 +267,8 @@
 
     async function pintaListaUsuarios(usersElement, data) {
         usersElement.innerHTML = '';
-        await abrir("600");
+        let color = "rgba(12,43,62,0.92)";
+        await abrir("600", color);
         usersElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
 
@@ -443,6 +472,7 @@
         $('#products').slideUp();
 
         document.getElementById("ficha").innerHTML = "";
+        let color = "rgba(82,82,82,0.92)";
         await abrir("600");
         rellenarFicha(tipo, dibujar);
     }
@@ -522,7 +552,7 @@
         pintarFicha('', '', emptyJson).then(r => createForm('', -1, "person", false));
     }
 
-    function createForm(associatedJson, id, tipo, edit) {
+    async function createForm(associatedJson, id, tipo, edit) {
 
         let bodyElement = document.getElementById("ficha");
             bodyElement.innerHTML = '';
@@ -532,8 +562,10 @@
             bodyElement.innerHTML += '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>';
             bodyElement.innerHTML += '</div>';
         bodyElement = document.getElementById("ficha");
-        $('#ficha').addClass("form-style");
-        $('#ficha').removeClass("ficha");
+        /*$('#ficha').addClass("form-style");
+        $('#ficha').removeClass("ficha");*/
+        let color = "rgba(209,212,217,0.92)";
+        await abrir(600, color);
 
         //No se pueden crear relaciones a un elemento que no existe. Escondemos la posibilidad
         if(id===-1) {$("#relaciones").hide();}
@@ -941,7 +973,8 @@
             mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
             await pintarFicha(name, tipo, dibujar);
-            await abrir("600");
+            let color = "rgba(78,34,49,0.92)";
+            await abrir("600", color);
 
         });
     }
@@ -1281,44 +1314,86 @@
         retrievePersons();
     }
 
-    async function createUser() {
-    //Deshabilitamos el boton «login» cuando abrimos la ficha y lo rehabilitamos al cerrarla
-        document.getElementById("loginBoton").disabled = true;
+    async function createNewUser(){
+        let vacio = {'id': -1};
+        await createUser(vacio);
+        console.log(vacio);
+    }
+
+    async function createUser(usuario) {
+        //Deshabilitamos el boton «login» cuando abrimos la ficha y lo rehabilitamos al cerrarla
+        if (usuario['id'] === -1) {
+            document.getElementById("loginBoton").disabled = true;
+        }
         $("#ficha").ready(function () {
-            document.getElementById("cerrar").onclick=function () {
-                document.getElementById("loginBoton").disabled = false;
+
+            document.getElementById("cerrar").onclick = function () {
+                if (usuario['id'] === -1) {
+                    document.getElementById("loginBoton").disabled = false;
+                }
                 cerrar();
             };
-            document.getElementById("noSendForm").onclick=function () {
-                document.getElementById("loginBoton").disabled = false;
-            }
+            /*document.getElementById("noSendForm").onclick=function () {
+                if(usuario['id']===-1) {
+                    document.getElementById("loginBoton").disabled = false;
+                }
+            }*/
         })
-
         let bodyElement = document.getElementById("ficha");
-        $('#ficha').css("background-color", "rgba(0,0,0,0.92)");
         bodyElement.innerHTML = '';
         bodyElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar">X</button>' +
 
             '<form id="newUserForm">' +
-                '<div id="newUserFormWrapper">' +
-                    '<div class="fieldElement" id="fieldName">' +
-                        '<label for="username" class="fieldTag">Nombre:</label>' +
-                        '<input type="text" name="username" id="name" class="field-style">' +
+            '<div id="newUserFormWrapper">' +
+            '<div class="fieldElement" id="fieldName">';
+            bodyElement = document.getElementById("fieldName");
+                if (usuario['id'] === -1){
+                    bodyElement.innerHTML += '<label for="username" class="fieldTag">Nombre:</label>' +
+                        '<input type="text" name="username" id="name" class="field-style">';
+                } else {
+                    bodyElement.innerHTML += '<label for="username" class="fieldTag">Nombre:</label>' +
+                        '<input type="text" name="username" id="username" class="field-style" value='+ usuario.username +'>';
+                    }
+                bodyElement = document.getElementById("newUserFormWrapper");
+                bodyElement.innerHTML += '</div>' +
+                '<div class="fieldElement" id="fieldMail">';
+            bodyElement = document.getElementById("fieldMail");
+                if (usuario['id'] === -1){
+                    bodyElement.innerHTML += '<label for="email" class="fieldTag">Correo:</label>' +
+                        '<input type="email" name="email" id="email" class="field-style">';
+                } else {
+                    bodyElement.innerHTML += '<label for="email" class="fieldTag">Correo:</label>' +
+                        '<input type="email" name="email" id="email" class="field-style" value='+ usuario.email +'>';
+                }
+            bodyElement = document.getElementById("newUserFormWrapper");
+                bodyElement.innerHTML +=
+                            '</div>' +
+                    '<div class="fieldElement" id="fieldPassword">' +
+                        '<label for="password" class="fieldTag">New Password:</label>' +
+                        '<input type="password" name="password" id="password" class="field-style">' +
                     '</div>' +
-                    '<div class="fieldElement" id="fieldMail">' +
-                        '<label for="email" class="fieldTag">Correo:</label>' +
-                        '<input type="email" name="email" id="e-mail" class="field-style">' +
-                    '</div>' +
-                    '<div class="fieldElement" id="fieldPhoto">' +
-                        '<label for="password" class="fieldTag">Password:</label>' +
-                        '<input type="password" name="password" id="newPass" class="field-style">' +
+                    '<div class="fieldDates" id="fieldBirthday">';
+            bodyElement = document.getElementById("fieldBirthday");
+                if (usuario['id'] === -1) {
+                    bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
+                        '<input type="date" name="birthday" id="birthday" class="field-style">';
+                } else {
+                    bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
+                        '<input type="date" name="birthday" id="birthday" class="field-style" value='+ usuario["birthday"]["date"] +'>';
+        }
+        bodyElement = document.getElementById("newUserFormWrapper");
+        bodyElement.innerHTML +=
                     '</div>' +
                 '</div>'  +
+                '<div id="newUserButtonWrapper">' +
                     '<button class="btn-success" id="sendForm">Enviar</button>' +
-                    '<button class="btn-danger" id="noSendForm" onclick="cerrar();">Cancelar</button>' +
+                    //'<button class="btn-danger" id="noSendForm" onclick="cerrar();">Cancelar</button>' +
+                '</div>'  +
             '</form>' ;
-        await abrir("300");
+        //$('#ficha').css("background-color", "rgba(0,0,0,0.92)");
+        let color = "rgba(0,0,0,0.92)";
+        await abrir("350", color);
 
         $('#sendForm').click(function () {
             (function ($) {
@@ -1344,11 +1419,30 @@
                 let data = $(this).serializeFormJSON();
                     data["role"] = "reader";
                     data["standby"] = true;
+                    if(data["birthday"]===null) {delete data["birthday"];}
                 console.log(data);
-                altaUser(data);
+                let dataOrdenado = {};
+                dataOrdenado["username"] = data["username"];
+                dataOrdenado["email"] = data["email"];
+                dataOrdenado["password"] = data["password"];
+                dataOrdenado["birthday"] = data["birthday"];
+                dataOrdenado["role"] = data["role"];
+                dataOrdenado["standby"] = data["standby"];
+                console.log(dataOrdenado);
+                if (usuario['id'] !== -1) {
+                    /*if(usuario["username"]===data["username"]){delete data["username"];}
+                    if(usuario["email"]===data["email"]){delete data["email"];}*/
+                }
+
+                console.log(dataOrdenado);
+                altaUser(dataOrdenado);
             });
-            document.getElementById("loginBoton").disabled = false;
+            if(usuario['id']===-1) {
+                document.getElementById("loginBoton").disabled = false;
+            }
             cerrar();
+
         });
+
     }
 

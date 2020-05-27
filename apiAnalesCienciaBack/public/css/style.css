@@ -524,7 +524,7 @@ td:nth-child(1) {
 
 .separador {
     height: 3px;
-    background-color: #17445E;
+    background-color: #3f7aa5;
 }
 
 .editRelations {
@@ -539,12 +539,21 @@ margin-top: 40px;
 Formulario Nuevo Usuario
 ********************************************************************************************/
 
+#newUserForm{
+    text-align: center;
+    vertical-align: center;
+}
+
 #newUserFormWrapper{
-    margin: 30px 0;
+    margin: 30px;
     text-align: center;
     vertical-align: center;
 }
 
 #noSendForm, #sendForm{
     margin: 0 10px;
+}
+
+.fieldElement{
+    margin-bottom: 6px;
 }

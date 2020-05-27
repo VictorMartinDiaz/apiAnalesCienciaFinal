@@ -145,6 +145,7 @@ trait Utils
         string $username,
         string $email,
         string $password,
+        ?DateTime $birthday,
         bool $isWriter = false,
         bool $standby = false
     ): int {
@@ -152,6 +153,7 @@ trait Utils
             $username,
             $email,
             $password,
+            $birthday,
             ($isWriter) ? Role::ROLE_WRITER : Role::ROLE_READER,
             $standby
         );

@@ -43,6 +43,8 @@ class UserTest extends TestCase
         self::assertSame(0, self::$user->getId());
         self::assertEmpty(self::$user->getUsername());
         self::assertEmpty(self::$user->getEmail());
+        self::assertEmpty(self::$user->getPassword());
+        self::assertEmpty(self::$user->getBirthday());
         self::assertEmpty(self::$user->getStandby());
         self::assertTrue(self::$user->hasRole(Role::ROLE_READER));
         self::assertFalse(self::$user->hasRole(Role::ROLE_WRITER));
@@ -75,6 +77,14 @@ class UserTest extends TestCase
             static::assertEmpty(self::$user->getStandby());
             self::$user->setStandby($userStandby);
             static::assertSame($userStandby, self::$user->getStandby());
+        }
+
+        public function testGetSetBirthday(): void
+        {
+            $userBirthday = self::$faker->birthday;
+            static::assertEmpty(self::$user->getBirthday());
+            self::$user->setBirthday($userBirthday);
+            static::assertSame($userBirthday, self::$user->getBirthday());
         }
 
     public function testRoles(): void

@@ -7,6 +7,7 @@
 
 namespace TDW\ACiencia\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 use OutOfRangeException;
@@ -72,6 +73,15 @@ class User implements JsonSerializable
 
     /**
      * @ORM\Column(
+     *     name     = "birthday",
+     *     type     = "date",
+     *     nullable = true
+     *     )
+     */
+    private ?DateTime $birthday = null;
+
+    /**
+     * @ORM\Column(
      *     name="role",
      *     type="object"
      *     )
@@ -93,6 +103,7 @@ class User implements JsonSerializable
      * @param string $username username
      * @param string $email email
      * @param string $password password
+     * @param DateTime|null $birthday
      * @param string $role Role::ROLE_READER | Role::ROLE_WRITER
      * @param bool $standby standby
      */
@@ -100,13 +111,14 @@ class User implements JsonSerializable
         string $username = '',
         string $email = '',
         string $password = '',
+        ?DateTime $birthday = null,
         string $role = Role::ROLE_READER,
         bool $standby = false
     ) {
         $this->id       = 0;
         $this->username = $username;
         $this->email    = $email;
-        $this->setPassword($password);
+        $this->password = $password;
         $this->role     = new Role($role);
         $this->standby  = $standby;
     }
@@ -156,6 +168,24 @@ class User implements JsonSerializable
     public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getBirthday(): ?DateTime
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param DateTime|null $birthday birthday
+     * @return User
+     */
+    public function setBirthday(DateTime $birthday): self
+    {
+        $this->birthday = $birthday;
         return $this;
     }
 
@@ -251,6 +281,8 @@ class User implements JsonSerializable
             '(id=' . $this->getId() . ', ' .
             'username="' . $this->getUsername() . '", ' .
             'email="' . $this->getEmail() . '", ' .
+            'birthday=' . $this->getBirthday() . ', ' .
+            'password="' . $this->getPassword() . '", ' .
             'role="' . $this->role .
             'standby="' . $this->getStandby() . '", ' .
             '")]';
@@ -270,6 +302,8 @@ class User implements JsonSerializable
                 'id' => $this->getId(),
                 'username' => $this->getUsername(),
                 'email' => $this->getEmail(),
+                'password' => $this->getPassword(),
+                'birthday' => $this->getBirthday(),
                 'role' => $this->role->__toString(),
                 'standby' => $this->getStandby()
             ]

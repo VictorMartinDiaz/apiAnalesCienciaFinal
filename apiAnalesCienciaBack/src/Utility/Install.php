@@ -7,6 +7,7 @@
 
 namespace TDW\ACiencia\Utility;
 
+use DateTime;
 use Composer\Script\Event;
 
 /**
@@ -64,6 +65,7 @@ abstract class Install
             $_ENV['ADMIN_USER_NAME'],
             $_ENV['ADMIN_USER_EMAIL'],
             $_ENV['ADMIN_USER_PASSWD'],
+             null,
             true,
             'false'
         );

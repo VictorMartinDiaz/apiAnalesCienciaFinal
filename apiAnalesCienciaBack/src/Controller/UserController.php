@@ -192,6 +192,7 @@ class UserController
             $req_data['username'],
             $req_data['email'],
             $req_data['password'],
+            $req_data['birthday'],
             $req_data['role'] ?? Role::ROLE_READER,
             $req_data['standby']
         );
@@ -254,6 +255,11 @@ class UserController
         // password
         if (isset($req_data['password'])) {
             $user->setPassword($req_data['password']);
+        }
+
+        //birthday
+        if(isset($req_data['birthday'])){
+            $user->setBirthday($req_data['birthday']);
         }
 
         // role
