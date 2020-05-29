@@ -48,7 +48,7 @@ class User implements JsonSerializable
      *     nullable = false
      *     )
      */
-    private string $username;
+    protected string $username;
 
     /**
      * @ORM\Column(
@@ -59,7 +59,7 @@ class User implements JsonSerializable
      *     unique   = true
      *     )
      */
-    private string $email;
+    protected string $email;
 
     /**
      * @ORM\Column(
@@ -69,7 +69,7 @@ class User implements JsonSerializable
      *     nullable = false
      *     )
      */
-    private string $password;
+    protected string $password;
 
     /**
      * @ORM\Column(
@@ -78,7 +78,7 @@ class User implements JsonSerializable
      *     nullable = true
      *     )
      */
-    private ?DateTime $birthday = null;
+    protected ?DateTime $birthday = null;
 
     /**
      * @ORM\Column(
@@ -86,7 +86,7 @@ class User implements JsonSerializable
      *     type="object"
      *     )
      */
-    private Role $role;
+    protected Role $role;
 
     /**
      * @ORM\Column(
@@ -184,7 +184,7 @@ class User implements JsonSerializable
      * @param DateTime|null $birthday birthday
      * @return User
      */
-    public function setBirthday(?DateTime $birthday): ?self
+    public function setBirthday(?DateTime $birthday): self
     {
         $this->birthday = $birthday;
         return $this;
@@ -200,7 +200,7 @@ class User implements JsonSerializable
 
     /**
      * @param bool $standby standby
-     * @return boolean
+     * @return user
      */
     public function setStandby(bool $standby): self
     {

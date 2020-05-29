@@ -1364,15 +1364,18 @@
                     '<div class="fieldElement" id="fieldPassword">' +
                         '<label for="password" class="fieldTag">New Password:</label>' +
                         '<input type="password" name="password" id="password" class="field-style">' +
-                    '</div>' +
-                    '<div class="fieldDates" id="fieldBirthday">';
+                    '</div>';
+            bodyElement = document.getElementById("newUserFormWrapper");
+        if (usuario['id'] !== -1) {
+            bodyElement.innerHTML += '<div class="fieldDates" id="fieldBirthday">';
             bodyElement = document.getElementById("fieldBirthday");
-                if (usuario['id'] === -1) {
-                    bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
-                        '<input type="date" name="birthday" id="birthday" class="field-style">';
-                } else {
-                    bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
-                        '<input type="date" name="birthday" id="birthday" class="field-style" value='+ usuario["birthday"]["date"] +'>';
+            if (usuario['birthday'] === null) {
+                bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
+                    '<input type="date" name="birthday" id="birthday" class="field-style">';
+            } else {
+                bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
+                    '<input type="date" name="birthday" id="birthday" class="field-style" value='+ usuario["birthday"] +'>';
+            }
         }
         bodyElement = document.getElementById("newUserFormWrapper");
         bodyElement.innerHTML +=
