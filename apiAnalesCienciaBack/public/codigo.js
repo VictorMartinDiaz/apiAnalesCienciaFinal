@@ -33,7 +33,7 @@
     }
 
     //abrimos la ficha con un tamaño y color de fondos determinados en función de lo que queramos mostrar
-    async function abrir(size, color){
+    async function abrir(size, color, textColor){
         $('#persons').slideUp();
         $('#products').slideUp();
         $('#entities').slideUp();
@@ -49,6 +49,7 @@
         await new Promise(r => setTimeout(r, 300));
         $("#ficha").show()
             .css("background-color", color)
+            .css("color", textColor)
             .animate({
             opacity: '1',
             height: size,
@@ -119,11 +120,15 @@
             headers: {"Authorization": authHeader},
             dataType: 'json',
             success: function (data) {
+                //console.log(data);
                 data['users'].forEach(i =>
                 {
+                    delete i["user"]["password"];
+                    console.log(i["user"]);
                     if (usuarioActual === i['user'].username) {
                         let usuario = i['user'];
                         localStorage.usuarioRegistrado = i['user'].role;
+                        //delete usuario["password"];
                         imIn(usuario);
                         return false;
                     }
@@ -148,7 +153,7 @@
                                          '<a class="btn btn-dark" id="crear">Edit Info</a>';
                 if (tipo === "writer") {
                     bodyElement.innerHTML += '<a class="btn btn-primary" id="crear" onclick="newElement()">Crear</a>';
-                    bodyElement.innerHTML += '<a class="btn btn-light text-secondary" id="crear" onclick="retrieveUsers()">Permisos</a>';
+                    bodyElement.innerHTML += '<a class="btn btn-light text-secondary" id="permisos">Permisos</a>';
                 }
                 $("#logout").click(function () {
                     localStorage.removeItem('usuarioRegistrado');
@@ -162,7 +167,13 @@
             console.log(error)
         }
 
+        $("#permisos").click(async function f() {
+            await cerrar();
+            retrieveUsers();
+        })
+
         $("#crear").click(async function () {
+            await cerrar();
             console.log(usuario);
             await createUser(usuario);
         })
@@ -207,7 +218,8 @@
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
                 let color = "rgba(12,43,62,0.92)";
-                await abrir("600", color);
+                let textColor = "rgba(210,210,210,0.92)";
+                await abrir("600", color, textColor);
             },
         })
     }
@@ -226,7 +238,8 @@
                 await new Promise(r => setTimeout(r, 50));
                 retrieveUsers();
                 let color = "rgba(12,43,62,0.92)";
-                await abrir("600", color);
+                let textColor = "rgba(210,210,210,0.92)";
+                await abrir("600", color, textColor);
             },
         });
     }
@@ -245,7 +258,8 @@
                  await new Promise(r => setTimeout(r, 100));
                  retrieveUsers();
                  let color = "rgba(12,43,62,0.92)";
-                 await abrir("600", color);
+                 let textColor = "rgba(210,210,210,0.92)";
+                 await abrir("600", color, textColor);
              },
          })
     }
@@ -260,7 +274,11 @@
     async function pintaListaUsuarios(usersElement, data) {
         usersElement.innerHTML = '';
         let color = "rgba(12,43,62,0.92)";
-        await abrir("600", color);
+        let textColor = "rgba(210,210,210,0.92)";
+        await abrir("600", color, textColor);
+        $("#ficha").ready(function () {
+            $(".formTag").css("color", "#c0e0f8");
+        });
         usersElement.innerHTML +=
             '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
 
@@ -344,6 +362,7 @@
 
             let enviar = JSON.stringify(data);
             //crea elementos tipo paco:{json}, juan:{json}, etc...
+
 
         });
     }
@@ -450,11 +469,12 @@
                 }
             }
         }
-        await cerrar();
+        //await cerrar();
         await pintarFicha(name, tipo, dibujar);
     }
 
     async function pintarFicha(name, tipo, dibujar) {
+    await cerrar();
         /*if($('#ficha').hasClass("form-style")){
             $('#ficha').removeClass("form-style");
             $('#ficha').addClass("ficha");
@@ -465,7 +485,8 @@
 
         document.getElementById("ficha").innerHTML = "";
         let color = "rgba(82,82,82,0.92)";
-        await abrir("600", color);
+        let textColor = "rgba(210,210,210,0.92)";
+        await abrir("600", color, textColor);
         rellenarFicha(tipo, dibujar);
     }
 
@@ -545,7 +566,9 @@
     }
 
     async function createForm(associatedJson, id, tipo, edit) {
-
+        let color = "rgba(212,220,220,0.92)";
+        let textColor = "rgba(32,61,73,0.92)";
+        await abrir(600, color, textColor);
         let bodyElement = document.getElementById("ficha");
             bodyElement.innerHTML = '';
             bodyElement.innerHTML += '<div id="rel_close">';
@@ -556,8 +579,7 @@
         bodyElement = document.getElementById("ficha");
         /*$('#ficha').addClass("form-style");
         $('#ficha').removeClass("ficha");*/
-        let color = "rgba(209,212,217,0.92)";
-        await abrir(600, color);
+
 
         //No se pueden crear relaciones a un elemento que no existe. Escondemos la posibilidad
         if(id===-1) {$("#relaciones").hide();}
@@ -628,32 +650,32 @@
             bodyElement.innerHTML += '<fieldset id="campos">';
             bodyElement = document.getElementById("campos");
 
-                bodyElement.innerHTML += '<div class="fieldDates" id="fieldDates">';
+            bodyElement.innerHTML += '<div class="fieldDates" id="fieldDates">';
+            bodyElement = document.getElementById("fieldDates");
+                bodyElement.innerHTML += '<div class="fieldElement" id="fieldBirthDate">';
+                bodyElement = document.getElementById("fieldBirthDate");
+                    bodyElement.innerHTML += '<label for="birthDate">Fecha de nacimiento</label>';
+                    if(associatedJson.birthDate==='' || associatedJson.birthDate===null || associatedJson.birthDate===undefined){
+                        bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" >';
+                    }
+                    else {
+                        bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" value=' + associatedJson.birthDate + '>';
+                    }
                 bodyElement = document.getElementById("fieldDates");
-                    bodyElement.innerHTML += '<div class="fieldElement" id="fieldBirthDate">';
-                    bodyElement = document.getElementById("fieldBirthDate");
-                        bodyElement.innerHTML += '<label for="birthDate">Fecha de nacimiento</label>';
-                        if(associatedJson.birthDate==='' || associatedJson.birthDate===null || associatedJson.birthDate===undefined){
-                            bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" >';
-                        }
-                        else {
-                            bodyElement.innerHTML += '<input type="date" name="birthDate" id="birthDate" value=' + associatedJson.birthDate + '>';
-                        }
-                    bodyElement = document.getElementById("fieldDates");
-                    bodyElement.innerHTML += '</div>';
+                bodyElement.innerHTML += '</div>';
 
-                    bodyElement.innerHTML += '<div class="fieldElement" id="fieldDeathDate">';
-                    bodyElement = document.getElementById("fieldDeathDate");
-                        bodyElement.innerHTML += '<label for="deathDate">Fecha de defuncion</label>';
-                        if(associatedJson.deathDate==='' || associatedJson.deathDate===null || associatedJson.deathDate===undefined){
-                            bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" >';
-                        } else {
-                            bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" value=' + associatedJson.deathDate + '>';
-                        }
-                        bodyElement = document.getElementById("fieldDates");
-                        bodyElement.innerHTML += '</div>';
-                        bodyElement = document.getElementById("campos");
-                        bodyElement.innerHTML += '</div>';
+                bodyElement.innerHTML += '<div class="fieldElement" id="fieldDeathDate">';
+                bodyElement = document.getElementById("fieldDeathDate");
+                    bodyElement.innerHTML += '<label for="deathDate">Fecha de defuncion</label>';
+                    if(associatedJson.deathDate==='' || associatedJson.deathDate===null || associatedJson.deathDate===undefined){
+                        bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" >';
+                    } else {
+                        bodyElement.innerHTML += '<input type="date" name="deathDate" id="deathDate" value=' + associatedJson.deathDate + '>';
+                    }
+                bodyElement = document.getElementById("fieldDates");
+                bodyElement.innerHTML += '</div>';
+                    bodyElement = document.getElementById("campos");
+                    bodyElement.innerHTML += '</div>';
 
                 bodyElement.innerHTML += '<div class="fieldElement" id="fieldName">';
                 bodyElement = document.getElementById("fieldName");
@@ -694,10 +716,12 @@
             bodyElement.innerHTML += '<br/>';
             bodyElement.innerHTML += '<div id="formButton">';
                 bodyElement = document.getElementById("formButton");
-                bodyElement.innerHTML += '<input type="submit" value="Send" id="sendButton" class="transition" onclick="close()"/>';
+                bodyElement.innerHTML += '<input type="submit" value="Send" id="sendButton" class="transition btn-info" onclick="close()"/>';
             bodyElement.innerHTML += '</div>';
             bodyElement = document.getElementById("form");
         bodyElement.innerHTML += '</form>';
+
+        $(".formtag").css("color", "#203444");
 
         $('input[name ="tipo"]').click(function () {
             tipo = this.value;
@@ -961,12 +985,13 @@
                 '</span>';
 
         $('#'+id+'').click(async function () {
-            await cerrar();
+            //await cerrar();
             mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
             await pintarFicha(name, tipo, dibujar);
             let color = "rgba(78,34,49,0.92)";
-            await abrir("600", color);
+            let textColor = "rgba(227,237,241,0.92)";
+            await abrir("600", color, textColor);
 
         });
     }
@@ -1318,7 +1343,7 @@
             document.getElementById("loginBoton").disabled = true;
         }
         $("#ficha").ready(function () {
-
+            console.log(usuario);
             document.getElementById("cerrar").onclick = function () {
                 if (usuario['id'] === -1) {
                     document.getElementById("loginBoton").disabled = false;
@@ -1374,7 +1399,7 @@
                     '<input type="date" name="birthday" id="birthday" class="field-style">';
             } else {
                 bodyElement.innerHTML += '<label for="birthday" class="fieldTag">Birthday:</label>' +
-                    '<input type="date" name="birthday" id="birthday" class="field-style" value='+ usuario["birthday"] +'>';
+                    '<input type="date" name="birthday" id="birthday" class="field-style" value='+ usuario["birthday"]+'>';
             }
         }
         bodyElement = document.getElementById("newUserFormWrapper");
@@ -1388,7 +1413,8 @@
             '</form>' ;
         //$('#ficha').css("background-color", "rgba(0,0,0,0.92)");
         let color = "rgba(0,0,0,0.92)";
-        await abrir("350", color);
+        let textColor = "rgba(250,250,250,0.92)";
+        await abrir("350", color, textColor);
 
         $('#sendForm').click(function () {
             (function ($) {

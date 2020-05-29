@@ -558,9 +558,9 @@ td:nth-child(1) {
     padding-right: 0px;
 }
 
-    /*****************************************************************************************
-    Relaciones
-    ********************************************************************************************/
+/*****************************************************************************************
+                                    Relaciones
+********************************************************************************************/
 
 .listado{
     display: inline-flex;
@@ -573,11 +573,15 @@ td:nth-child(1) {
 }
 
 .editRelations {
-    margin-top: 20px;
+    margin-top: 70px;
 }
 
 #relBut{
-margin-top: 40px;
+margin-top: 80px;
+}
+
+#sendButton{
+    margin-top: 25px;
 }
 
 /*****************************************************************************************
@@ -590,13 +594,15 @@ Formulario Nuevo Usuario
 }
 
 #newUserFormWrapper{
-    margin: 30px;
+    margin: 40px;
     text-align: center;
     vertical-align: center;
 }
 
+#se
+
 #noSendForm, #sendForm{
-    margin: 0 10px;
+    margin: 25px;
 }
 
 .fieldElement{
