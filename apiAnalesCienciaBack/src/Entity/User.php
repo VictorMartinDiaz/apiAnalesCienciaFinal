@@ -74,7 +74,7 @@ class User implements JsonSerializable
     /**
      * @ORM\Column(
      *     name     = "birthday",
-     *     type     = "date",
+     *     type     = "datetime",
      *     nullable = true
      *     )
      */
@@ -118,7 +118,8 @@ class User implements JsonSerializable
         $this->id       = 0;
         $this->username = $username;
         $this->email    = $email;
-        $this->password = $password;
+        $this->setPassword($password);
+        $this->birthday = $birthday;
         $this->role     = new Role($role);
         $this->standby  = $standby;
     }
@@ -183,7 +184,7 @@ class User implements JsonSerializable
      * @param DateTime|null $birthday birthday
      * @return User
      */
-    public function setBirthday(DateTime $birthday): self
+    public function setBirthday(?DateTime $birthday): ?self
     {
         $this->birthday = $birthday;
         return $this;
@@ -277,13 +278,16 @@ class User implements JsonSerializable
      */
     public function __toString(): string
     {
+        $birthday = (null !== $this->getBirthday())
+                    ? $this->getBirthday()->format('"Y-m-d"')
+                    : '"null"';
         return '[' . basename(get_class($this)) . ' ' .
             '(id=' . $this->getId() . ', ' .
             'username="' . $this->getUsername() . '", ' .
             'email="' . $this->getEmail() . '", ' .
-            'birthday=' . $this->getBirthday() . ', ' .
+            'birthday=' . $birthday . ' ' .
             'password="' . $this->getPassword() . '", ' .
-            'role="' . $this->role .
+            'role=' . $this->getRole() .
             'standby="' . $this->getStandby() . '", ' .
             '")]';
     }
@@ -303,7 +307,7 @@ class User implements JsonSerializable
                 'username' => $this->getUsername(),
                 'email' => $this->getEmail(),
                 'password' => $this->getPassword(),
-                'birthday' => $this->getBirthday(),
+                'birthday' => ($this->getBirthday()) ? $this->getBirthday()->format('Y-m-d') : null,
                 'role' => $this->role->__toString(),
                 'standby' => $this->getStandby()
             ]

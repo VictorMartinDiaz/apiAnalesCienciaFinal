@@ -29,6 +29,48 @@
     margin-top: 10px;
 }
 
+#fijaFicha {
+    position: relative;
+    margin-top: 20px;
+}
+
+.dropdown{
+    text-align: center;
+}
+
+@media screen and (max-width:767px) {
+    #botonera {
+        margin-top: 750px;
+        display: flex;
+    }
+    #banda {
+        display: none;
+    }
+
+    #ficha {
+        position: fixed;
+        margin: 0 7%;
+        top: 170px;
+    }
+
+    .navbar-toggler, .nav-link{
+        background-color: #000000 !important;
+    }
+}
+
+@media screen and (max-width:650px) {
+    #ficha {
+        margin: 0 3%;
+    }
+}
+
+@media screen and (max-height:900px) {
+    .indexFooter{
+        display: none!important;
+    }
+}
+
+
 .btn {
     margin-left: 10px;
 }
@@ -48,6 +90,9 @@
     margin-left: 10px;
 }
 
+.navbar-collapse{
+
+}
 /*********************************************************************************************************************************************************/
 /* Ficha */
 /*********************************************************************************************************************************************************/

@@ -19,6 +19,7 @@ use Slim\Routing\RouteContext;
 use TDW\ACiencia\Entity\Role;
 use TDW\ACiencia\Entity\User;
 use TDW\ACiencia\Utility\Error;
+use DateTime;
 
 /**
  * Class UserController
@@ -219,7 +220,7 @@ class UserController
     public function put(Request $request, Response $response, array $args): Response
     {
         // Error 403 scope: writer
-        //if (false === $this->checkTokenScope($request->getAttribute('token'), Role::ROLE_WRITER)) {
+        // if (false === $this->checkTokenScope($request->getAttribute('token'), Role::ROLE_WRITER)) {
         //    return Error::error($response, StatusCode::STATUS_FORBIDDEN);
         //}
 
@@ -259,8 +260,11 @@ class UserController
 
         //birthday
         if(isset($req_data['birthday'])){
-            $user->setBirthday($req_data['birthday']);
+            //$user->setBirthday($req_data['birthday']);
+            $user->setBirthday(DateTime::createFromFormat('!Y-m-d', $req_data['birthday']));
         }
+
+
 
         // role
         if (isset($req_data['role'])) {

@@ -29,12 +29,17 @@
             .animate({
             opacity: '0.87'
         });
+        $('.nav-link').show();
     }
 
+    //abrimos la ficha con un tamaño y color de fondos determinados en función de lo que queramos mostrar
     async function abrir(size, color){
         $('#persons').slideUp();
         $('#products').slideUp();
         $('#entities').slideUp();
+        if ($(window).width() < 767) {
+            $('.nav-link').slideUp();
+        }
         $('.banda')
             .addClass("escondida")
             .animate({
@@ -51,6 +56,7 @@
         });
     }
 
+    //El bloque de botones para hacer log-in/sign-in
     function PreRequest(){
         $("#preReqBlockOpen").show();
         $("#preReqBlockClose").hide();
@@ -83,9 +89,10 @@
         });
     }
 
+    //No hemos conseguido que funcione el tema de las fechas del cumpleaños
     function altaUser(userInfo) {
-            let conFecha = userInfo;
-            delete userInfo["birthday"];
+            //let conFecha = userInfo;
+            //delete userInfo["birthday"];
             console.log(userInfo);
             let info = JSON.stringify(userInfo);
             console.log(info);
@@ -96,16 +103,6 @@
                 //dataType: 'json',
                 success: function (data) {
                     console.log("Success");
-                   // console.log(info);
-                   /* $.ajax({
-                        type: 'PUT',
-                        url: 'api/v1/users' + conFecha["id"],
-                        data: conFecha,
-                        //dataType: 'json',
-                        success: function(data) {
-                            console.log("Great Success");
-                        }
-                    })*/
                 }, error: function (xhr, status, error) {
                     let err = eval("(" + xhr.responseText + ")");
                     if(err.code===400)
@@ -135,6 +132,7 @@
         })
     }
 
+    //"Estoy dentro!"
     function imIn(usuario) {
         let tipo = usuario.role;
         let suspendido = usuario.standby;
@@ -145,7 +143,6 @@
                 $("#ficha").click(function () {
                     document.getElementById("logout").style.visibility = "visible";
                 });
-
                 bodyElement = document.getElementById("botonera");
                 bodyElement.innerHTML = "<button class='btn btn-danger' id='logout'>Logout</button>" +
                                          '<a class="btn btn-dark" id="crear">Edit Info</a>';
@@ -157,11 +154,10 @@
                     localStorage.removeItem('usuarioRegistrado');
                     location.reload();
                 });
-            } else if(tipo === "reader" && suspendido===true){
+            } else if(tipo === "reader" && suspendido===true) {
                 window.alert("Este usuario esta suspendido");
                 location.reload();
             }
-                //bodyElement.innerHTML += '<a class="btn btn-dark" id="crear" onclick="">Edit Info</a>';
         } catch (error) {
             console.log(error)
         }
@@ -173,10 +169,10 @@
     }
 
     function retrieveUsers() {
-        if($('#ficha').hasClass("form-style")){
-            $('#ficha').removeClass("form-style");
-            $('#ficha').addClass("ficha");
-        }
+        /*if($('#ficha').hasClass("form-style")){
+            $('#ficha').removeClass("form-style")
+            .addClass("ficha");
+        }*/
         let usersElement = document.getElementById("ficha");
         $.ajax({
             type: 'GET',
@@ -187,10 +183,6 @@
                await pintaListaUsuarios(usersElement, data);
             },
         });
-        $("#editarPermisos").click(function () {
-
-        });
-
     }
 
     async function  promoteUser(userId) {
@@ -463,17 +455,17 @@
     }
 
     async function pintarFicha(name, tipo, dibujar) {
-        if($('#ficha').hasClass("form-style")){
+        /*if($('#ficha').hasClass("form-style")){
             $('#ficha').removeClass("form-style");
             $('#ficha').addClass("ficha");
-        }
+        }*/
         $('#persons').slideUp();
         $('#entities').slideUp();
         $('#products').slideUp();
 
         document.getElementById("ficha").innerHTML = "";
         let color = "rgba(82,82,82,0.92)";
-        await abrir("600");
+        await abrir("600", color);
         rellenarFicha(tipo, dibujar);
     }
 
@@ -519,8 +511,8 @@
         $('#editar').click(async function () {
             $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
             await new Promise(r => setTimeout(r, 300));
-            createForm(dibujar, dibujar.id, tipo, true);
-            $("#ficha").toggle({ effect: "scale", direction: "horizontal" });
+            await createForm(dibujar, dibujar.id, tipo, true);
+            //$("#ficha").toggle({ effect: "scale", direction: "horizontal" });
         });
 
         $('#listaRel').click(function () {
@@ -1434,7 +1426,8 @@
                     if(usuario["email"]===dataOrdenado["email"]){delete dataOrdenado["email"];}
                     delete dataOrdenado["role"];
                     delete dataOrdenado["standby"];
-                    delete dataOrdenado["birthday"];
+                    delete dataOrdenado["password"];
+                    //delete dataOrdenado["birthday"];
                     console.log(dataOrdenado);
                     $.ajax({
                         type: 'PUT',
