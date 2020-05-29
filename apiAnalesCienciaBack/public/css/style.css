@@ -5,10 +5,41 @@
 * {
     font-family: 'EB Garamond', serif;
 }
+#miwRigth, #miwLeft{
+    max-height: 50px;
+    max-width: 50px;
+
+}
+#miwRigth{
+    float: right;
+}
+#miwLeft{
+    float: left;
+}
 
 /*********************************************************************************************************************************************************/
 /* Barra Navegacion */
 /*********************************************************************************************************************************************************/
+
+
+#logout, #crear, #permisos, #editInfo, #newUserBoton, #loginBoton {
+    margin-top: 10px;
+
+}
+#logout, #crear, #editInfo, #newUserBoton {
+    color: #f6fffe;
+}
+
+#permisos, #loginBoton{
+    color: #3b4151;
+}
+
+#preReqBlockOpen{
+    background-color: #1b1b1b;
+    margin-left: auto;
+    padding: 10px 0;
+}
+
 
 .dropdownImg {
     max-height: 60px;
@@ -26,12 +57,11 @@
 }
 
 #botonera {
-    margin-top: 10px;
+
 }
 
 #fijaFicha {
     position: relative;
-    margin-top: 20px;
 }
 
 .dropdown{
@@ -87,7 +117,8 @@
 }
 
 #preReqBlockOpen{
-    margin-left: 10px;
+    background-color: #000000 !important;
+    color: #7d8293;
 }
 
 .navbar-collapse{
@@ -151,12 +182,17 @@ a:link {
 /* Index */
 /*********************************************************************************************************************************************************/
 
+.texto {
+    color: #f6fffe;
+}
+
 .indexFondo {
     background-image: url("../img/background4.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
     opacity: 0.87;
+    background-position: center center;
     overflow: hidden;
 }
 

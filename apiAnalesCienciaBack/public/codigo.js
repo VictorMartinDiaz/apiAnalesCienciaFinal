@@ -484,7 +484,7 @@
         $('#products').slideUp();
 
         document.getElementById("ficha").innerHTML = "";
-        let color = "rgba(82,82,82,0.92)";
+        let color = "rgba(57,57,57,0.92)";
         let textColor = "rgba(210,210,210,0.92)";
         await abrir("600", color, textColor);
         rellenarFicha(tipo, dibujar);
@@ -989,7 +989,7 @@
             mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
             await pintarFicha(name, tipo, dibujar);
-            let color = "rgba(78,34,49,0.92)";
+            let color = "rgba(86,88,88,0.92)";
             let textColor = "rgba(227,237,241,0.92)";
             await abrir("600", color, textColor);
 
@@ -1475,8 +1475,27 @@
                 document.getElementById("loginBoton").disabled = false;
             }
             cerrar();
-
         });
-
     }
 
+  /*  function randombg(){
+        let random= Math.floor(Math.random() * 16) + 0;
+        let imagenes = [
+            'url("../img/background4.jpg")',
+            'url("../img/Background/background1.jpg")',
+            'url("../img/Background/background2.jpg")',
+            'url("../img/Background/background3.jpg")',
+            'url("../img/Background/background5.jpg")',
+            'url("../img/Background/fsfBackground.jpg")',
+            'url("../img/Background/gnuBackground.jpg")',
+            'url("../img/Background/leeBackground.jpg")',
+            'url("../img/Background/gnuBackground.jpg")',
+            'url("../img/Background/linusBackground.jpg")',
+            'url("../img/Background/linuxBackground.jpg")',
+            'url("../img/Background/nelsonBackground.jpg")',
+            'url("../img/Background/vannevarBackground.jpg")',
+            'url("../img/Background/w3cBackground.jpeg")',
+            'url("../img/Background/wwwBackground.jpg")',
+        ];
+        document.getElementById("body").style.backgroundImage=imagenes[random];
+    }*/
