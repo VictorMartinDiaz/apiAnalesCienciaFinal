@@ -124,7 +124,6 @@
                 data['users'].forEach(i =>
                 {
                     delete i["user"]["password"];
-                    console.log(i["user"]);
                     if (usuarioActual === i['user'].username) {
                         let usuario = i['user'];
                         localStorage.usuarioRegistrado = i['user'].role;
@@ -863,56 +862,67 @@
         }
     }
 
-    //TODO, la mitad los elementos en cada listado fallan dios sabe por qué
-    //TODO La ficha de relaciones no carga a la primera si se le meten muchas relaciones. Si se le llama una segunda vez, carga
 
+    //TODO La ficha de relaciones no carga a la primera si se le meten muchas relaciones. Si se le llama una segunda vez, carga
     async function card4entities(dibujar) {
+    await cerrar();
+    let color = "#5a5950";
+    let textColor = "#bfbfbf";
+    await abrir(750, color, textColor);
         let ficha = document.getElementById("ficha");
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
         ficha.innerHTML +=
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation1">' +
+            '<div id="productCardRelation1">' +
                 '<h1>Autores</h1>' +
                 buscaPersona(dibujar, 1) +
             '</div>' +
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation2">' +
+            '<div id="productCardRelation2">' +
                 '<h1>Productos</h1>' +
                 buscaProducto(dibujar, 2) +
             '</div>';
     }
 
-    function card4products(dibujar) {
+    async function card4products(dibujar) {
+        await cerrar();
+        let color = "#5a5950";
+        let textColor = "#bfbfbf";
+        await abrir(750, color, textColor);
         let ficha = document.getElementById("ficha");
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
         ficha.innerHTML +=
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation1">' +
+            '<div id="productCardRelation1">' +
                 '<h1>Autores</h1>' +
                 buscaPersona(dibujar, 1) +
             '</div>' +
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation2">' +
+            '<div id="productCardRelation2">' +
                 '<h1>Entidades</h1>' +
                 buscaEntidad(dibujar, 2) +
             '</div>';
 
     }
 
-    function card4persons(dibujar) {
+    async function card4persons(dibujar) {
+        await cerrar();
+        let color = "#5a5950";
+        let textColor = "#bfbfbf";
+        await abrir(750, color, textColor);
         let ficha = document.getElementById("ficha");
         ficha.innerHTML = '<button class="btn btn-danger" id="cerrar" onclick="cerrar();">X</button>' +
             '<h1>Relaciones</h1>';
         ficha.innerHTML +=
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation1">' +
+            '<div id="productCardRelation1">' +
                 '<h1>Productos</h1>' +
                 buscaProducto(dibujar, 1) +
             '</div>' +
             '<hr class="separador">' +
-            '<div class="half" id="productCardRelation2">' +
+            '<div id="productCardRelation2">' +
                 '<h1>Entidades</h1>' +
                 buscaEntidad(dibujar, 2) +
             '</div>';
@@ -984,7 +994,10 @@
                 '</div>' +
                 '</span>';
 
-        $('#'+id+'').click(async function () {
+        //TODOproductCardRelation1 solo funciona el ultimo elemento de cada listado, dios sabe por qué
+        /*$('#'+id+'').click(async function () {
+            console.log(id);
+            console.log(name);
             //await cerrar();
             mitad.innerHTML = '';
             await new Promise(r => setTimeout(r, 50));
@@ -993,7 +1006,7 @@
             let textColor = "rgba(227,237,241,0.92)";
             await abrir("600", color, textColor);
 
-        });
+        });*/
     }
 
     function editRelations(tipo, dibujar){
@@ -1186,7 +1199,7 @@
                     entitiesRelatedArray = dibujar.entities;
                     console.log(entitiesRelatedArray);
                     //sacamos el id del elemento pulsado
-                    let elemento = this.id.substr(3,1);
+                    let elemento = this.id.substr(3,3);
                     elemento = parseInt(elemento);
                     console.log(elemento);
                     console.log(entitiesRelatedArray);

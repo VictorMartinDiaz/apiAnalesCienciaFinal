@@ -620,6 +620,11 @@ margin-top: 80px;
     margin-top: 25px;
 }
 
+#productCardRelation1, #productCardRelation2 {
+    height: 40%;
+    text-align: center;
+}
+
 /*****************************************************************************************
 Formulario Nuevo Usuario
 ********************************************************************************************/
