@@ -1495,20 +1495,20 @@
         let random= Math.floor(Math.random() * 14);
         console.log(random);
         let imagenes = [
-            'url("../img/background4.jpg")',
-            'url("../img/Background/background1.jpg")',
-            'url("../img/Background/background2.jpg")',
-            'url("../img/Background/background3.jpg")',
-            'url("../img/Background/background5.jpg")',
-            'url("../img/Background/fsfBackground.jpg")',
-            'url("../img/Background/gnuBackground.jpg")',
-            'url("../img/Background/leeBackground.jpg")',
-            'url("../img/Background/linusBackground.jpg")',
-            'url("../img/Background/linuxBackground.jpg")',
-            'url("../img/Background/nelsonBackground.jpg")',
-            'url("../img/Background/vannevarBackground.jpg")',
-            'url("../img/Background/w3cBackground.jpeg")',
-            'url("../img/Background/wwwBackground.jpg")',
+            'url("/img/background4.jpg")',
+            'url("/img/Background/background1.jpg")',
+            'url("/img/Background/background2.jpg")',
+            'url("/img/Background/background3.jpg")',
+            'url("/img/Background/background5.jpg")',
+            'url("/img/Background/fsfBackground.jpg")',
+            'url("/img/Background/gnuBackground.jpg")',
+            'url("/img/Background/leeBackground.jpg")',
+            'url("/img/Background/linusBackground.jpg")',
+            'url("/img/Background/linuxBackground.jpg")',
+            'url("/img/Background/nelsonBackground.jpg")',
+            'url("/img/Background/vannevarBackground.jpg")',
+            'url("/img/Background/w3cBackground.jpeg")',
+            'url("/img/Background/wwwBackground.jpg")',
         ];
         document.getElementById("body").style.backgroundImage=imagenes[random];
     }
