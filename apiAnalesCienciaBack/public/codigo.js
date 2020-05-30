@@ -1478,8 +1478,9 @@
         });
     }
 
-  /*  function randombg(){
-        let random= Math.floor(Math.random() * 16) + 0;
+    function randombg(){
+        let random= Math.floor(Math.random() * 14);
+        console.log(random);
         let imagenes = [
             'url("../img/background4.jpg")',
             'url("../img/Background/background1.jpg")',
@@ -1489,7 +1490,6 @@
             'url("../img/Background/fsfBackground.jpg")',
             'url("../img/Background/gnuBackground.jpg")',
             'url("../img/Background/leeBackground.jpg")',
-            'url("../img/Background/gnuBackground.jpg")',
             'url("../img/Background/linusBackground.jpg")',
             'url("../img/Background/linuxBackground.jpg")',
             'url("../img/Background/nelsonBackground.jpg")',
@@ -1498,4 +1498,4 @@
             'url("../img/Background/wwwBackground.jpg")',
         ];
         document.getElementById("body").style.backgroundImage=imagenes[random];
-    }*/
+    }
